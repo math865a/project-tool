@@ -1,0 +1,1 @@
+export {useCellStyles} from "./useCellStyles"
