@@ -70,4 +70,6 @@ project-tool/
 
 The system is under active reconstruction. Core functionality is still in progress, as the app is being re-architected to improve modularity, scalability, and developer experience.
 
+I am aware of plenty of security issues (such as hardcoded credentials in the Docker Compose file) and will address them in due course. The focus is currently on building a solid foundation for the application.
+
 Feel free to explore the code — this repo represents my approach to real-world fullstack systems built from the ground up.
