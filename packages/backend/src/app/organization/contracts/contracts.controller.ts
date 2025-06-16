@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ContractOptionsQuery, ContractProfileQuery, ContractsViewQuery } from './queries';
-import { CreateContractDto, UpdateContractDto } from '@shared';
+import {CreateContractDto, Option, UpdateContractDto} from '@shared';
 import { HttpUser } from '@/libs/util';
 import { CreateContractCommand, UpdateContractCommand } from './commands';
 
@@ -13,9 +13,7 @@ export class ContractsController {
     ) {}
 
     @Get('options')
-    async getContractOptions() {
-        console.log('options');
-
+    async getContractOptions(): Promise<Option[]> {
         return await this.queryBus.execute(new ContractOptionsQuery());
     }
 

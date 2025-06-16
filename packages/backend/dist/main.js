@@ -539,7 +539,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContractsController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -554,7 +554,6 @@ let ContractsController = class ContractsController {
         this.queryBus = queryBus;
     }
     async getContractOptions() {
-        console.log('options');
         return await this.queryBus.execute(new queries_1.ContractOptionsQuery());
     }
     async getContractsView() {
@@ -575,7 +574,7 @@ __decorate([
     (0, common_1.Get)('options'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], ContractsController.prototype, "getContractOptions", null);
 __decorate([
     (0, common_1.Get)(),
@@ -595,7 +594,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof _shared_1.CreateContractDto !== "undefined" && _shared_1.CreateContractDto) === "function" ? _c : Object, String]),
+    __metadata("design:paramtypes", [typeof (_d = typeof _shared_1.CreateContractDto !== "undefined" && _shared_1.CreateContractDto) === "function" ? _d : Object, String]),
     __metadata("design:returntype", Promise)
 ], ContractsController.prototype, "createContract", null);
 __decorate([
@@ -604,7 +603,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __param(2, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_d = typeof Omit !== "undefined" && Omit) === "function" ? _d : Object, String]),
+    __metadata("design:paramtypes", [String, typeof (_e = typeof Omit !== "undefined" && Omit) === "function" ? _e : Object, String]),
     __metadata("design:returntype", Promise)
 ], ContractsController.prototype, "updateContract", null);
 exports.ContractsController = ContractsController = __decorate([
@@ -701,15 +700,15 @@ let ContractOptionsHandler = class ContractOptionsHandler {
         this.client = client;
         this.query = `
         MATCH (c:Contract)
-        RETURN c.id AS id, c.name AS name
+        RETURN {
+            value: c.id,
+            label: c.name
+        } AS option
     `;
     }
     async execute() {
         const result = await this.client.read(this.query);
-        return result.records.map((record) => ({
-            id: record.get('id'),
-            name: record.get('name'),
-        }));
+        return result.records?.map((record) => record.get("option")) ?? [];
     }
 };
 exports.ContractOptionsHandler = ContractOptionsHandler;
@@ -9721,18 +9720,18 @@ const neo4j_1 = __webpack_require__(/*! @/libs/neo4j */ "./src/libs/neo4j/index.
 let ResourceOptionsQueryHandler = class ResourceOptionsQueryHandler {
     constructor(client) {
         this.client = client;
-    }
-    async execute() {
-        console.log('resource-options');
-        const { records } = await this.client.read(`
+        this.query = `
             MATCH (r:Resource)
             WITH {
-                id: r.id,
-                name: r.name,
+                value: r.id,
+                label: r.name,
                 color: r.color
             } AS resource ORDER BY resource.name
             RETURN resource
-        `);
+        `;
+    }
+    async execute() {
+        const { records } = await this.client.read(this.query);
         return records.map((d) => d.get('resource'));
     }
 };
@@ -10005,7 +10004,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ResourcesController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -10051,7 +10050,7 @@ __decorate([
     (0, common_1.Get)('options'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], ResourcesController.prototype, "getResourceOptions", null);
 __decorate([
     (0, common_1.Post)(':resourceId'),
@@ -10059,7 +10058,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __param(2, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_d = typeof _shared_1.CreateResourceDto !== "undefined" && _shared_1.CreateResourceDto) === "function" ? _d : Object, String]),
+    __metadata("design:paramtypes", [String, typeof (_e = typeof _shared_1.CreateResourceDto !== "undefined" && _shared_1.CreateResourceDto) === "function" ? _e : Object, String]),
     __metadata("design:returntype", Promise)
 ], ResourcesController.prototype, "updateResource", null);
 __decorate([
@@ -10074,7 +10073,7 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], ResourcesController.prototype, "getResourcesView", null);
 __decorate([
     (0, common_1.Get)(':resourceId'),
@@ -10205,17 +10204,8 @@ let CreateResourceTypeHandler = class CreateResourceTypeHandler {
         })
         MERGE (rt)-[:CREATED_BY {timestamp: timestamp()}]->(u)
         MERGE (rt)-[:IS_AGREED_UNDER]->(c)
-        WITH rt
-        CALL {
-            WITH rt
-            UNWIND $resources AS resourceId
-            MATCH (r:Resource) WHERE r.id = resourceId
-            CREATE (a:Agent {
-                id: apoc.create.uuid()
-            })
-            MERGE (a)-[:IS]->(r)
-            MERGE (a)-[:IS]->(rt)
-        }
+  
+        
         RETURN {
             resourceType: rt{.*}
         } AS result
@@ -10265,6 +10255,9 @@ let CreateResourceTypeHandler = class CreateResourceTypeHandler {
         return true;
     }
     async create(dto, uid) {
+        console.log("resources", dto.resources);
+        console.log("contract", dto.contract);
+        console.log("dto", dto);
         const queryResult = await this.client.write(this.query, {
             ...dto,
             uid: uid,
@@ -12079,12 +12072,13 @@ let DBInitService = class DBInitService {
         const isDatabaseNew = await this.determineIfDatabaseIsNew();
         if (isDatabaseNew) {
             await this.createIndexes();
-            await this.contract();
+            const contractId = await this.contract();
             await this.financialsources();
             await this.createBookingStages();
             await this.createDefaultProjectManager();
             await this.createStages();
             await this.createCalendarDays();
+            await this.createResourceAgents(contractId);
             console.log('Ran new db script');
         }
         else {
@@ -12254,11 +12248,13 @@ let DBInitService = class DBInitService {
         `);
     }
     async contract() {
-        await this.client.write(`
+        const result = await this.client.write(`
             MERGE (c:Contract {name: "Kundekontrakt 1", abbrevation: "kon1"})
             ON CREATE
                 SET c.id = apoc.create.uuid()
+            RETURN c.id AS contractId
         `);
+        return result.records[0].get('contractId');
     }
     async financialsources() {
         await this.client.write(`
@@ -12268,6 +12264,53 @@ let DBInitService = class DBInitService {
                     ON CREATE 
                         SET f.id = apoc.create.uuid()
         `);
+    }
+    async createResourceAgents(contractId) {
+        await this.client.write(`
+				CALL {
+					MATCH (c:Contract)
+						WHERE c.id = $contractId
+					CREATE (rt:ResourceType {
+						id: apoc.create.uuid(),
+						name: "Projektleder",
+						abbrevation: "PL",
+						salesDefault: 400,
+						salesOvertime: 500,
+						typeNo: 1,
+						color: "#fd7e14"
+					})
+					MERGE (rt)-[:IS_AGREED_UNDER]->(c)
+					RETURN rt
+				}
+				
+				CALL {
+					WITH rt
+					MATCH (c:Calendar)
+						WHERE c.isDefault = true
+						
+					CREATE (r:Resource {
+						id: apoc.create.uuid(),
+						name: "Jens Jensen",
+						initials: "JJ",
+						costDefault: 300,
+						costOvertime: 400,
+						color: "#228be6"
+					})
+					
+					RETURN r
+				}
+				
+				CALL {
+					WITH rt, r
+					MERGE (a:Agent {
+						id: apoc.create.uuid()
+					})
+					MERGE (a)-[:IS]->(r)
+					MERGE (a)-[:IS]->(rt)
+				}
+			`, {
+            contractId: contractId,
+        });
     }
 };
 exports.DBInitService = DBInitService;

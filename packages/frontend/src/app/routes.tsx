@@ -3,7 +3,7 @@ import { Root } from './root.tsx';
 import {
     addResourceAction,
     addResourceLoader,
-    AddResourcePage,
+    AddResourcePage, addResourceTypeAction, addResourceTypeLoader, AddResourceTypePage,
     App,
     AppLayout,
     deleteResourceAction,
@@ -77,6 +77,14 @@ export const router = createBrowserRouter([
                                                 element: <ResourceTypesViewPage />,
                                                 loader: resourceTypesViewLoader,
                                                 handle: resourceTypesViewHandle,
+                                                children: [
+                                                    {
+                                                        path: 'add',
+                                                        element: <AddResourceTypePage />,
+                                                        loader: addResourceTypeLoader,
+                                                        action: addResourceTypeAction,
+                                                    },
+                                                ],
                                             },
                                         ],
                                     },

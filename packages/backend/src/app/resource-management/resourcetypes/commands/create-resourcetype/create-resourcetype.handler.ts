@@ -70,6 +70,9 @@ export class CreateResourceTypeHandler
     }
 
     async create(dto: CreateResourceTypeDto, uid: string) {
+        console.log("resources", dto.resources)
+        console.log("contract", dto.contract)
+        console.log("dto", dto)
         const queryResult = await this.client.write(this.query, {
             ...dto,
             uid: uid,
@@ -112,19 +115,23 @@ export class CreateResourceTypeHandler
         })
         MERGE (rt)-[:CREATED_BY {timestamp: timestamp()}]->(u)
         MERGE (rt)-[:IS_AGREED_UNDER]->(c)
-        WITH rt
-        CALL {
-            WITH rt
-            UNWIND $resources AS resourceId
-            MATCH (r:Resource) WHERE r.id = resourceId
-            CREATE (a:Agent {
-                id: apoc.create.uuid()
-            })
-            MERGE (a)-[:IS]->(r)
-            MERGE (a)-[:IS]->(rt)
-        }
+  
+        
         RETURN {
             resourceType: rt{.*}
         } AS result
    `;
 }
+
+/*
+      WITH rt
+CALL {
+            WITH rt
+            UNWIND $resources AS resourceId
+            MATCH (r:Resource) WHERE r.id = resourceId
+            MERGE (a:Agent {
+                id: apoc.create.uuid()
+            })
+            MERGE (a)-[:IS]->(r)
+            MERGE (a)-[:IS]->(rt)
+        }*/

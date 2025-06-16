@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateResourceDto, ResourceViewRow } from '@shared';
+import {CreateResourceDto, Option, ResourceViewRow} from '@shared';
 import { HttpUser } from '@/libs/util';
 import { CreateResourceCommand, DeleteResourceCommand, UpdateResourceCommand } from './commands';
 import { ResourceOptionsQuery, ResourceProfileQuery, ResourcesViewQuery } from './queries';
@@ -18,7 +18,7 @@ export class ResourcesController {
     }
 
     @Get('options')
-    async getResourceOptions() {
+    async getResourceOptions(): Promise<Option[]> {
         return await this.queryBus.execute(new ResourceOptionsQuery());
     }
 
