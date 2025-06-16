@@ -3,12 +3,17 @@ import { Root } from "./root.tsx";
 import {
     addContractAction,
     AddContractPage,
+    addFinancialSourceAction,
+    AddFinancialSourcePage,
     addResourceAction,
     addResourceLoader,
     AddResourcePage,
     addResourceTypeAction,
     addResourceTypeLoader,
     AddResourceTypePage,
+    addWorkpackageAction,
+    addWorkpackageLoader,
+    AddWorkpackagePage,
     App,
     AppLayout,
     ContractsLayout,
@@ -17,6 +22,11 @@ import {
     contractsViewLoader,
     ContractsViewPage,
     deleteResourceAction,
+    FinancialSourcesLayout,
+    financialSourcesLayoutHandle,
+    financialSourcesViewHandle,
+    financialSourcesViewLoader,
+    FinancialSourcesViewPage,
     PagesLayout,
     ResourcesLayout,
     resourcesLayoutHandle,
@@ -28,6 +38,11 @@ import {
     resourceTypesViewHandle,
     resourceTypesViewLoader,
     ResourceTypesViewPage,
+    WorkpackagesLayout,
+    workpackagesLayoutHandle,
+    workpackagesViewHandle,
+    workpackagesViewLoader,
+    WorkpackagesViewPage,
 } from "./app";
 
 export const router = createBrowserRouter([
@@ -59,21 +74,24 @@ export const router = createBrowserRouter([
                                 element: <PagesLayout />,
                                 children: [
                                     {
-                                        element: <ContractsLayout />,
-                                        handle: contractsLayoutHandle,
+                                        element: <WorkpackagesLayout />,
+                                        handle: workpackagesLayoutHandle,
                                         children: [
                                             {
-                                                path: "contracts",
-                                                element: <ContractsViewPage />,
-                                                loader: contractsViewLoader,
-                                                handle: contractsViewHandle,
+                                                path: "workpackages",
+                                                element: (
+                                                    <WorkpackagesViewPage />
+                                                ),
+                                                loader: workpackagesViewLoader,
+                                                handle: workpackagesViewHandle,
                                                 children: [
                                                     {
                                                         path: "add",
                                                         element: (
-                                                            <AddContractPage />
+                                                            <AddWorkpackagePage />
                                                         ),
-                                                        action: addContractAction,
+                                                        loader: addWorkpackageLoader,
+                                                        action: addWorkpackageAction,
                                                     },
                                                 ],
                                             },
@@ -120,6 +138,50 @@ export const router = createBrowserRouter([
                                                         ),
                                                         loader: addResourceTypeLoader,
                                                         action: addResourceTypeAction,
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        element: <ContractsLayout />,
+                                        handle: contractsLayoutHandle,
+                                        children: [
+                                            {
+                                                path: "contracts",
+                                                element: <ContractsViewPage />,
+                                                loader: contractsViewLoader,
+                                                handle: contractsViewHandle,
+                                                children: [
+                                                    {
+                                                        path: "add",
+                                                        element: (
+                                                            <AddContractPage />
+                                                        ),
+                                                        action: addContractAction,
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        element: <FinancialSourcesLayout />,
+                                        handle: financialSourcesLayoutHandle,
+                                        children: [
+                                            {
+                                                path: "financialsources",
+                                                element: (
+                                                    <FinancialSourcesViewPage />
+                                                ),
+                                                loader: financialSourcesViewLoader,
+                                                handle: financialSourcesViewHandle,
+                                                children: [
+                                                    {
+                                                        path: "add",
+                                                        element: (
+                                                            <AddFinancialSourcePage />
+                                                        ),
+                                                        action: addFinancialSourceAction,
                                                     },
                                                 ],
                                             },

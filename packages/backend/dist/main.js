@@ -1573,7 +1573,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FinancialSourcesController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -1582,7 +1582,6 @@ const queries_1 = __webpack_require__(/*! ./queries */ "./src/app/organization/f
 const _shared_1 = __webpack_require__(/*! @shared */ "../shared/src/index.ts");
 const util_1 = __webpack_require__(/*! @/libs/util */ "./src/libs/util/index.ts");
 const commands_1 = __webpack_require__(/*! ./commands */ "./src/app/organization/financialsources/commands/index.ts");
-const update_financialsource_command_1 = __webpack_require__(/*! ./commands/update-financialsource/update-financialsource.command */ "./src/app/organization/financialsources/commands/update-financialsource/update-financialsource.command.ts");
 let FinancialSourcesController = class FinancialSourcesController {
     constructor(commandBus, queryBus) {
         this.commandBus = commandBus;
@@ -1601,7 +1600,7 @@ let FinancialSourcesController = class FinancialSourcesController {
         return await this.commandBus.execute(new commands_1.CreateFinancialSourceCommand(dto, uid));
     }
     async updateFinancialSource(financialSourceId, dto, uid) {
-        return await this.commandBus.execute(new update_financialsource_command_1.UpdateFinancialSourceCommand({
+        return await this.commandBus.execute(new commands_1.UpdateFinancialSourceCommand({
             ...dto,
             financialSourceId,
         }, uid));
@@ -1615,17 +1614,17 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], FinancialSourcesController.prototype, "getFinancialSourcesView", null);
 __decorate([
-    (0, common_1.Get)('options'),
+    (0, common_1.Get)("options"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], FinancialSourcesController.prototype, "getFinancialSourceOptions", null);
 __decorate([
-    (0, common_1.Get)(':financialSourceId'),
-    __param(0, (0, common_1.Param)('financialSourceId')),
+    (0, common_1.Get)(":financialSourceId"),
+    __param(0, (0, common_1.Param)("financialSourceId")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -1635,28 +1634,28 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof _shared_1.CreateFinancialSourceDto !== "undefined" && _shared_1.CreateFinancialSourceDto) === "function" ? _c : Object, String]),
+    __metadata("design:paramtypes", [typeof (_e = typeof _shared_1.CreateFinancialSourceDto !== "undefined" && _shared_1.CreateFinancialSourceDto) === "function" ? _e : Object, String]),
     __metadata("design:returntype", Promise)
 ], FinancialSourcesController.prototype, "createFinancialSource", null);
 __decorate([
-    (0, common_1.Post)(':financialSourceId'),
-    __param(0, (0, common_1.Param)('financialSourceId')),
+    (0, common_1.Post)(":financialSourceId"),
+    __param(0, (0, common_1.Param)("financialSourceId")),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_d = typeof Omit !== "undefined" && Omit) === "function" ? _d : Object, String]),
+    __metadata("design:paramtypes", [String, typeof (_f = typeof Omit !== "undefined" && Omit) === "function" ? _f : Object, String]),
     __metadata("design:returntype", Promise)
 ], FinancialSourcesController.prototype, "updateFinancialSource", null);
 __decorate([
-    (0, common_1.Delete)(':financialSourceId'),
-    __param(0, (0, common_1.Param)('financialSourceId')),
+    (0, common_1.Delete)(":financialSourceId"),
+    __param(0, (0, common_1.Param)("financialSourceId")),
     __param(1, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], FinancialSourcesController.prototype, "deleteFinancialSource", null);
 exports.FinancialSourcesController = FinancialSourcesController = __decorate([
-    (0, common_1.Controller)('financialsources'),
+    (0, common_1.Controller)("financialsources"),
     __metadata("design:paramtypes", [typeof (_a = typeof cqrs_1.CommandBus !== "undefined" && cqrs_1.CommandBus) === "function" ? _a : Object, typeof (_b = typeof cqrs_1.QueryBus !== "undefined" && cqrs_1.QueryBus) === "function" ? _b : Object])
 ], FinancialSourcesController);
 
@@ -1750,14 +1749,15 @@ let FinancialSourceOptionsQueryHandler = class FinancialSourceOptionsQueryHandle
         this.query = `
         MATCH (f:FinancialSource)
         RETURN {
-            id: f.id,
-            name: f.name
+            value: f.id,
+            label: f.name
         } AS option
+
     `;
     }
     async execute() {
         const queryResult = await this.client.read(this.query);
-        return queryResult.records.map((d) => d.get('option'));
+        return queryResult.records.map((d) => d.get("option"));
     }
 };
 exports.FinancialSourceOptionsQueryHandler = FinancialSourceOptionsQueryHandler;
@@ -1933,13 +1933,27 @@ let FinancialSourcesViewQueryHandler = class FinancialSourcesViewQueryHandler {
     constructor(client) {
         this.client = client;
         this.query = `
-        MATCH (f:FinancialSource)
-        RETURN {node: f{.*}} as row
+        MATCH (financialsources:FinancialSource)
+        
+        UNWIND financialsources AS f
+            CALL {
+                WITH f
+                OPTIONAL MATCH (f)<-[:IS_FINANCED_BY]-(w:Workpackage)
+                WITH count(w) AS workpackageCount
+                RETURN workpackageCount
+            }
+        
+        RETURN {
+            id: f.id, 
+            node: f{.*},
+            workpackageCount: workpackageCount
+        } as row
+            ORDER BY row.node.name
    `;
     }
     async execute() {
         const queryResult = await this.client.read(this.query);
-        return queryResult.records.map((d) => d.get('row'));
+        return queryResult.records.map((d) => d.get("row"));
     }
 };
 exports.FinancialSourcesViewQueryHandler = FinancialSourcesViewQueryHandler;
@@ -4732,6 +4746,7 @@ const queries_1 = __webpack_require__(/*! ./queries */ "./src/app/project-manage
 const _shared_1 = __webpack_require__(/*! @shared */ "../shared/src/index.ts");
 const util_1 = __webpack_require__(/*! @/libs/util */ "./src/libs/util/index.ts");
 const commands_1 = __webpack_require__(/*! ./commands */ "./src/app/project-management/project-managers/commands/index.ts");
+const default_project_manager_1 = __webpack_require__(/*! ./queries/default-project-manager */ "./src/app/project-management/project-managers/queries/default-project-manager/index.ts");
 let ProjectManagerService = class ProjectManagerService {
     constructor(commandBus, queryBus) {
         this.commandBus = commandBus;
@@ -4739,6 +4754,9 @@ let ProjectManagerService = class ProjectManagerService {
     }
     async getProjectManagers() {
         return await this.queryBus.execute(new queries_1.ProjectManagersQuery());
+    }
+    async getDefaultProjectManager() {
+        return await this.queryBus.execute(new default_project_manager_1.DefaultProjectManagerQuery());
     }
     async getProjectManager(projectManagerId) {
         return await this.queryBus.execute(new queries_1.ProjectManagerQuery(projectManagerId));
@@ -4760,12 +4778,6 @@ let ProjectManagerService = class ProjectManagerService {
     }
 };
 exports.ProjectManagerService = ProjectManagerService;
-__decorate([
-    __param(0, (0, common_1.Param)('projectManagerId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], ProjectManagerService.prototype, "getProjectManager", null);
 __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, util_1.HttpUser)()),
@@ -4814,6 +4826,12 @@ let ProjectManagersController = class ProjectManagersController {
     async getProjectManagers() {
         return await this.projectManagerService.getProjectManagers();
     }
+    async getDefaultProjectManager() {
+        return await this.projectManagerService.getDefaultProjectManager();
+    }
+    async getProjectManagerOptions() {
+        return await this.projectManagerService.getProjectManagerOptions();
+    }
     async getProjectManager(projectManagerId) {
         return await this.projectManagerService.getProjectManager(projectManagerId);
     }
@@ -4838,8 +4856,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProjectManagersController.prototype, "getProjectManagers", null);
 __decorate([
-    (0, common_1.Get)(':projectManagerId'),
-    __param(0, (0, common_1.Param)('projectManagerId')),
+    (0, common_1.Get)("default"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProjectManagersController.prototype, "getDefaultProjectManager", null);
+__decorate([
+    (0, common_1.Get)("options"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProjectManagersController.prototype, "getProjectManagerOptions", null);
+__decorate([
+    (0, common_1.Get)(":projectManagerId"),
+    __param(0, (0, common_1.Param)("projectManagerId")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -4853,24 +4883,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProjectManagersController.prototype, "createProjectManager", null);
 __decorate([
-    (0, common_1.Post)(':projectManagerId'),
+    (0, common_1.Post)(":projectManagerId"),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('projectManagerId')),
+    __param(1, (0, common_1.Param)("projectManagerId")),
     __param(2, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [typeof (_c = typeof Omit !== "undefined" && Omit) === "function" ? _c : Object, String, String]),
     __metadata("design:returntype", Promise)
 ], ProjectManagersController.prototype, "updateProjectManager", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Delete)(":id"),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], ProjectManagersController.prototype, "deleteProjectManager", null);
 exports.ProjectManagersController = ProjectManagersController = __decorate([
-    (0, common_1.Controller)('project-managers'),
+    (0, common_1.Controller)("project-managers"),
     __metadata("design:paramtypes", [typeof (_a = typeof project_manager_service_1.ProjectManagerService !== "undefined" && project_manager_service_1.ProjectManagerService) === "function" ? _a : Object])
 ], ProjectManagersController);
 
@@ -4911,6 +4941,100 @@ exports.ProjectManagersModule = ProjectManagersModule = __decorate([
 
 /***/ }),
 
+/***/ "./src/app/project-management/project-managers/queries/default-project-manager/default-project-manager.handler.ts":
+/*!************************************************************************************************************************!*\
+  !*** ./src/app/project-management/project-managers/queries/default-project-manager/default-project-manager.handler.ts ***!
+  \************************************************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DefaultProjectManagerQueryHandler = void 0;
+const cqrs_1 = __webpack_require__(/*! @nestjs/cqrs */ "@nestjs/cqrs");
+const default_project_manager_query_1 = __webpack_require__(/*! ./default-project-manager.query */ "./src/app/project-management/project-managers/queries/default-project-manager/default-project-manager.query.ts");
+const neo4j_1 = __webpack_require__(/*! @/libs/neo4j */ "./src/libs/neo4j/index.ts");
+let DefaultProjectManagerQueryHandler = class DefaultProjectManagerQueryHandler {
+    constructor(client) {
+        this.client = client;
+        this.query = `
+		MATCH (pm:ProjectManager)
+			WHERE pm.isDefault = true
+		RETURN {
+			value: pm.id,
+			label: pm.name,
+			color: pm.color
+		} AS projectManager
+	`;
+    }
+    async execute() {
+        const result = await this.client.read(this.query);
+        return result.records[0].get("projectManager");
+    }
+};
+exports.DefaultProjectManagerQueryHandler = DefaultProjectManagerQueryHandler;
+exports.DefaultProjectManagerQueryHandler = DefaultProjectManagerQueryHandler = __decorate([
+    (0, cqrs_1.QueryHandler)(default_project_manager_query_1.DefaultProjectManagerQuery),
+    __metadata("design:paramtypes", [typeof (_a = typeof neo4j_1.Neo4jClient !== "undefined" && neo4j_1.Neo4jClient) === "function" ? _a : Object])
+], DefaultProjectManagerQueryHandler);
+
+
+/***/ }),
+
+/***/ "./src/app/project-management/project-managers/queries/default-project-manager/default-project-manager.query.ts":
+/*!**********************************************************************************************************************!*\
+  !*** ./src/app/project-management/project-managers/queries/default-project-manager/default-project-manager.query.ts ***!
+  \**********************************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DefaultProjectManagerQuery = void 0;
+class DefaultProjectManagerQuery {
+    constructor() { }
+}
+exports.DefaultProjectManagerQuery = DefaultProjectManagerQuery;
+
+
+/***/ }),
+
+/***/ "./src/app/project-management/project-managers/queries/default-project-manager/index.ts":
+/*!**********************************************************************************************!*\
+  !*** ./src/app/project-management/project-managers/queries/default-project-manager/index.ts ***!
+  \**********************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./default-project-manager.query */ "./src/app/project-management/project-managers/queries/default-project-manager/default-project-manager.query.ts"), exports);
+__exportStar(__webpack_require__(/*! ./default-project-manager.handler */ "./src/app/project-management/project-managers/queries/default-project-manager/default-project-manager.handler.ts"), exports);
+
+
+/***/ }),
+
 /***/ "./src/app/project-management/project-managers/queries/handlers.ts":
 /*!*************************************************************************!*\
   !*** ./src/app/project-management/project-managers/queries/handlers.ts ***!
@@ -4924,7 +5048,14 @@ const is_project_manager_1 = __webpack_require__(/*! ./is-project-manager */ "./
 const project_manager_1 = __webpack_require__(/*! ./project-manager */ "./src/app/project-management/project-managers/queries/project-manager/index.ts");
 const project_manager_options_1 = __webpack_require__(/*! ./project-manager-options */ "./src/app/project-management/project-managers/queries/project-manager-options/index.ts");
 const project_managers_1 = __webpack_require__(/*! ./project-managers */ "./src/app/project-management/project-managers/queries/project-managers/index.ts");
-exports.queryHandlers = [project_manager_options_1.ProjectManagerOptionsQueryHandler, project_managers_1.ProjectManagersHandler, project_manager_1.ProjectManagerHandler, is_project_manager_1.IsProjectManagerHandler];
+const default_project_manager_1 = __webpack_require__(/*! ./default-project-manager */ "./src/app/project-management/project-managers/queries/default-project-manager/index.ts");
+exports.queryHandlers = [
+    project_manager_options_1.ProjectManagerOptionsQueryHandler,
+    default_project_manager_1.DefaultProjectManagerQueryHandler,
+    project_managers_1.ProjectManagersHandler,
+    project_manager_1.ProjectManagerHandler,
+    is_project_manager_1.IsProjectManagerHandler,
+];
 
 
 /***/ }),
@@ -5110,18 +5241,17 @@ let ProjectManagerOptionsQueryHandler = class ProjectManagerOptionsQueryHandler 
         this.client = client;
         this.query = `
         MATCH (pm:ProjectManager)
-        WITH pm ORDER BY pm.name
         RETURN {
-            id: pm.id,
-            name: pm.name,
+            value: pm.id,
+            label: pm.name,
             color: pm.color
         } AS projectManager
+            ORDER BY projectManager.label
    `;
     }
     async execute() {
         const queryResult = await this.client.read(this.query);
-        const response = queryResult.records.map((d) => d.get('projectManager'));
-        return response;
+        return queryResult.records.map((d) => d.get("projectManager"));
     }
 };
 exports.ProjectManagerOptionsQueryHandler = ProjectManagerOptionsQueryHandler;
@@ -6920,6 +7050,101 @@ __exportStar(__webpack_require__(/*! ./workpackages.module */ "./src/app/project
 
 /***/ }),
 
+/***/ "./src/app/project-management/workpackages/queries/booking-stages/booking-stages.query.ts":
+/*!************************************************************************************************!*\
+  !*** ./src/app/project-management/workpackages/queries/booking-stages/booking-stages.query.ts ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BookingStagesQuery = void 0;
+class BookingStagesQuery {
+    constructor() { }
+}
+exports.BookingStagesQuery = BookingStagesQuery;
+
+
+/***/ }),
+
+/***/ "./src/app/project-management/workpackages/queries/booking-stages/index.ts":
+/*!*********************************************************************************!*\
+  !*** ./src/app/project-management/workpackages/queries/booking-stages/index.ts ***!
+  \*********************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./stages.handler */ "./src/app/project-management/workpackages/queries/booking-stages/stages.handler.ts"), exports);
+__exportStar(__webpack_require__(/*! ./booking-stages.query */ "./src/app/project-management/workpackages/queries/booking-stages/booking-stages.query.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./src/app/project-management/workpackages/queries/booking-stages/stages.handler.ts":
+/*!******************************************************************************************!*\
+  !*** ./src/app/project-management/workpackages/queries/booking-stages/stages.handler.ts ***!
+  \******************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BookingStagesQueryHandler = void 0;
+const cqrs_1 = __webpack_require__(/*! @nestjs/cqrs */ "@nestjs/cqrs");
+const neo4j_1 = __webpack_require__(/*! @/libs/neo4j */ "./src/libs/neo4j/index.ts");
+const booking_stages_query_1 = __webpack_require__(/*! ./booking-stages.query */ "./src/app/project-management/workpackages/queries/booking-stages/booking-stages.query.ts");
+let BookingStagesQueryHandler = class BookingStagesQueryHandler {
+    constructor(client) {
+        this.client = client;
+        this.query = `
+            MATCH (s:BookingStage)
+            RETURN {
+                value: s.name,
+                label: s.name,
+                color: s.color,
+                sequence: s.sequence
+            } AS bookingStage
+                ORDER BY bookingStage.sequence
+    `;
+    }
+    async execute() {
+        const queryResult = await this.client.read(this.query);
+        return queryResult.records.map((d) => d.get("bookingStage"));
+    }
+};
+exports.BookingStagesQueryHandler = BookingStagesQueryHandler;
+exports.BookingStagesQueryHandler = BookingStagesQueryHandler = __decorate([
+    (0, cqrs_1.QueryHandler)(booking_stages_query_1.BookingStagesQuery),
+    __metadata("design:paramtypes", [typeof (_a = typeof neo4j_1.Neo4jClient !== "undefined" && neo4j_1.Neo4jClient) === "function" ? _a : Object])
+], BookingStagesQueryHandler);
+
+
+/***/ }),
+
 /***/ "./src/app/project-management/workpackages/queries/handlers.ts":
 /*!*********************************************************************!*\
   !*** ./src/app/project-management/workpackages/queries/handlers.ts ***!
@@ -6935,13 +7160,15 @@ const validate_systematic_name_1 = __webpack_require__(/*! ./validate-systematic
 const workpackage_create_form_1 = __webpack_require__(/*! ./workpackage-create-form */ "./src/app/project-management/workpackages/queries/workpackage-create-form/index.ts");
 const workpackages_view_1 = __webpack_require__(/*! ./workpackages-view */ "./src/app/project-management/workpackages/queries/workpackages-view/index.ts");
 const workpackge_profile_1 = __webpack_require__(/*! ./workpackge-profile */ "./src/app/project-management/workpackages/queries/workpackge-profile/index.ts");
+const booking_stages_1 = __webpack_require__(/*! ./booking-stages */ "./src/app/project-management/workpackages/queries/booking-stages/index.ts");
 exports.queryHandlers = [
     validate_systematic_name_1.ValidateSystematicNameQueryHandler,
     workpackages_view_1.WorkpackageViewQueryHandler,
     workpackge_profile_1.WorkpackageProfileQueryHandler,
     stages_1.StagesQueryHandler,
     workpackage_create_form_1.WorkpackageCreateFormQueryHandler,
-    project_manager_workpackages_1.ProjectManagerWorkpackagesHandler
+    project_manager_workpackages_1.ProjectManagerWorkpackagesHandler,
+    booking_stages_1.BookingStagesQueryHandler,
 ];
 
 
@@ -7232,13 +7459,18 @@ let StagesQueryHandler = class StagesQueryHandler {
         this.client = client;
         this.query = `
             MATCH (s:Stage)
-            RETURN s{.*, id: s.name} AS stage ORDER BY stage.sequence
+            RETURN {
+                value: s.name,
+                label: s.name,
+                color: s.color,
+                sequence: s.sequence
+            } AS stage
+                ORDER BY stage.sequence
     `;
     }
     async execute() {
         const queryResult = await this.client.read(this.query);
-        const response = queryResult.records.map((d) => d.get('stage'));
-        return response;
+        return queryResult.records.map((d) => d.get("stage"));
     }
 };
 exports.StagesQueryHandler = StagesQueryHandler;
@@ -7665,111 +7897,30 @@ let WorkpackageViewQueryHandler = class WorkpackageViewQueryHandler {
     constructor(client) {
         this.client = client;
         this.query = `
-        MATCH (defaultPM:DefaultProjectManager)
-        MATCH (w:Workpackage)--(plan:Plan)
-
-
-        CALL {
-            WITH w
-            RETURN
-                w.id AS id,
-                w.serialNo AS serialNo,
-                w.systematicName AS systematicName,
-                w.name AS name
-        }
-
-        CALL {
-            WITH w
-            MATCH (w)--(c:Contract)
-            RETURN {
-                id: c.id,
-                name: c.name
-            } AS contract
-        }
-
-        CALL {
-            WITH w
-            MATCH (w)--(f:FinancialSource)
-            RETURN {
-                id: f.id,
-                name: f.name
-            } AS financialSource
-        }
-
-        CALL {
-            WITH w
-            MATCH (w)--(s:Stage)
-            RETURN {
-                id: s.id,
-                name: s.name,
-                color: s.color,
-                sequence: s.sequence
-            } AS stage
-        }
-
-        CALL {
-            WITH w
-            MATCH (w)--(bs:BookingStage)
-            RETURN {
-                id: bs.id,
-                name: bs.name,
-                color: bs.color,
-                sequence: bs.sequence
-            } AS bookingStage
-        }
-
-        CALL {
-            WITH plan, defaultPM
-            OPTIONAL MATCH (plan)<-[:MANAGES]-(pm:ProjectManager)
-            RETURN CASE
-                WHEN pm.id IS NOT NULL
-                    THEN  {
-                        id: pm.id,
-                        name: pm.name,
-                        color: pm.color
-                    } 
-                ELSE {
-                    id: defaultPM.id,
-                    name: defaultPM.name,
-                    color: defaultPM.color
-                }
-            END AS projectManager
-        }
-
-        CALL {
-            WITH plan
-            RETURN 
-                apoc.temporal.format(plan.startDate, "YYYY-MM-dd") AS startDate,
-                apoc.temporal.format(plan.endDate, "YYYY-MM-dd") AS endDate
-        }
-
-        CALL {
-            WITH plan
-            RETURN round((plan.defaultWork + plan.overtimeWork)/60,1) AS work
-        }
-
-
+        MATCH (w:Workpackage)--(pl:Plan)--(pm:ProjectManager)
+        MATCH (c:Contract)--(w)--(f:FinancialSource)
+        MATCH (s:Stage)--(w)--(bs:BookingStage)
+        
         RETURN {
-            id: id,
-            serialNo: serialNo,
-            systematicName: systematicName,
-            name: name,
-            contract: contract,
-            financialSource: financialSource,
-            stage: stage,
-            bookingStage: bookingStage,
-            projectManager: projectManager,
-            startDate: startDate,
-            endDate: endDate,
-            work: work,
-            team: []        
+            id: w.id,
+            node: w{.*},
+            plan: pl{
+                .*,
+                startDate: apoc.temporal.format(pl.startDate, "dd-MM-YYYY"),
+                endDate: apoc.temporal.format(pl.endDate, "dd-MM-YYYY")
+            },
+            contract: c{.*},
+            financialSource: f{.*},
+            stage: s{.*},
+            bookingStage: bs{.*},
+            projectManager: pm{.*}
         } AS row
-        ORDER BY row.systematicName
+            ORDER BY row.node.systematicName
    `;
     }
     async execute() {
         const queryResult = await this.client.read(this.query);
-        return queryResult.records.map((d) => d.get('row'));
+        return queryResult.records.map((d) => d.get("row"));
     }
 };
 exports.WorkpackageViewQueryHandler = WorkpackageViewQueryHandler;
@@ -8014,7 +8165,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkpackagesController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -8023,6 +8174,7 @@ const queries_1 = __webpack_require__(/*! ./queries */ "./src/app/project-manage
 const _shared_1 = __webpack_require__(/*! @shared */ "../shared/src/index.ts");
 const util_1 = __webpack_require__(/*! @/libs/util */ "./src/libs/util/index.ts");
 const commands_1 = __webpack_require__(/*! ./commands */ "./src/app/project-management/workpackages/commands/index.ts");
+const booking_stages_1 = __webpack_require__(/*! ./queries/booking-stages */ "./src/app/project-management/workpackages/queries/booking-stages/index.ts");
 let WorkpackagesController = class WorkpackagesController {
     constructor(commandBus, queryBus) {
         this.commandBus = commandBus;
@@ -8030,6 +8182,12 @@ let WorkpackagesController = class WorkpackagesController {
     }
     async getWorkpackagesView() {
         return await this.queryBus.execute(new queries_1.WorkpackageViewQuery());
+    }
+    async getBookingStages() {
+        return await this.queryBus.execute(new booking_stages_1.BookingStagesQuery());
+    }
+    async getStages() {
+        return await this.queryBus.execute(new queries_1.StagesQuery());
     }
     async getWorkpackageProfile(workpackageId) {
         return await this.queryBus.execute(new queries_1.WorkpackageProfileQuery(workpackageId));
@@ -8049,11 +8207,23 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], WorkpackagesController.prototype, "getWorkpackagesView", null);
 __decorate([
-    (0, common_1.Get)(':workpackageId'),
-    __param(0, (0, common_1.Param)('workpackageId')),
+    (0, common_1.Get)("booking-stages"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], WorkpackagesController.prototype, "getBookingStages", null);
+__decorate([
+    (0, common_1.Get)("stages"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], WorkpackagesController.prototype, "getStages", null);
+__decorate([
+    (0, common_1.Get)(":workpackageId"),
+    __param(0, (0, common_1.Param)("workpackageId")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -8063,28 +8233,28 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof _shared_1.CreateWorkpackageDto !== "undefined" && _shared_1.CreateWorkpackageDto) === "function" ? _c : Object, String]),
+    __metadata("design:paramtypes", [typeof (_f = typeof _shared_1.CreateWorkpackageDto !== "undefined" && _shared_1.CreateWorkpackageDto) === "function" ? _f : Object, String]),
     __metadata("design:returntype", Promise)
 ], WorkpackagesController.prototype, "createWorkpackage", null);
 __decorate([
-    (0, common_1.Post)(':workpackageId'),
-    __param(0, (0, common_1.Param)('workpackageId')),
+    (0, common_1.Post)(":workpackageId"),
+    __param(0, (0, common_1.Param)("workpackageId")),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_d = typeof Omit !== "undefined" && Omit) === "function" ? _d : Object, String]),
+    __metadata("design:paramtypes", [String, typeof (_g = typeof Omit !== "undefined" && Omit) === "function" ? _g : Object, String]),
     __metadata("design:returntype", Promise)
 ], WorkpackagesController.prototype, "updateWorkpackage", null);
 __decorate([
-    (0, common_1.Delete)(':workpackageId'),
-    __param(0, (0, common_1.Param)('workpackageId')),
+    (0, common_1.Delete)(":workpackageId"),
+    __param(0, (0, common_1.Param)("workpackageId")),
     __param(1, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], WorkpackagesController.prototype, "deleteWorkpackage", null);
 exports.WorkpackagesController = WorkpackagesController = __decorate([
-    (0, common_1.Controller)('workpackages'),
+    (0, common_1.Controller)("workpackages"),
     __metadata("design:paramtypes", [typeof (_a = typeof cqrs_1.CommandBus !== "undefined" && cqrs_1.CommandBus) === "function" ? _a : Object, typeof (_b = typeof cqrs_1.QueryBus !== "undefined" && cqrs_1.QueryBus) === "function" ? _b : Object])
 ], WorkpackagesController);
 
@@ -12106,14 +12276,14 @@ let DBInitService = class DBInitService {
             await this.createCalendarDays();
             await this.createResourceAgents(contractId);
             await this.createDefaultUser();
-            console.log('Ran new db script');
+            console.log("Ran new db script");
         }
         else {
-            console.log('db is not new.');
+            console.log("db is not new.");
         }
     }
     async determineIfDatabaseIsNew() {
-        console.log('Is checking DB');
+        console.log("Is checking DB");
         const queryResult = await this.client.read(`
             OPTIONAL MATCH (pm:DefaultProjectManager) 
             RETURN CASE 
@@ -12121,26 +12291,26 @@ let DBInitService = class DBInitService {
                     then false
                 else true
             END AS isDatabaseNew`);
-        return queryResult?.records[0]?.get('isDatabaseNew');
+        return queryResult?.records[0]?.get("isDatabaseNew");
     }
     async createIndexes() {
         const session = this.client.driver.session();
         const constraints = [
-            'CREATE CONSTRAINT constraint_uid IF NOT EXISTS FOR (w:User) REQUIRE (w.uid) IS UNIQUE',
-            'CREATE CONSTRAINT constraints_workpackage_systematicName IF NOT EXISTS FOR (w:Workpackage) REQUIRE w.systematicName IS UNIQUE',
-            'CREATE CONSTRAINT constraints_activity_id IF NOT EXISTS FOR (a0:Activity) REQUIRE a0.id IS UNIQUE',
-            'CREATE CONSTRAINT constraints_resource_id IF NOT EXISTS FOR (r:Resource) REQUIRE r.id IS UNIQUE',
-            'CREATE CONSTRAINT constraints_resourceType_id IF NOT EXISTS FOR (rt:ResourceType) REQUIRE rt.id IS UNIQUE',
-            'CREATE CONSTRAINT constraints_agent IF NOT EXISTS FOR (ag:Agent) REQUIRE ag.id IS UNIQUE',
-            'CREATE CONSTRAINT constraints_stage IF NOT EXISTS FOR (s:Stage) REQUIRE s.name IS UNIQUE',
-            'CREATE CONSTRAINT constraints_bookingstage IF NOT EXISTS FOR (b:BookingStage) REQUIRE b.name IS UNIQUE',
-            'CREATE CONSTRAINT constraints_contract IF NOT EXISTS FOR (c:Contract) REQUIRE (c.id, c.name, c.abbrevation) IS UNIQUE',
-            'CREATE CONSTRAINT constraints_financialsource IF NOT EXISTS FOR (f:FinancialSource) REQUIRE (f.id, f.name) IS UNIQUE',
-            'CREATE RANGE INDEX calendarday_weekYear_index IF NOT EXISTS FOR (c1:CalendarDay) ON (c1.week, c1.year)',
-            'CREATE RANGE INDEX calendarday_date_index IF NOT EXISTS FOR (c2:CalendarDay) ON c2.date',
-            'CREATE RANGE INDEX activity_interval IF NOT EXISTS FOR (a2:Activity) ON (a2.startDate, a2.endDate)',
-            'CREATE RANGE INDEX activity_startDate IF NOT EXISTS FOR (a3:Activity) ON a3.startDate',
-            'CREATE RANGE INDEX activity_endDate IF NOT EXISTS FOR (a3:Activity) ON a3.endDate',
+            "CREATE CONSTRAINT constraint_uid IF NOT EXISTS FOR (w:User) REQUIRE (w.uid) IS UNIQUE",
+            "CREATE CONSTRAINT constraints_workpackage_systematicName IF NOT EXISTS FOR (w:Workpackage) REQUIRE w.systematicName IS UNIQUE",
+            "CREATE CONSTRAINT constraints_activity_id IF NOT EXISTS FOR (a0:Activity) REQUIRE a0.id IS UNIQUE",
+            "CREATE CONSTRAINT constraints_resource_id IF NOT EXISTS FOR (r:Resource) REQUIRE r.id IS UNIQUE",
+            "CREATE CONSTRAINT constraints_resourceType_id IF NOT EXISTS FOR (rt:ResourceType) REQUIRE rt.id IS UNIQUE",
+            "CREATE CONSTRAINT constraints_agent IF NOT EXISTS FOR (ag:Agent) REQUIRE ag.id IS UNIQUE",
+            "CREATE CONSTRAINT constraints_stage IF NOT EXISTS FOR (s:Stage) REQUIRE s.name IS UNIQUE",
+            "CREATE CONSTRAINT constraints_bookingstage IF NOT EXISTS FOR (b:BookingStage) REQUIRE b.name IS UNIQUE",
+            "CREATE CONSTRAINT constraints_contract IF NOT EXISTS FOR (c:Contract) REQUIRE (c.id, c.name, c.abbrevation) IS UNIQUE",
+            "CREATE CONSTRAINT constraints_financialsource IF NOT EXISTS FOR (f:FinancialSource) REQUIRE (f.id, f.name) IS UNIQUE",
+            "CREATE RANGE INDEX calendarday_weekYear_index IF NOT EXISTS FOR (c1:CalendarDay) ON (c1.week, c1.year)",
+            "CREATE RANGE INDEX calendarday_date_index IF NOT EXISTS FOR (c2:CalendarDay) ON c2.date",
+            "CREATE RANGE INDEX activity_interval IF NOT EXISTS FOR (a2:Activity) ON (a2.startDate, a2.endDate)",
+            "CREATE RANGE INDEX activity_startDate IF NOT EXISTS FOR (a3:Activity) ON a3.startDate",
+            "CREATE RANGE INDEX activity_endDate IF NOT EXISTS FOR (a3:Activity) ON a3.endDate",
         ];
         for (let i = 0; i < constraints.length; i++) {
             await session.run(constraints[i]);
@@ -12152,24 +12322,25 @@ let DBInitService = class DBInitService {
             MERGE (:ProjectManager:DefaultProjectManager {
                 color: "CECECE",
                 id: "95fde6bc-fef3-488c-811f-044a9c135782",
-                name: "Ingen"
+                name: "Ingen",
+                isDefault: true
             })
         `);
     }
     mapDays(startDate, endDate) {
-        const interval = luxon_1.Interval.fromDateTimes(luxon_1.DateTime.fromISO(startDate).setZone('utc').setLocale('da'), luxon_1.DateTime.fromISO(endDate).setZone('utc').setLocale('da'));
+        const interval = luxon_1.Interval.fromDateTimes(luxon_1.DateTime.fromISO(startDate).setZone("utc").setLocale("da"), luxon_1.DateTime.fromISO(endDate).setZone("utc").setLocale("da"));
         return interval.splitBy({ days: 1 }).map((date) => {
-            let labels = ['CalendarDay'];
+            let labels = ["CalendarDay"];
             if ([6, 7].includes(date.start.weekday)) {
-                labels.push('Weekend');
+                labels.push("Weekend");
             }
             else {
-                labels.push('BusinessDay');
+                labels.push("BusinessDay");
             }
             const properties = {
-                date: date.start.toFormat('yyyy-MM-dd'),
+                date: date.start.toFormat("yyyy-MM-dd"),
                 week: date.start.weekNumber,
-                weekdayName: (0, lodash_1.capitalize)(date.start.toFormat('cccc')),
+                weekdayName: (0, lodash_1.capitalize)(date.start.toFormat("cccc")),
                 weekday: date.start.weekday,
                 year: date.start.year,
             };
@@ -12180,7 +12351,7 @@ let DBInitService = class DBInitService {
         });
     }
     async createCalendarDays() {
-        const days = this.mapDays(luxon_1.DateTime.now().minus({ years: 2 }).toFormat('yyyy-MM-dd'), luxon_1.DateTime.now().plus({ years: 5 }).toFormat('yyyy-MM-dd'));
+        const days = this.mapDays(luxon_1.DateTime.now().minus({ years: 2 }).toFormat("yyyy-MM-dd"), luxon_1.DateTime.now().plus({ years: 5 }).toFormat("yyyy-MM-dd"));
         await this.client.write(`
             MERGE (c:Calendar {
                 isDefault: true
@@ -12281,7 +12452,7 @@ let DBInitService = class DBInitService {
                 SET c.id = apoc.create.uuid()
             RETURN c.id AS contractId
         `);
-        return result.records[0].get('contractId');
+        return result.records[0].get("contractId");
     }
     async financialsources() {
         await this.client.write(`
@@ -13027,6 +13198,38 @@ exports.CreateFinancialSourceDto = CreateFinancialSourceDto;
 
 /***/ }),
 
+/***/ "../shared/src/dto/organization/financialsources/financialsource.node.ts":
+/*!*******************************************************************************!*\
+  !*** ../shared/src/dto/organization/financialsources/financialsource.node.ts ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FinancialSourceNode = void 0;
+class FinancialSourceNode {
+}
+exports.FinancialSourceNode = FinancialSourceNode;
+
+
+/***/ }),
+
+/***/ "../shared/src/dto/organization/financialsources/financialsource.view-row.ts":
+/*!***********************************************************************************!*\
+  !*** ../shared/src/dto/organization/financialsources/financialsource.view-row.ts ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FinancialSourceViewRow = void 0;
+class FinancialSourceViewRow {
+}
+exports.FinancialSourceViewRow = FinancialSourceViewRow;
+
+
+/***/ }),
+
 /***/ "../shared/src/dto/organization/financialsources/index.ts":
 /*!****************************************************************!*\
   !*** ../shared/src/dto/organization/financialsources/index.ts ***!
@@ -13051,6 +13254,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__webpack_require__(/*! ./update-financialsource.dto */ "../shared/src/dto/organization/financialsources/update-financialsource.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./create-financialsource.dto */ "../shared/src/dto/organization/financialsources/create-financialsource.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./financialsource.node */ "../shared/src/dto/organization/financialsources/financialsource.node.ts"), exports);
+__exportStar(__webpack_require__(/*! ./financialsource.view-row */ "../shared/src/dto/organization/financialsources/financialsource.view-row.ts"), exports);
 
 
 /***/ }),
@@ -13229,6 +13434,23 @@ __exportStar(__webpack_require__(/*! ./update-allocation.dto */ "../shared/src/d
 __exportStar(__webpack_require__(/*! ./update-period.dto */ "../shared/src/dto/project-management/planning/update-period.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./create-activity.dto */ "../shared/src/dto/project-management/planning/create-activity.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./delete-assignment.dto */ "../shared/src/dto/project-management/planning/delete-assignment.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./plan.node */ "../shared/src/dto/project-management/planning/plan.node.ts"), exports);
+
+
+/***/ }),
+
+/***/ "../shared/src/dto/project-management/planning/plan.node.ts":
+/*!******************************************************************!*\
+  !*** ../shared/src/dto/project-management/planning/plan.node.ts ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PlanNode = void 0;
+class PlanNode {
+}
+exports.PlanNode = PlanNode;
 
 
 /***/ }),
@@ -13362,6 +13584,23 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__webpack_require__(/*! ./create-project-manager.dto */ "../shared/src/dto/project-management/project-manager/create-project-manager.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./update-project-manager.dto */ "../shared/src/dto/project-management/project-manager/update-project-manager.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./assign-project-manager.dto */ "../shared/src/dto/project-management/project-manager/assign-project-manager.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./project-manager.node */ "../shared/src/dto/project-management/project-manager/project-manager.node.ts"), exports);
+
+
+/***/ }),
+
+/***/ "../shared/src/dto/project-management/project-manager/project-manager.node.ts":
+/*!************************************************************************************!*\
+  !*** ../shared/src/dto/project-management/project-manager/project-manager.node.ts ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProjectManagerNode = void 0;
+class ProjectManagerNode {
+}
+exports.ProjectManagerNode = ProjectManagerNode;
 
 
 /***/ }),
@@ -13461,6 +13700,22 @@ exports.SwapTeamMemberDto = SwapTeamMemberDto;
 
 /***/ }),
 
+/***/ "../shared/src/dto/project-management/workpackage/booking-stage.node.ts":
+/*!******************************************************************************!*\
+  !*** ../shared/src/dto/project-management/workpackage/booking-stage.node.ts ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BookingStageNode = void 0;
+class BookingStageNode {
+}
+exports.BookingStageNode = BookingStageNode;
+
+
+/***/ }),
+
 /***/ "../shared/src/dto/project-management/workpackage/create-workpackage.dto.ts":
 /*!**********************************************************************************!*\
   !*** ../shared/src/dto/project-management/workpackage/create-workpackage.dto.ts ***!
@@ -13503,6 +13758,26 @@ __exportStar(__webpack_require__(/*! ./update-booking-stage.dto */ "../shared/sr
 __exportStar(__webpack_require__(/*! ./update-stage.dto */ "../shared/src/dto/project-management/workpackage/update-stage.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./update-workpackage.dto */ "../shared/src/dto/project-management/workpackage/update-workpackage.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./create-workpackage.dto */ "../shared/src/dto/project-management/workpackage/create-workpackage.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./booking-stage.node */ "../shared/src/dto/project-management/workpackage/booking-stage.node.ts"), exports);
+__exportStar(__webpack_require__(/*! ./stage.node */ "../shared/src/dto/project-management/workpackage/stage.node.ts"), exports);
+__exportStar(__webpack_require__(/*! ./workpackage.node */ "../shared/src/dto/project-management/workpackage/workpackage.node.ts"), exports);
+__exportStar(__webpack_require__(/*! ./workpackage.view-row */ "../shared/src/dto/project-management/workpackage/workpackage.view-row.ts"), exports);
+
+
+/***/ }),
+
+/***/ "../shared/src/dto/project-management/workpackage/stage.node.ts":
+/*!**********************************************************************!*\
+  !*** ../shared/src/dto/project-management/workpackage/stage.node.ts ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.StageNode = void 0;
+class StageNode {
+}
+exports.StageNode = StageNode;
 
 
 /***/ }),
@@ -13555,6 +13830,38 @@ exports.UpdateWorkpackageDto = void 0;
 class UpdateWorkpackageDto {
 }
 exports.UpdateWorkpackageDto = UpdateWorkpackageDto;
+
+
+/***/ }),
+
+/***/ "../shared/src/dto/project-management/workpackage/workpackage.node.ts":
+/*!****************************************************************************!*\
+  !*** ../shared/src/dto/project-management/workpackage/workpackage.node.ts ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WorkpackageNode = void 0;
+class WorkpackageNode {
+}
+exports.WorkpackageNode = WorkpackageNode;
+
+
+/***/ }),
+
+/***/ "../shared/src/dto/project-management/workpackage/workpackage.view-row.ts":
+/*!********************************************************************************!*\
+  !*** ../shared/src/dto/project-management/workpackage/workpackage.view-row.ts ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WorkpackageViewRow = void 0;
+class WorkpackageViewRow {
+}
+exports.WorkpackageViewRow = WorkpackageViewRow;
 
 
 /***/ }),

@@ -1,5 +1,4 @@
-import type { Avatar as AvatarType } from "@/types";
-import { Avatar } from "./avatar";
+import { Avatar, AvatarType } from "./avatar";
 import { Group, GroupProps, Text, TextProps } from "@mantine/core";
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";

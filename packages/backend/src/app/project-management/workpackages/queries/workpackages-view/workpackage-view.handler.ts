@@ -1,17 +1,44 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { WorkpackageViewQuery } from './workpackage-view.query';
-import { Neo4jClient } from '@/libs/neo4j';
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { WorkpackageViewQuery } from "./workpackage-view.query";
+import { Neo4jClient } from "@/libs/neo4j";
+import { WorkpackageViewRow } from "@shared";
 
 @QueryHandler(WorkpackageViewQuery)
-export class WorkpackageViewQueryHandler implements IQueryHandler<WorkpackageViewQuery, any[]> {
+export class WorkpackageViewQueryHandler
+    implements IQueryHandler<WorkpackageViewQuery, WorkpackageViewRow[]>
+{
     constructor(private readonly client: Neo4jClient) {}
 
-    async execute(): Promise<any[]> {
+    async execute(): Promise<WorkpackageViewRow[]> {
         const queryResult = await this.client.read(this.query);
-        return queryResult.records.map((d) => d.get('row'));
+        return queryResult.records.map((d) => d.get("row"));
     }
 
     query = `
+        MATCH (w:Workpackage)--(pl:Plan)--(pm:ProjectManager)
+        MATCH (c:Contract)--(w)--(f:FinancialSource)
+        MATCH (s:Stage)--(w)--(bs:BookingStage)
+        
+        RETURN {
+            id: w.id,
+            node: w{.*},
+            plan: pl{
+                .*,
+                startDate: apoc.temporal.format(pl.startDate, "dd-MM-YYYY"),
+                endDate: apoc.temporal.format(pl.endDate, "dd-MM-YYYY")
+            },
+            contract: c{.*},
+            financialSource: f{.*},
+            stage: s{.*},
+            bookingStage: bs{.*},
+            projectManager: pm{.*}
+        } AS row
+            ORDER BY row.node.systematicName
+   `;
+}
+
+/*
+`
         MATCH (defaultPM:DefaultProjectManager)
         MATCH (w:Workpackage)--(plan:Plan)
 
@@ -74,7 +101,7 @@ export class WorkpackageViewQueryHandler implements IQueryHandler<WorkpackageVie
                         id: pm.id,
                         name: pm.name,
                         color: pm.color
-                    } 
+                    }
                 ELSE {
                     id: defaultPM.id,
                     name: defaultPM.name,
@@ -85,7 +112,7 @@ export class WorkpackageViewQueryHandler implements IQueryHandler<WorkpackageVie
 
         CALL {
             WITH plan
-            RETURN 
+            RETURN
                 apoc.temporal.format(plan.startDate, "YYYY-MM-dd") AS startDate,
                 apoc.temporal.format(plan.endDate, "YYYY-MM-dd") AS endDate
         }
@@ -109,11 +136,11 @@ export class WorkpackageViewQueryHandler implements IQueryHandler<WorkpackageVie
             startDate: startDate,
             endDate: endDate,
             work: work,
-            team: []        
+            team: []
         } AS row
         ORDER BY row.systematicName
-   `;
-}
+   `
+ */
 
 /*       
 

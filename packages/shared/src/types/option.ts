@@ -3,3 +3,7 @@ export interface Option {
     label: string;
     color?: string;
 }
+
+export interface StageOption extends Option {
+    sequence: number;
+}

@@ -1,5 +1,6 @@
-import {ContractsViewRightActions} from './@actions.tsx';
+import { ContractsViewRightActions } from "./@actions.tsx";
 
 export const contractsViewHandle = {
-	rightActions: <ContractsViewRightActions/>,
+    rightActions: <ContractsViewRightActions />,
+    pageSize: "md",
 };

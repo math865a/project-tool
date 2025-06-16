@@ -1,15 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { WorkpackageProfileQuery, WorkpackageViewQuery } from './queries';
-import { CreateWorkpackageDto, UpdateWorkpackageDto } from '@shared';
-import { HttpUser } from '@/libs/util';
+import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import {
+    StagesQuery,
+    WorkpackageProfileQuery,
+    WorkpackageViewQuery,
+} from "./queries";
+import {
+    CreateWorkpackageDto,
+    StageOption,
+    UpdateWorkpackageDto,
+    WorkpackageViewRow,
+} from "@shared";
+import { HttpUser } from "@/libs/util";
 import {
     CreateWorkpackageCommand,
     DeleteWorkpackageCommand,
     UpdateWorkpackageCommand,
-} from './commands';
+} from "./commands";
+import { BookingStagesQuery } from "./queries/booking-stages";
 
-@Controller('workpackages')
+@Controller("workpackages")
 export class WorkpackagesController {
     constructor(
         private readonly commandBus: CommandBus,
@@ -17,66 +27,83 @@ export class WorkpackagesController {
     ) {}
 
     @Get()
-    async getWorkpackagesView() {
+    async getWorkpackagesView(): Promise<WorkpackageViewRow[]> {
         return await this.queryBus.execute(new WorkpackageViewQuery());
     }
 
-    /*
-        @Get("allocation/:allocationId")
-        async getAllocationView(@Param("allocationId") allocationId: string) {
-            return await this.client.request(
-                planningPatterns.getAllocation,
-                allocationId
-            );
-        }
-    
-        @Get("create-form")
-        async getCreateForm() {
-            return await Promise.all([
-                this.client.request(workpackagePatterns.getWorkpackageCreateForm),
-                this.client.request(contractPatterns.getContractOptions),
-                this.client.request(
-                    financialsourcePatterns.getFinancialSourceOptions
-                ),
-                this.client.request(
-                    projectManagerPatterns.getProjectManagerOptions
-                ),
-                this.client.request(workpackagePatterns.getWorkpackageStages),
-            ]).then((res) => ({
-                record: res[0],
-                options: {
-                    contractOptions: res[1],
-                    financialSourceOptions: res[2],
-                    projectManagerOptions: res[3],
-                    stageOptions: res[4],
-                },
-            }));
-        }*/
+    @Get("booking-stages")
+    async getBookingStages(): Promise<StageOption[]> {
+        return await this.queryBus.execute(new BookingStagesQuery());
+    }
 
-    @Get(':workpackageId')
-    async getWorkpackageProfile(@Param('workpackageId') workpackageId: string) {
-        return await this.queryBus.execute(new WorkpackageProfileQuery(workpackageId));
+    @Get("stages")
+    async getStages(): Promise<StageOption[]> {
+        return await this.queryBus.execute(new StagesQuery());
+    }
+
+    /*
+		@Get("allocation/:allocationId")
+		async getAllocationView(@Param("allocationId") allocationId: string) {
+			return await this.client.request(
+				planningPatterns.getAllocation,
+				allocationId
+			);
+		}
+	
+		@Get("create-form")
+		async getCreateForm() {
+			return await Promise.all([
+				this.client.request(workpackagePatterns.getWorkpackageCreateForm),
+				this.client.request(contractPatterns.getContractOptions),
+				this.client.request(
+					financialsourcePatterns.getFinancialSourceOptions
+				),
+				this.client.request(
+					projectManagerPatterns.getProjectManagerOptions
+				),
+				this.client.request(workpackagePatterns.getWorkpackageStages),
+			]).then((res) => ({
+				record: res[0],
+				options: {
+					contractOptions: res[1],
+					financialSourceOptions: res[2],
+					projectManagerOptions: res[3],
+					stageOptions: res[4],
+				},
+			}));
+		}*/
+
+    @Get(":workpackageId")
+    async getWorkpackageProfile(@Param("workpackageId") workpackageId: string) {
+        return await this.queryBus.execute(
+            new WorkpackageProfileQuery(workpackageId),
+        );
         /*return await Promise.all([
-            this.client.request(
-                workpackagePatterns.getWorkpackageProfile,
-                workpackageId
-            ),
-            this.client.request(planningPatterns.getPlan, workpackageId),
-        ]).then((res: [Object, Object]) => ({
-            ...res[0],
-            planning: res[1],
-        }));*/
+			this.client.request(
+				workpackagePatterns.getWorkpackageProfile,
+				workpackageId
+			),
+			this.client.request(planningPatterns.getPlan, workpackageId),
+		]).then((res: [Object, Object]) => ({
+			...res[0],
+			planning: res[1],
+		}));*/
     }
 
     @Post()
-    async createWorkpackage(@Body() dto: CreateWorkpackageDto, @HttpUser() uid: string) {
-        return await this.commandBus.execute(new CreateWorkpackageCommand(dto, uid));
+    async createWorkpackage(
+        @Body() dto: CreateWorkpackageDto,
+        @HttpUser() uid: string,
+    ) {
+        return await this.commandBus.execute(
+            new CreateWorkpackageCommand(dto, uid),
+        );
     }
 
-    @Post(':workpackageId')
+    @Post(":workpackageId")
     async updateWorkpackage(
-        @Param('workpackageId') workpackageId: string,
-        @Body() dto: Omit<UpdateWorkpackageDto, 'workpackageId'>,
+        @Param("workpackageId") workpackageId: string,
+        @Body() dto: Omit<UpdateWorkpackageDto, "workpackageId">,
         @HttpUser() uid: string,
     ) {
         return await this.commandBus.execute(
@@ -84,11 +111,13 @@ export class WorkpackagesController {
         );
     }
 
-    @Delete(':workpackageId')
+    @Delete(":workpackageId")
     async deleteWorkpackage(
-        @Param('workpackageId') workpackageId: string,
+        @Param("workpackageId") workpackageId: string,
         @HttpUser() uid: string,
     ) {
-        return await this.commandBus.execute(new DeleteWorkpackageCommand(workpackageId, uid));
+        return await this.commandBus.execute(
+            new DeleteWorkpackageCommand(workpackageId, uid),
+        );
     }
 }
