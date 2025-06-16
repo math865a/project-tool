@@ -1,11 +1,21 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { Root } from './root.tsx';
+import { createBrowserRouter } from "react-router-dom";
+import { Root } from "./root.tsx";
 import {
+    addContractAction,
+    AddContractPage,
     addResourceAction,
     addResourceLoader,
-    AddResourcePage, addResourceTypeAction, addResourceTypeLoader, AddResourceTypePage,
+    AddResourcePage,
+    addResourceTypeAction,
+    addResourceTypeLoader,
+    AddResourceTypePage,
     App,
     AppLayout,
+    ContractsLayout,
+    contractsLayoutHandle,
+    contractsViewHandle,
+    contractsViewLoader,
+    ContractsViewPage,
     deleteResourceAction,
     PagesLayout,
     ResourcesLayout,
@@ -18,20 +28,20 @@ import {
     resourceTypesViewHandle,
     resourceTypesViewLoader,
     ResourceTypesViewPage,
-} from './app';
+} from "./app";
 
 export const router = createBrowserRouter([
     {
         element: <Root />,
         children: [
             {
-                path: 'api',
+                path: "api",
                 children: [
                     {
-                        path: 'resources',
+                        path: "resources",
                         children: [
                             {
-                                path: 'delete/:resourceId',
+                                path: "delete/:resourceId",
                                 action: deleteResourceAction,
                             },
                         ],
@@ -42,25 +52,48 @@ export const router = createBrowserRouter([
                 element: <App />,
                 children: [
                     {
-                        path: '/',
+                        path: "/",
                         element: <AppLayout />,
                         children: [
                             {
                                 element: <PagesLayout />,
                                 children: [
                                     {
+                                        element: <ContractsLayout />,
+                                        handle: contractsLayoutHandle,
+                                        children: [
+                                            {
+                                                path: "contracts",
+                                                element: <ContractsViewPage />,
+                                                loader: contractsViewLoader,
+                                                handle: contractsViewHandle,
+                                                children: [
+                                                    {
+                                                        path: "add",
+                                                        element: (
+                                                            <AddContractPage />
+                                                        ),
+                                                        action: addContractAction,
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
                                         element: <ResourcesLayout />,
                                         handle: resourcesLayoutHandle,
                                         children: [
                                             {
-                                                path: 'resources',
+                                                path: "resources",
                                                 element: <ResourcesViewPage />,
                                                 loader: resourcesViewLoader,
                                                 handle: resourcesViewHandle,
                                                 children: [
                                                     {
-                                                        path: 'add',
-                                                        element: <AddResourcePage />,
+                                                        path: "add",
+                                                        element: (
+                                                            <AddResourcePage />
+                                                        ),
                                                         loader: addResourceLoader,
                                                         action: addResourceAction,
                                                     },
@@ -73,14 +106,18 @@ export const router = createBrowserRouter([
                                         handle: resourceTypesLayoutHandle,
                                         children: [
                                             {
-                                                path: 'resourcetypes',
-                                                element: <ResourceTypesViewPage />,
+                                                path: "resourcetypes",
+                                                element: (
+                                                    <ResourceTypesViewPage />
+                                                ),
                                                 loader: resourceTypesViewLoader,
                                                 handle: resourceTypesViewHandle,
                                                 children: [
                                                     {
-                                                        path: 'add',
-                                                        element: <AddResourceTypePage />,
+                                                        path: "add",
+                                                        element: (
+                                                            <AddResourceTypePage />
+                                                        ),
                                                         loader: addResourceTypeLoader,
                                                         action: addResourceTypeAction,
                                                     },

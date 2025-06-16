@@ -20,7 +20,7 @@ export class DBInitService implements OnModuleInit {
 			await this.createStages();
 			await this.createCalendarDays();
 			await this.createResourceAgents(contractId);
-
+			await this.createDefaultUser()
 			console.log('Ran new db script');
 		} else {
 			console.log('db is not new.');
@@ -290,6 +290,22 @@ export class DBInitService implements OnModuleInit {
 				contractId: contractId,
 			},
 		)
+
+	}
+
+	async createDefaultUser() {
+		await this.client.write(`
+			CREATE (u:User {
+				uid: "user1",
+				name: "Test User",
+				email: "test@email.com",
+				color: "#FF5733",
+				isDeactivated: false,
+				lastSeen: null,
+				isOnline: false
+			})
+		`)
+
 
 	}
 

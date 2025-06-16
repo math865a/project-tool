@@ -539,7 +539,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContractsController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -580,7 +580,7 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], ContractsController.prototype, "getContractsView", null);
 __decorate([
     (0, common_1.Get)(':contractId'),
@@ -594,7 +594,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_d = typeof _shared_1.CreateContractDto !== "undefined" && _shared_1.CreateContractDto) === "function" ? _d : Object, String]),
+    __metadata("design:paramtypes", [typeof (_e = typeof _shared_1.CreateContractDto !== "undefined" && _shared_1.CreateContractDto) === "function" ? _e : Object, String]),
     __metadata("design:returntype", Promise)
 ], ContractsController.prototype, "createContract", null);
 __decorate([
@@ -603,7 +603,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __param(2, (0, util_1.HttpUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_e = typeof Omit !== "undefined" && Omit) === "function" ? _e : Object, String]),
+    __metadata("design:paramtypes", [String, typeof (_f = typeof Omit !== "undefined" && Omit) === "function" ? _f : Object, String]),
     __metadata("design:returntype", Promise)
 ], ContractsController.prototype, "updateContract", null);
 exports.ContractsController = ContractsController = __decorate([
@@ -897,8 +897,29 @@ let ContractViewQueryHandler = class ContractViewQueryHandler {
     constructor(client) {
         this.client = client;
         this.query = `
-        MATCH (c:Contract)
-        RETURN {node: c{.*}} as row
+        MATCH (contracts:Contract)
+        
+        UNWIND contracts AS c
+            CALL {
+                WITH c
+                OPTIONAL MATCH (c)<-[:IS_AGREED_UNDER]-(rt:ResourceType)
+                WITH count(rt) AS resourceTypeCount
+                RETURN resourceTypeCount
+            }
+            
+            CALL {
+                WITH c
+                OPTIONAL MATCH (c)<-[:IS_UNDER]-(w:Workpackage)
+                WITH count(w) AS workpackageCount
+                RETURN workpackageCount
+            }
+        RETURN {
+            id: c.id,
+            node: c{.*},
+            resourceTypeCount: resourceTypeCount,
+            workpackageCount: workpackageCount
+        } AS row
+            ORDER BY row.node.name
    `;
     }
     async execute() {
@@ -9259,6 +9280,7 @@ let CreateResourceHandler = class CreateResourceHandler {
                 WHERE c.id = $calendar
             MERGE (r)-[:USES]->(c)
         }
+        
         RETURN r.id AS id
    `;
     }
@@ -10192,23 +10214,24 @@ let CreateResourceTypeHandler = class CreateResourceTypeHandler {
     `;
         this.query = `
         MATCH (u:User {uid: $uid})
-        MATCH (c:Contract) WHERE c.id = $contract
+        MATCH (c:Contract)
+            WHERE c.id = $contract
+            
         CREATE (rt:ResourceType {
             id: apoc.create.uuid(),
             name: $name,
             abbrevation: $abbrevation,
-            typeNo: toInteger($typeNo),
+            typeNo: $typeNo,
             salesDefault: $salesDefault,
             salesOvertime: $salesOvertime,
             color: $color
         })
+        
         MERGE (rt)-[:CREATED_BY {timestamp: timestamp()}]->(u)
         MERGE (rt)-[:IS_AGREED_UNDER]->(c)
-  
         
-        RETURN {
-            resourceType: rt{.*}
-        } AS result
+        RETURN rt.id AS id
+
    `;
     }
     async execute(command) {
@@ -10216,16 +10239,16 @@ let CreateResourceTypeHandler = class CreateResourceTypeHandler {
         if (typeof validation !== 'boolean') {
             return validation;
         }
-        const result = await this.create(command.dto, command.uid);
+        const resourceTypeId = await this.create(command.dto, command.uid);
         const event = {
             ...command.dto,
             uid: command.uid,
             type: 'resourcetype.created',
-            resourceTypeId: result.resourceType.id,
+            resourceTypeId: resourceTypeId,
         };
         this.publisher.publish(event);
         return new _shared_1.FormSuccessResponse({
-            id: result.resourceType.id,
+            id: resourceTypeId,
         });
     }
     async checkDuplicates(dto) {
@@ -10258,11 +10281,14 @@ let CreateResourceTypeHandler = class CreateResourceTypeHandler {
         console.log("resources", dto.resources);
         console.log("contract", dto.contract);
         console.log("dto", dto);
+        console.log("iod", uid);
         const queryResult = await this.client.write(this.query, {
             ...dto,
             uid: uid,
         });
-        return queryResult.records[0].get('result');
+        const result = queryResult.records[0]?.get('id');
+        console.log("resourcetypeID", result);
+        return result;
     }
 };
 exports.CreateResourceTypeHandler = CreateResourceTypeHandler;
@@ -12079,6 +12105,7 @@ let DBInitService = class DBInitService {
             await this.createStages();
             await this.createCalendarDays();
             await this.createResourceAgents(contractId);
+            await this.createDefaultUser();
             console.log('Ran new db script');
         }
         else {
@@ -12311,6 +12338,19 @@ let DBInitService = class DBInitService {
 			`, {
             contractId: contractId,
         });
+    }
+    async createDefaultUser() {
+        await this.client.write(`
+			CREATE (u:User {
+				uid: "user1",
+				name: "Test User",
+				email: "test@email.com",
+				color: "#FF5733",
+				isDeactivated: false,
+				lastSeen: null,
+				isOnline: false
+			})
+		`);
     }
 };
 exports.DBInitService = DBInitService;
@@ -12893,6 +12933,22 @@ exports.ContractNode = ContractNode;
 
 /***/ }),
 
+/***/ "../shared/src/dto/organization/contracts/contract.view-row.ts":
+/*!*********************************************************************!*\
+  !*** ../shared/src/dto/organization/contracts/contract.view-row.ts ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ContractViewRow = void 0;
+class ContractViewRow {
+}
+exports.ContractViewRow = ContractViewRow;
+
+
+/***/ }),
+
 /***/ "../shared/src/dto/organization/contracts/create-contract.dto.ts":
 /*!***********************************************************************!*\
   !*** ../shared/src/dto/organization/contracts/create-contract.dto.ts ***!
@@ -12934,6 +12990,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__webpack_require__(/*! ./update-contract.dto */ "../shared/src/dto/organization/contracts/update-contract.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./create-contract.dto */ "../shared/src/dto/organization/contracts/create-contract.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./contract.node */ "../shared/src/dto/organization/contracts/contract.node.ts"), exports);
+__exportStar(__webpack_require__(/*! ./contract.view-row */ "../shared/src/dto/organization/contracts/contract.view-row.ts"), exports);
 
 
 /***/ }),
