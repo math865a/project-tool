@@ -7,8 +7,10 @@ Think **Microsoft Project meets resource scheduling** — i.e. creating Gantt-st
 tasks, and tracking scheduled time. It also includes a centralized capacity overview for each resource, with filtering
 down to individual tasks and project level.
 
-This is a **complete rebuild from scratch** to improve the architecture, user experience, and remove dependencies on
-paid services. It is currently a work in progress.
+I have **several** versions of this app and all features have been build a couple of times in different ways.
+Unfortunately, i don't have a working version and thus i am consolidating all the knowledge and experience into
+this single repository. The goal is to demonstrate a clean, maintainable architecture that can be easily
+extended and adapted to future needs. It is currently a work in progress.
 
 ---
 
