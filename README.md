@@ -8,7 +8,8 @@ tasks, and tracking scheduled time. It also includes a centralized capacity over
 down to individual tasks and project level.
 
 I have **several** versions of this app and all features have been build a couple of times in different ways.
-Unfortunately, i don't have a working version and thus i am consolidating all the knowledge and experience into
+Unfortunately, i don't have a working version at this time (due to licenses etc.) and thus i am consolidating all the
+knowledge and experience into
 this single repository. The goal is to demonstrate a clean, maintainable architecture that can be easily
 extended and adapted to future needs. It is currently a work in progress.
 
