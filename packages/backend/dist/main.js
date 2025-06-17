@@ -12495,6 +12495,8 @@ let DBInitService = class DBInitService {
 						color: "#228be6"
 					})
 					
+					MERGE (r)-[:USES]->(c)
+					
 					RETURN r
 				}
 				
