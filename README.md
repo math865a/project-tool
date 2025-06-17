@@ -201,4 +201,25 @@ and Passport.js. This ensures that only authorized users can access specific res
 their
 roles and permissions. (Currently not implemented in this version of the project)
 
+### Frontend architecture
 
+The frontend is built using **React** with TypeScript, Vite, and React Router leveraging modern web technologies for a
+responsive and
+interactive user interface. The architecture follows best practices for component-based design, state management, and
+API integration.
+
+#### Core Architecture Patterns
+
+- **Component-Based Architecture**: UI is built using reusable components
+- **State Management**: Uses React Context and custom hooks for global state management
+- **API Integration**: Communicates with the backend via REST APIs and websockets
+
+#### Core features
+
+The frontend consists of several key features, each with its own architecture and design considerations:
+
+- **Gantt Chart Visualization**: Displays project timelines, tasks, and dependencies. Build with mobx to manage state
+  due to the reactive nature of this feature (currently being implemented)
+- **Capacity board**: Shows resource allocation and availability. (currently being implemented)
+- **Resource capacity dashboard**: Displays resource utilization and availability across projects. (currently being
+  implemented)
