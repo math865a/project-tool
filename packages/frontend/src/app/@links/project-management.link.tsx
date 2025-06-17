@@ -16,8 +16,7 @@ export function ProjectManagementLink() {
                 {
                     id: "project-managers",
                     url: "project-managers",
-                    label: "Project Managers",
-
+                    label: "Projektledere",
                     icon: IconBusinessplan,
                 },
             ]}

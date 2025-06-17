@@ -129,7 +129,7 @@ export const workpackagesColumns: ColumnDef<WorkpackageViewRow, any>[] = [
             </Tag>
         ),
         meta: {
-            title: "Booking-stadie",
+            title: "Booking stadie",
             align: "center",
         },
     }),

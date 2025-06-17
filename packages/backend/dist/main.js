@@ -14269,6 +14269,219 @@ exports.FormErrorResponse = FormErrorResponse;
 
 /***/ }),
 
+/***/ "../shared/src/gantt/activity-json.ts":
+/*!********************************************!*\
+  !*** ../shared/src/gantt/activity-json.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/activity-type.ts":
+/*!********************************************!*\
+  !*** ../shared/src/gantt/activity-type.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/allocation-json.ts":
+/*!**********************************************!*\
+  !*** ../shared/src/gantt/allocation-json.ts ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AllocationJson = void 0;
+class AllocationJson {
+    constructor(props) {
+        this.id = props.id;
+        this.interval = props.interval;
+        this.timesheet = props.timesheet;
+    }
+}
+exports.AllocationJson = AllocationJson;
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/assignment-json.ts":
+/*!**********************************************!*\
+  !*** ../shared/src/gantt/assignment-json.ts ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AssignmentJson = void 0;
+class AssignmentJson {
+    constructor(props) {
+        this.id = props.id;
+        this.agent = props.agent;
+        this.task = props.task;
+        this.allocations = props.allocations ?? [];
+    }
+}
+exports.AssignmentJson = AssignmentJson;
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/delivery-json.ts":
+/*!********************************************!*\
+  !*** ../shared/src/gantt/delivery-json.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DeliveryJson = void 0;
+class DeliveryJson {
+    constructor(props) {
+        this.kind = "Delivery";
+        this.name = "Ny leverance";
+        this.description = "";
+        this.childIds = [];
+        this.id = props.id;
+        this.startDate = props.startDate;
+        this.endDate = props.endDate;
+        this.color = props.color;
+    }
+}
+exports.DeliveryJson = DeliveryJson;
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/gantt-data.ts":
+/*!*****************************************!*\
+  !*** ../shared/src/gantt/gantt-data.ts ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GanttData = void 0;
+class GanttData {
+}
+exports.GanttData = GanttData;
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/index.ts":
+/*!************************************!*\
+  !*** ../shared/src/gantt/index.ts ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./activity-type */ "../shared/src/gantt/activity-type.ts"), exports);
+__exportStar(__webpack_require__(/*! ./activity-json */ "../shared/src/gantt/activity-json.ts"), exports);
+__exportStar(__webpack_require__(/*! ./assignment-json */ "../shared/src/gantt/assignment-json.ts"), exports);
+__exportStar(__webpack_require__(/*! ./allocation-json */ "../shared/src/gantt/allocation-json.ts"), exports);
+__exportStar(__webpack_require__(/*! ./delivery-json */ "../shared/src/gantt/delivery-json.ts"), exports);
+__exportStar(__webpack_require__(/*! ./plan-json */ "../shared/src/gantt/plan-json.ts"), exports);
+__exportStar(__webpack_require__(/*! ./team-member.json */ "../shared/src/gantt/team-member.json.ts"), exports);
+__exportStar(__webpack_require__(/*! ./task-json */ "../shared/src/gantt/task-json.ts"), exports);
+__exportStar(__webpack_require__(/*! ./gantt-data */ "../shared/src/gantt/gantt-data.ts"), exports);
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/plan-json.ts":
+/*!****************************************!*\
+  !*** ../shared/src/gantt/plan-json.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PlanJson = void 0;
+class PlanJson {
+    constructor(props) {
+        this.kind = "Plan";
+        this.name = "Plan";
+        Object.assign(this, props);
+        this.childIds = props.childIds ? props.childIds : [];
+    }
+}
+exports.PlanJson = PlanJson;
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/task-json.ts":
+/*!****************************************!*\
+  !*** ../shared/src/gantt/task-json.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TaskJson = void 0;
+class TaskJson {
+    constructor(props) {
+        this.kind = "Task";
+        this.name = "Ny opgave";
+        this.description = "";
+        this.childIds = [];
+        this.id = props.id;
+        this.startDate = props.startDate;
+        this.endDate = props.endDate;
+    }
+}
+exports.TaskJson = TaskJson;
+
+
+/***/ }),
+
+/***/ "../shared/src/gantt/team-member.json.ts":
+/*!***********************************************!*\
+  !*** ../shared/src/gantt/team-member.json.ts ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TeamMemberJson = exports.ResourceTypeJson = exports.ResourceJson = void 0;
+class ResourceJson {
+}
+exports.ResourceJson = ResourceJson;
+class ResourceTypeJson {
+}
+exports.ResourceTypeJson = ResourceTypeJson;
+class TeamMemberJson {
+}
+exports.TeamMemberJson = TeamMemberJson;
+
+
+/***/ }),
+
 /***/ "../shared/src/index.ts":
 /*!******************************!*\
   !*** ../shared/src/index.ts ***!
@@ -14294,6 +14507,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__webpack_require__(/*! ./dto */ "../shared/src/dto/index.ts"), exports);
 __exportStar(__webpack_require__(/*! ./form */ "../shared/src/form.ts"), exports);
 __exportStar(__webpack_require__(/*! ./types */ "../shared/src/types/index.ts"), exports);
+__exportStar(__webpack_require__(/*! ./gantt */ "../shared/src/gantt/index.ts"), exports);
 
 
 /***/ }),
