@@ -1,24 +1,79 @@
 {
-  "extends": "../../tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/.server/**/*.ts",
+    "**/.server/**/*.tsx",
+    "**/.client/**/*.ts",
+    "**/.client/**/*.tsx"
+  ],
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "types": [
+      "@remix-run/node",
+      "vite/client"
+    ],
     "isolatedModules": true,
-    "noEmit": true,
+    "esModuleInterop": true,
     "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "target": "ES2022",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src"],
-  "references": [
-    { "path": "../shared" }
-  ]
-} 
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "~/*": [
+        "./app/*"
+      ],
+      "@/*": [
+        "./app/*"
+      ],
+      "socket": [
+        "./app/src/socket"
+      ],
+      "design": [
+        "./app/src/design-system"
+      ],
+      "mui-config": [
+        "./app/config/mui"
+      ],
+      "session": [
+        "./app/session.server"
+      ],
+      "session/*": [
+        "./app/pages/session/*"
+      ],
+      "capacity": [
+        "./app/pages/capacity/*"
+      ],
+      "useGantt": [
+        "./app/src/features/gantt/useGantt.ts"
+      ],
+      "useWorkpackage": [
+        "./app/src/state/workpackage-profile/WorkpackageProvider.tsx"
+      ],
+      "gantt-models": [
+        "./app/src/features/gantt/models"
+      ],
+      "styles": [
+        "./app/styles"
+      ],
+      "gantt/*": [
+        "./app/src/features/gantt/*"
+      ]
+    },
+    // Vite takes care of building everything, not tsc.
+    "noEmit": true
+  }
+}

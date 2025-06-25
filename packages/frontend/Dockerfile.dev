@@ -1,0 +1,35 @@
+# Development Dockerfile for Remix Frontend
+# This Dockerfile is designed to work with docker-compose for development
+
+# Use Node.js 20 Alpine for smaller image size
+FROM node:20-alpine
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json first for better caching
+COPY package.json ./
+
+# Install dependencies (without --frozen-lockfile since we're in development)
+RUN pnpm install
+
+# Copy the rest of the application
+COPY . .
+
+# Expose ports
+# 5173: Main application port (as specified in docker-compose)
+# 8002: Vite HMR port for hot module replacement
+EXPOSE 5173 8002
+
+# Set environment variables for development
+ENV NODE_ENV=development
+ENV PORT=5173
+ENV HOST=0.0.0.0
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Start the development server
+# Using the dev script from package.json which runs "remix vite:dev"
+CMD ["pnpm", "run", "dev"]

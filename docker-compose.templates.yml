@@ -1,0 +1,59 @@
+services:
+
+  base:
+    restart: always
+
+  database:
+    extends:
+      service: base
+    profiles: [ "databases" ]
+    networks:
+      - db-tier
+
+  node-base:
+    extends:
+      service: base
+    environment:
+      NODE_ENV: development
+
+  frontend:
+    extends:
+      service: node-base
+    profiles: [ "frontends" ]
+    networks:
+      - front-tier
+
+  transport:
+    extends:
+      service: base
+    profiles: [ "transports" ]
+    networks:
+      - service-tier
+
+  service:
+    extends:
+      service: node-base
+    profiles: [ "services" ]
+    build:
+      context: ./packages/services
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./packages/services:/app
+      - /app/node_modules
+    environment:
+      NATS_CONN: nats://nats-service:4222
+      NEO4J_CONN: neo4j://neo4j-db:7687
+      NEO4J_USER: ${NEO4J_USER}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      MONGO_CONN: mongodb://mongo-db:27017
+    networks:
+      - service-tier
+      - db-tier
+
+  gateway-service:
+    extends:
+      service: service
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+    networks:
+      - front-tier

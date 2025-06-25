@@ -90,4 +90,7 @@ temp/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db 
+Thumbs.db
+_old
+/neo4j/
+/neo4j

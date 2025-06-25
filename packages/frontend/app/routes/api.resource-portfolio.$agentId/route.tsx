@@ -1,0 +1,46 @@
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import invariant from "tiny-invariant";
+import { getServiceUrl } from "~/server";
+import { sendRequest } from "~/session.server";
+import { FormResponse } from "~/src";
+
+export interface IDeletionConsequence {
+    id: string;
+    name: string;
+    systematicName: string;
+    allocations: IDeletionAllocation[];
+    totalWork: string;
+}
+
+export interface IDeletionAllocation {
+    taskName: string;
+    startDate: string;
+    endDate: string;
+    hours: string;
+}
+
+export async function loader({
+    request,
+    params,
+}: LoaderFunctionArgs): Promise<IDeletionConsequence[]> {
+    invariant(params.agentId);
+    return await sendRequest(request, {
+        url: getServiceUrl(
+            "resourcePortfolio",
+            "delete-consequences",
+            params.agentId
+        ),
+        method: "GET",
+    });
+}
+
+export async function action({
+    request,
+    params,
+}: ActionFunctionArgs): Promise<FormResponse> {
+    invariant(params.agentId);
+    return await sendRequest(request, {
+        url: getServiceUrl("resourcePortfolio", params.agentId),
+        method: "DELETE",
+    });
+}

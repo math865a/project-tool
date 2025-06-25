@@ -1,0 +1,12 @@
+FROM node:19-alpine3.16
+
+RUN npm i -g pnpm
+
+WORKDIR /app
+
+COPY . .
+
+RUN pnpm install
+RUN pnpm update
+
+CMD pnpm run start:dev
