@@ -22,7 +22,8 @@ COPY . .
 # Expose ports
 # 5173: Main application port (as specified in docker-compose)
 # 8002: Vite HMR port for hot module replacement
-EXPOSE 5173 8002
+# 8002
+EXPOSE 5173
 
 # Set environment variables for development
 ENV NODE_ENV=development

@@ -13,8 +13,16 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterLuxon } from "@mui/x-date-pickers-pro/AdapterLuxon";
 
+/*
+if (typeof window !== "undefined") {
+    // Ensure __remixRouter is available for HMR
+    if (!window.__remixRouter) {
+        window.__remixRouter = null;
+    }
+}*/
+
 interface ClientCacheProviderProps {
-    children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 function ClientCacheProvider({children}: ClientCacheProviderProps) {
@@ -48,7 +56,11 @@ if (process.env.NODE_ENV === "development") {
 		disableErrorBoundaries: false,
 	});
 }
-
+/*
+startTransition(() => {
+	hydrateRoot(document, <StrictMode><RemixBrowser/></StrictMode>)
+})
+*/
 startTransition(() => {
 	hydrateRoot(
 		document,
@@ -56,7 +68,7 @@ startTransition(() => {
 			<ClientCacheProvider>
 				<ThemeProvider theme={theme}>
 					<LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="da">
-						{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+
 						<CssBaseline/>
 						<RemixBrowser/>
 					</LocalizationProvider>

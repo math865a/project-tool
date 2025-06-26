@@ -9,7 +9,7 @@ export default function PageLinks() {
     const { user } = useSession();
 
     return (
-        <Directory.Wrapper sx={{ px: 2, mt: 2 }}>
+        <Directory.Wrapper sx={{ px: 1, mt: 2 }}>
             <>
                 {user.isResource && (
                     <SidebarItem

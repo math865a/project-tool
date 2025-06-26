@@ -29,7 +29,8 @@ let serviceMap: IServiceMap = getServiceMap();
 let serviceDomain: string = getServerDomain();
 
 function getServerDomain() {
-    const domain = process.env.API_DOMAIN  ?? "" // process.env.GATEWAY_DOMAIN;
+    const domain = process.env.API_DOMAIN ?? ""; //
+    // process.env.GATEWAY_DOMAIN;
     if (domain) {
         return domain;
     }
@@ -71,7 +72,7 @@ function getServiceMap() {
     return api as IServiceMap;
 }
 
-const services = _.mapValues(serviceMap.http, (x) => serviceDomain+ "/" + x);
+const services = _.mapValues(serviceMap.http, (x) => serviceDomain + "/" + x);
 
 export function getServiceUrl(
     service: keyof typeof services,
@@ -90,7 +91,8 @@ export function getServiceUrl(
 
 export const namespaces = _.mapValues(
     serviceMap.gateways,
-    (x) => (process.env.SOCKET_DOMAIN ?? "") + "/" + x
+    (x) =>
+        process.env.SOCKET_DOMAIN ?? "" + "/" + x /*"http://127.0.0.1:5001" */
 );
 
 //http://100.64.100.70:5000/

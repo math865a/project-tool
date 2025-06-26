@@ -9,7 +9,6 @@ import { LicenseInfo } from "@mui/x-data-grid-pro";
 import { json, MetaFunction } from "@remix-run/node";
 import {
     Links,
-    LiveReload,
     Meta,
     Outlet,
     Scripts,
@@ -20,7 +19,7 @@ import * as React from "react";
 //import calendarStyles from "react-big-calendar/lib/css/react-big-calendar.css";
 import { namespaces } from "./server";
 
-//import styles from "./styles/scrollbar.css";
+//import styles from "./styles/scrollbar.module.css";
 
 export function links() {
     return [
@@ -33,14 +32,14 @@ export function links() {
             rel: "stylesheet",
             href: "https://fonts.googleapis.com/css2?family=Poppins",
         },
-        /*{
-		   rel: "stylesheet",
-		   href: styles,
-	   },
-	  {
-		   rel: "stylesheet",
-		   href: calendarStyles,
-	   },**/
+        /* {
+			 rel: "stylesheet",
+			 href: styles,
+		 },
+		 {
+			 rel: "stylesheet",
+			 href: calendarStyles,
+		 },*/
     ];
 }
 
@@ -109,9 +108,7 @@ const Document = withEmotionCache(
                     />
                 </head>
                 <body>
-                    {process.env.NODE_ENV === "development" && (
-                        <LiveReload origin={"http://172.19.0.3"} port={8002} />
-                    )}
+                    {/*process.env.NODE_ENV === "development" && <LiveReload />*/}
                     {children}
                     <ScrollRestoration />
                     <Scripts />
@@ -162,50 +159,4 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 
 /*
-import {
-    Links,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-} from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
-
-export const links: LinksFunction = () => [
-    { rel: "preconnect", href: "https://fonts.googleapis.com" },
-    {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous",
-    },
-    {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-    },
-];
-
-export function Layout({ children }: { children: React.ReactNode }) {
-    return (
-        <html lang="en">
-            <head>
-                <meta charSet="utf-8" />
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1"
-                />
-                <Meta />
-                <Links />
-            </head>
-            <body>
-                {children}
-                <ScrollRestoration />
-                <Scripts />
-            </body>
-        </html>
-    );
-}
-
-export default function App() {
-    return <Outlet />;
-}
 */

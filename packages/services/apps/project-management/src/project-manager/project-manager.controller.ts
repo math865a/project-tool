@@ -20,6 +20,7 @@ import {
     ProjectManagerQuery,
     ProjectManagersQuery,
 } from "./queries";
+
 @Controller()
 export class ProjectManagerNatsController {
     constructor(private queryBus: QueryBus, private commandBus: CommandBus) {}

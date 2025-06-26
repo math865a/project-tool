@@ -36,7 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return await logout(request);
 }
 
-const drawerWidth = 225;
+const drawerWidth = 240;
 export default function App() {
     return (
         <Layout.Root>

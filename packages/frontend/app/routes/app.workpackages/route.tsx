@@ -6,8 +6,8 @@ import { getServiceUrl } from "~/server";
 import { HasAccess } from "~/src";
 import { Subject } from "~/src/_definitions";
 import BackAction from "~/src/layout/topbar/BackAction";
-import GridSection from "./Grid.Section";
 import HeaderSection from "./Header.Section";
+import GridSection from "./Grid.Section";
 
 export const handle = {
     BackAction: <BackAction title="Arbejdspakker" noBack />,

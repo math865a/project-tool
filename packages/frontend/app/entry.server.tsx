@@ -3,6 +3,8 @@
  * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
  * For more information, see https://remix.run/file-conventions/entry.server
  */
+
+/*
 import { EntryContext } from "@remix-run/server-runtime";
 import { renderToString } from "react-dom/server";
 import { RemixServer } from "@remix-run/react";
@@ -25,16 +27,15 @@ export default function handleRequest(
     });
 }
 
+*/
 
-/*
+import {PassThrough} from "node:stream";
 
-import { PassThrough } from "node:stream";
-
-import type { AppLoadContext, EntryContext } from "@remix-run/node";
-import { createReadableStreamFromReadable } from "@remix-run/node";
-import { RemixServer } from "@remix-run/react";
-import { isbot } from "isbot";
-import { renderToPipeableStream } from "react-dom/server";
+import type {AppLoadContext, EntryContext} from "@remix-run/node";
+import {createReadableStreamFromReadable} from "@remix-run/node";
+import {RemixServer} from "@remix-run/react";
+import {isbot} from "isbot";
+import {renderToPipeableStream} from "react-dom/server";
 
 const ABORT_DELAY = 5_000;
 
@@ -173,4 +174,3 @@ function handleBrowserRequest(
         setTimeout(abort, ABORT_DELAY);
     });
 }
-*/
