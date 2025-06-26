@@ -1,6 +1,6 @@
 import { Child } from "design";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Socket, io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { useNamespaces } from "../hooks/useNamespaces";
 import { useSession } from "../session-user";
 
@@ -18,11 +18,12 @@ export const useSocket = ({
     const [socket, setSocket] = useState<Socket | undefined>();
 
     useEffect(() => {
+        console.log(namespaces[namespace]);
         const socket = io(namespaces[namespace], {
             auth: {
                 access_token: token ?? "",
                 uid: uid,
-            }
+            },
         });
         setSocket(socket);
         return () => {

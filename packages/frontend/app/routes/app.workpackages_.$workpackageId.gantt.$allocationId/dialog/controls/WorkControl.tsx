@@ -5,8 +5,9 @@ import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import v from "voca";
+
 const reg = /[0-9,]*/;
-export const WorkControl = observer(({allowed}: {allowed: boolean}) => {
+export const WorkControl = observer(({ allowed }: { allowed: boolean }) => {
     const { control, register, setValue } = useFormContext();
 
     const defaultWork: string = useWatch({ control, name: "defaultWork" });
@@ -19,13 +20,20 @@ export const WorkControl = observer(({allowed}: {allowed: boolean}) => {
         let filtered = value.match(reg);
         if (filtered) {
             let val = filtered[0];
-            if (val === ","){
-                setValue(type, "", {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+            if (val === ",") {
+                setValue(type, "", {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                    shouldTouch: true,
+                });
             } else {
-                setValue(type, val, {shouldDirty: true, shouldValidate: true, shouldTouch: true});
+                setValue(type, val, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                    shouldTouch: true,
+                });
             }
             //const val = Number(filtered[0]) > 0 ? Number(filtered) : 0
-
         }
     };
 
@@ -42,7 +50,7 @@ export const WorkControl = observer(({allowed}: {allowed: boolean}) => {
         const duration = dur
             .fromObject({ hours: total }, { locale: "da" })
             .shiftTo("hours", "minutes")
-            .toHuman({ listStyle: "short", unitDisplay: "long" })
+            .toHuman({ listStyle: "short", unitDisplay: "long" });
         if (duration === "0 timer og 0 minutter") {
             return "-";
         } else if (duration.startsWith("0 timer og ")) {
@@ -54,42 +62,62 @@ export const WorkControl = observer(({allowed}: {allowed: boolean}) => {
     }, [total]);
 
     const handleBlur = (type: "defaultWork" | "overtimeWork") => {
-        const val = type === "defaultWork" ? String(defaultWork) : String(overtimeWork);
-        if (val === ""){
-            setValue(type, "0", {shouldDirty: true, shouldValidate: true, shouldTouch: true});
+        const val =
+            type === "defaultWork" ? String(defaultWork) : String(overtimeWork);
+        if (val === "") {
+            setValue(type, "0", {
+                shouldDirty: true,
+                shouldValidate: true,
+                shouldTouch: true,
+            });
         } else if (val.startsWith(",")) {
-            setValue(type, v.substring(val, 1, val.length), {shouldDirty: true, shouldValidate: true, shouldTouch: true});
+            setValue(type, v.substring(val, 1, val.length), {
+                shouldDirty: true,
+                shouldValidate: true,
+                shouldTouch: true,
+            });
         } else if (val.endsWith(",")) {
-            setValue(type, v.substring(val, 0, val.length-1), {shouldDirty: true, shouldValidate: true, shouldTouch: true});
+            setValue(type, v.substring(val, 0, val.length - 1), {
+                shouldDirty: true,
+                shouldValidate: true,
+                shouldTouch: true,
+            });
         }
-    }
+    };
 
     return (
         <Stack direction="row" alignItems="center" spacing={3} pl={2}>
             <FormUI.Label label="Timer" widthFrac={0.5}>
-                {allowed ? <TextField
-                    value={defaultWork}
-                    variant="standard"
-                    size="small"
-                    onBlur={() => handleBlur("defaultWork")}
-                    onChange={(event) =>
-                        handleChange("defaultWork", event.target.value)
-                    }
-                /> : <Typography>
-                    {defaultWork}
-                </Typography>}
+                {allowed ? (
+                    <TextField
+                        autoFocus={true}
+                        value={defaultWork}
+                        variant="standard"
+                        size="small"
+                        onBlur={() => handleBlur("defaultWork")}
+                        onChange={(event) =>
+                            handleChange("defaultWork", event.target.value)
+                        }
+                    />
+                ) : (
+                    <Typography>{defaultWork}</Typography>
+                )}
             </FormUI.Label>
             <FormUI.Label label="Overarbejde (t)" widthFrac={0.5}>
-                {allowed ? <TextField
-                    value={overtimeWork}
-                    onBlur={() => handleBlur("overtimeWork")}
-                    onChange={(event) =>
-                        handleChange("overtimeWork", event.target.value)
-                    }
-                    name="overtime"
-                    variant="standard"
-                    size="small"
-                />: <Typography>{overtimeWork}</Typography>}
+                {allowed ? (
+                    <TextField
+                        value={overtimeWork}
+                        onBlur={() => handleBlur("overtimeWork")}
+                        onChange={(event) =>
+                            handleChange("overtimeWork", event.target.value)
+                        }
+                        name="overtime"
+                        variant="standard"
+                        size="small"
+                    />
+                ) : (
+                    <Typography>{overtimeWork}</Typography>
+                )}
             </FormUI.Label>
 
             <Divider orientation="vertical" variant="middle" flexItem />

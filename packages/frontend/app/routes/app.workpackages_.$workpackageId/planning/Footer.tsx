@@ -2,7 +2,6 @@ import { useElementSize } from "@mantine/hooks";
 import { Box, Stack } from "@mui/material";
 import { useLoaderData } from "@remix-run/react";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
 import { Action, Subject } from "~/src/_definitions";
 import ProjectManagerRoot from "~/src/components/project-manager/ProjectManagerRoot";
 import { PlanDays, PlanPeriod, PlanWork } from "~/src/features";
@@ -10,12 +9,12 @@ import { Can } from "~/src/session-user";
 import { useWorkpackage } from "~/src/state";
 import { WorkpackageLoader } from "../route";
 
-
 export const PlanningSectionFooter = observer(() => {
     const {
         Gantt: {
             Analysis: { PlanningChart },
         },
+        Gantt,
     } = useWorkpackage();
 
     const {
@@ -23,10 +22,10 @@ export const PlanningSectionFooter = observer(() => {
     } = useLoaderData<WorkpackageLoader>();
 
     const { ref, height } = useElementSize();
-
-    useEffect(() => {
-        PlanningChart.setFooterHeight(height);
-    }, [height]);
+    /*
+		useEffect(() => {
+			PlanningChart.setFooterHeight(height);
+		}, [height]);*/
 
     return (
         <Box
@@ -35,8 +34,8 @@ export const PlanningSectionFooter = observer(() => {
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            height={PlanningChart.footerHeight}
-            minHeight={PlanningChart.footerHeight}
+            // height={PlanningChart.footerHeight}
+            //minHeight={PlanningChart.footerHeight}
         >
             <Box>
                 <Can I={Action.Write} a={Subject.Workpackages} passThrough>
@@ -49,12 +48,16 @@ export const PlanningSectionFooter = observer(() => {
                     )}
                 </Can>
             </Box>
-            <Stack direction="row" alignItems="center" spacing={2}>
-                <PlanPeriod />
-                <PlanDays />
-                <PlanWork />
-            </Stack>
+
+            {Gantt.isEmpty ? (
+                <Box />
+            ) : (
+                <Stack direction="row" alignItems="center" spacing={2}>
+                    <PlanPeriod />
+                    <PlanDays />
+                    <PlanWork />
+                </Stack>
+            )}
         </Box>
     );
 });
-

@@ -1,8 +1,8 @@
 import { computed } from "mobx";
 import { getRoot, Model, model, prop } from "mobx-keystone";
 import { Gantt } from "../Gantt";
-import { DateTime as dt, Duration as dur, Interval as int } from "luxon";
-import { getNormalizedNow, getNormalizedNowPlus } from "~/util/time";
+import { DateTime as dt, Interval as int } from "luxon";
+import { getNormalizedNow } from "~/util/time";
 import { scaleBand, scaleLinear } from "@visx/scale";
 import _ from "lodash";
 
@@ -14,7 +14,7 @@ export class PlanningChartModel extends Model({
     tPad: prop<number>(0.25),
     width: prop<number>(0).withSetter(),
     maxHeight: prop<number>(200),
-    footerHeight: prop<number>(75).withSetter()
+    footerHeight: prop<number>(75).withSetter(),
 }) {
     spacing = this.rowHeight - this.hBar;
 
@@ -25,7 +25,9 @@ export class PlanningChartModel extends Model({
 
     @computed
     get data() {
-        return _.sortBy(this.Gantt.ActivityStore.Deliveries, d => d.Interval.startDate.toMillis());
+        return _.sortBy(this.Gantt.ActivityStore.Deliveries, (d) =>
+            d.Interval.startDate.toMillis()
+        );
     }
 
     @computed
@@ -54,7 +56,7 @@ export class PlanningChartModel extends Model({
 
     @computed
     get naturalHeight() {
-        return this.data.length * this.rowHeight +this.rowHeight + this.top;
+        return this.data.length * this.rowHeight + this.rowHeight + this.top;
     }
 
     @computed
@@ -74,7 +76,7 @@ export class PlanningChartModel extends Model({
     get nodeSpanInterval() {
         return int.fromDateTimes(
             dt.fromMillis(this.Gantt.Timeline.nodeSpan.start),
-            dt.fromMillis(this.Gantt.Timeline.nodeSpan.end),
+            dt.fromMillis(this.Gantt.Timeline.nodeSpan.end)
         );
     }
 

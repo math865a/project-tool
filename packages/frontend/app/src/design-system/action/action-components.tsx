@@ -40,7 +40,7 @@ export namespace ActionTypes {
     export interface IIconActionProps extends IconButtonProps {
         icon?: IconDef;
         iconSize?: number;
-        symbolProps?: Omit<SymbolProps, "icon" | "size">;
+        symbolProps?: Omit<SymbolProps, "icon">;
         to?: string;
         handleProps?: any;
     }
@@ -160,9 +160,9 @@ const TextButton = React.forwardRef<
         {
             text,
             icon,
-            iconSize = 20,
+            iconSize = 18,
             fontSize = 13,
-            spacing = 1,
+            spacing = 0,
             symbolProps = {},
             textColor = "text.primary",
             reverse = false,
@@ -185,22 +185,17 @@ const TextButton = React.forwardRef<
                     alignItems: "center",
                     flexDirection: reverse ? "row-reverse" : "row",
                 }}
+                startIcon={
+                    <SymbolComponent
+                        icon={icon}
+                        size={16}
+                        {...{
+                            ...symbolProps,
+                        }}
+                    />
+                }
                 {...buttonProps}
             >
-                <SymbolComponent
-                    icon={icon}
-                    size={iconSize}
-                    {...{
-                        ...symbolProps,
-                        color: !icon
-                            ? "transparent"
-                            : buttonProps?.disabled
-                            ? "grey.400"
-                            : symbolProps.color
-                            ? symbolProps.color
-                            : "inherit",
-                    }}
-                />
                 <Typography
                     pb={pbText}
                     pt={ptText}

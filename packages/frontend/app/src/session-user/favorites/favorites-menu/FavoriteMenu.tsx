@@ -18,7 +18,7 @@ export default function FavoritesMenu() {
                 sx: {
                     borderRadius: 4,
                     backgroundColor: "#fff",
-                    minWidth: 250,
+                    minWidth: 300,
                     p: 1,
                 },
             }}

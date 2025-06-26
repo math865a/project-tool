@@ -92,7 +92,9 @@ export function getServiceUrl(
 export const namespaces = _.mapValues(
     serviceMap.gateways,
     (x) =>
-        process.env.SOCKET_DOMAIN ?? "" + "/" + x /*"http://127.0.0.1:5001" */
+        /*process.env.SOCKET_DOMAIN ?? ""*/ "http://127.0.0.1:5001" +
+        "/" +
+        x /*"http://127.0.0.1:5001" */
 );
 
 //http://100.64.100.70:5000/

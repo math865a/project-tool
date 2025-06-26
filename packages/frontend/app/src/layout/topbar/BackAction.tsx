@@ -61,7 +61,7 @@ export default function BackAction(props: IBackActionProps) {
             <Box maxWidth="max-content">
                 <ButtonBase onClick={handleClick}>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Symbol icon={IconChevronLeft} size={0.9} />
+                        <Symbol icon={IconChevronLeft} />
                         <PageTitle title={title} />
                     </Stack>
                 </ButtonBase>

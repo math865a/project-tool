@@ -17,7 +17,7 @@ export type SymbolProps = IIcon;
 export const Symbol = (props: SymbolProps) => {
     const {
         icon: Icon,
-        size,
+        size = 18,
         color,
         className,
         inverse = false,

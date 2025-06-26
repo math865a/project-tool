@@ -8,21 +8,21 @@ import {
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import {
+    AddTeamMemberDto,
+    AssignProjectManagerDto,
     CreateActivityDto,
     CreateAllocationDto,
     CreateAssignmentDto,
     DeleteAssignmentDto,
+    RemoveTeamMemberDto,
+    SwapTeamMemberDto,
     UpdateActivityColorDto,
     UpdateActivityNameDto,
     UpdateAllocationDto,
-    UpdatePeriodDto,
-    UpdateWorkpackageDto,
-    AddTeamMemberDto,
-    RemoveTeamMemberDto,
-    AssignProjectManagerDto,
-    SwapTeamMemberDto,
     UpdateBookingStageDto,
+    UpdatePeriodDto,
     UpdateStageDto,
+    UpdateWorkpackageDto,
 } from "@ns/dto";
 import { NatsClient } from "@ns/nats";
 import { WsGuard } from "@ns/session";
@@ -39,7 +39,7 @@ import {
     namespace: "project-management",
     cors: {
         origin: "*",
-    }
+    },
 })
 export class ProjectManagementGateway {
     constructor(private client: NatsClient) {}
@@ -55,6 +55,7 @@ export class ProjectManagementGateway {
     ) {
         console.log(client.handshake.headers);
         client.join(workpackageId);
+        return { Status: "AY OKAY" };
     }
 
     @UseGuards(WsGuard)
@@ -119,7 +120,7 @@ export class ProjectManagementGateway {
     @UseGuards(WsGuard)
     @SubscribeMessage("get:team-options")
     async getTeamOptions(@MessageBody() workpackageId: string) {
-        console.log(workpackageId)
+        console.log(workpackageId);
         return await this.client.request(
             resourcePortfolioPatterns.getTeamOptions,
             workpackageId

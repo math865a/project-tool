@@ -32,6 +32,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
+    "noImplicitAny": false,
     "paths": {
       "~/*": [
         "./app/*"

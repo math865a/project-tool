@@ -37,11 +37,11 @@ export const ActivityTreeCell = observer(
         });
 
         /*
-        useLayoutEffect(() => {
-            if (Gantt.ActivityStore.Deliveries.length < 5 && props.row.kind === "Delivery"){
-                apiRef.current.setRowChildrenExpansion(id, true);
-            }
-        },[])*/
+		useLayoutEffect(() => {
+			if (Gantt.ActivityStore.Deliveries.length < 5 && props.row.kind === "Delivery"){
+				apiRef.current.setRowChildrenExpansion(id, true);
+			}
+		},[])*/
 
         const icon = computed(() => {
             if (rowNode.type !== "group") return undefined;
@@ -60,9 +60,12 @@ export const ActivityTreeCell = observer(
             <>
                 {isActionVisible.get() && (
                     <Action.Symbol
-                        sx={{ ml: rowNode.depth * 1.5 + 1 }}
+                        sx={{ ml: rowNode.depth + 1 }}
                         size="small"
                         icon={icon.get()}
+                        symbolProps={{
+                            size: 18,
+                        }}
                         onClick={handleClick}
                     />
                 )}

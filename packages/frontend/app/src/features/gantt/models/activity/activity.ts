@@ -2,10 +2,10 @@ import { ActivityType, DeliveryJson, PlanJson, TaskJson } from "../../types";
 import _ from "lodash";
 import { comparer, computed, reaction } from "mobx";
 import {
-    Model,
     detach,
     getRoot,
     idProp,
+    Model,
     model,
     modelAction,
     prop,
@@ -13,12 +13,12 @@ import {
 } from "mobx-keystone";
 import { Gantt } from "../../controllers/Gantt";
 import {
-    Interval,
-    Assignment,
-    TeamMember,
     ActivityAggregates,
     ActivityPeriod,
+    Assignment,
     Bar,
+    Interval,
+    TeamMember,
 } from "gantt-models";
 
 @model("activity")
@@ -38,11 +38,11 @@ export class Activity extends Model({
 }) {
     onAttachedToRootStore() {
         const expandListener = reaction(
-            () => this.Children.length,
-            (Children, prev) => {
-                if (Children > 0 && prev === 0) {
+            () => this.ChildRows.length,
+            (childCount, prev) => {
+                if (childCount > 0 && prev === 0) {
                     this.Table.expandRow(this);
-                } else if (Children === 0 && prev > 0) {
+                } else if (childCount === 0 && prev > 0) {
                     this.Table.collapseRow(this);
                 }
             },

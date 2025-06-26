@@ -5,9 +5,9 @@ import { type Coord, type Delta, type TimelineEventType } from "gantt/types";
 import _ from "lodash";
 import { computed } from "mobx";
 import {
-    Model,
     getParent,
     getRoot,
+    Model,
     model,
     modelAction,
     prop,
@@ -190,6 +190,9 @@ export class AllocationBar extends Model(
     @computed
     get barDelta() {
         if (this.TaskBar?.hasEvent) {
+            console.log(
+                `Running barDelta for ${this.Allocation.Assignment?.TeamMember?.resource.name} and task has event:${this.TaskBar?.hasEvent} and the event is ${this.Timeline.TimelineEvent.eventType}`
+            );
             if (this.Timeline.TimelineEvent.eventType === "move") {
                 return this.syncWithBarMove(this.bounds);
             } else if (this.Timeline.TimelineEvent.eventType === "resize-end") {
@@ -275,6 +278,7 @@ export class AllocationBar extends Model(
             dw: this.dw,
         };
     }
+
     @computed
     get coord() {
         return {
@@ -282,6 +286,7 @@ export class AllocationBar extends Model(
             w: _.round(this.w0 + this.delta.dw, 0),
         };
     }
+
     @computed
     get transform() {
         return {

@@ -3,8 +3,8 @@ import { Fallback, Page } from "~/src/design-system";
 import GanttDialog from "./planning/GanttAction";
 import PlanningChart from "./planning/PlanningChart";
 import { useWorkpackage } from "~/src/state";
-import { PlanningSectionFooter } from "./planning/Footer";
 import { IconChartBarPopular } from "@tabler/icons-react";
+import { PlanningSectionFooter } from "./planning";
 
 const PlanningSection = observer(() => {
     const { Gantt } = useWorkpackage();

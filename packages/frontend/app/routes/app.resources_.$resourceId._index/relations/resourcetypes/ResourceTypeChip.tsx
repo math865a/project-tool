@@ -4,7 +4,7 @@ import { Action as A, ResourceAgent, Subject, usePermissions } from "~/src";
 import { Action } from "~/src/design-system";
 import { disableInteraction } from "~/styles";
 import { useResourceTypeContext } from "./_provider";
-import { IconTrash } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
 
 export function ResourceTypeChip({
     resourceType,
@@ -42,11 +42,10 @@ export function ResourceTypeChip({
                 permissions.can(A.Write, Subject.Resources) &&
                 permissions.can(A.Write, Subject.ResourceTypes) ? (
                     <Action.Symbol
-                        icon={IconTrash}
+                        icon={IconX}
                         disabled={isDeleting}
                         title="Slet"
                         size="small"
-                        iconSize={0.9}
                     />
                 ) : (
                     <></>

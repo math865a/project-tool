@@ -36,6 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
         method: "POST",
         body: await parseRequest(request),
     });
+    console.log(result);
     if (result.status === "ok") {
         return redirect(`../${result.id}`);
     }
@@ -60,9 +61,7 @@ export default function CreateWorkpackage() {
             stageOptions,
         },
     } = useLoaderData<typeof loader>();
-    console.log(record);
 
-    console.log(stageOptions);
     const methods = useForm({
         defaultValues: record,
         resolver: yupResolver(schema),

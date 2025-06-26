@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useFetcher, useRouteLoaderData } from "@remix-run/react";
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     Action as A,
     Can,
@@ -61,6 +61,18 @@ export default function ResourceTypesEditor({
             menuProps.onClose();
         }
     }, [createAgents?.data]);
+
+    const options = useMemo(() => {
+        return (
+            resourceTypeOptions.data?.filter(
+                (d) => _.find(resourcetypes, (x) => x.id === d.id) === undefined
+            ) ?? []
+        );
+    }, [resourceTypeOptions.data]);
+
+    const hasAvailableOptions = useMemo(() => {
+        return options.length > 0;
+    }, [options]);
 
     return (
         <>
@@ -126,19 +138,11 @@ export default function ResourceTypesEditor({
                                 />
                             </AutoControl.Option>
                         )}
-                        options={
-                            resourceTypeOptions.data?.filter(
-                                (d) =>
-                                    _.find(
-                                        resourcetypes,
-                                        (x) => x.id === d.id
-                                    ) === undefined
-                            ) ?? []
-                        }
+                        options={options}
                         disableCloseOnSelect
                         PopperComponent={AutoControl.Popper}
                         renderTags={() => null}
-                        noOptionsText="Der er ingen ressourcer som ikke allerede er på dit team."
+                        noOptionsText="Alle ressourcetyperne er allerede valgt."
                         getOptionLabel={(option) => option.name}
                         sx={{
                             "& .MuiList-Root": {
@@ -164,25 +168,33 @@ export default function ResourceTypesEditor({
                         {selected.length + " valgte"}
                     </Typography>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Action.TextButton
-                            text="Annuller"
-                            icon={IconX}
-                            disabled={createAgents.state === "submitting"}
-                            sx={{ color: theme.palette.error.main }}
-                            onClick={() => {
-                                setSelected([]);
-                                menuProps.onClose();
-                            }}
-                        />
-                        <Action.TextButton
-                            text="Tilføj"
-                            icon={IconCheck}
-                            disabled={createAgents.state === "submitting"}
-                            sx={{ color: theme.palette.success.main }}
-                            onClick={() => {
-                                handleSubmit();
-                            }}
-                        />
+                        {hasAvailableOptions && (
+                            <>
+                                <Action.TextButton
+                                    text="Annuller"
+                                    icon={IconX}
+                                    disabled={
+                                        createAgents.state === "submitting"
+                                    }
+                                    sx={{ color: theme.palette.error.main }}
+                                    onClick={() => {
+                                        setSelected([]);
+                                        menuProps.onClose();
+                                    }}
+                                />
+                                <Action.TextButton
+                                    text="Tilføj"
+                                    icon={IconCheck}
+                                    disabled={
+                                        createAgents.state === "submitting"
+                                    }
+                                    sx={{ color: theme.palette.success.main }}
+                                    onClick={() => {
+                                        handleSubmit();
+                                    }}
+                                />
+                            </>
+                        )}
                     </Stack>
                 </Box>
             </Menu>
