@@ -1,8 +1,18 @@
+import { IsString, IsEmail, IsNotEmpty, IsHexColor } from "class-validator";
+
 export class UpdateUserDetailsDto {
-    constructor(
-        public readonly uid: string,
-        public readonly name: string,
-        public readonly email: string,
-        public readonly color: string
-    ) {}
+    @IsString()
+    @IsNotEmpty()
+    public readonly uid: string;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly name: string;
+
+    @IsEmail()
+    public readonly email: string;
+
+    @IsString()
+    @IsHexColor()
+    public readonly color: string;
 }

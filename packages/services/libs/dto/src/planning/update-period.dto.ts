@@ -1,17 +1,37 @@
+import { IsString, IsNotEmpty, IsDateString, IsIn } from "class-validator";
+
 export class UpdatePeriodDto {
-    constructor(
-        public readonly activityId: string,
-        public readonly startDate: string,
-        public readonly endDate: string
-    ) {}
+    @IsString()
+    @IsNotEmpty()
+    public readonly activityId: string;
+
+    @IsString()
+    @IsDateString()
+    public readonly startDate: string;
+
+    @IsString()
+    @IsDateString()
+    public readonly endDate: string;
+}
+
+export class PeriodDto {
+    @IsString()
+    @IsDateString()
+    public readonly startDate: string;
+
+    @IsString()
+    @IsDateString()
+    public readonly endDate: string;
 }
 
 export class PeriodUpdatedResult {
+    @IsString()
+    @IsNotEmpty()
     public readonly activityId: string;
-    public readonly period: {
-        startDate: string;
-        endDate: string;
-    };
+
+    public readonly period: PeriodDto;
+
+    @IsIn(["Plan", "Delivery", "Task", "Assignment", "Allocation"])
     public readonly kind:
         | "Plan"
         | "Delivery"

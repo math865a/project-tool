@@ -1,6 +1,11 @@
+import { IsString, IsNotEmpty } from "class-validator";
+
 export class CreateAgentDto {
-    constructor(
-        public readonly resourceId: string,
-        public readonly resourcetypeId: string
-    ) {}
+    @IsString()
+    @IsNotEmpty()
+    public readonly resourceId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly resourcetypeId: string;
 }

@@ -1,6 +1,11 @@
+import { IsString, IsNotEmpty } from "class-validator";
+
 export class UpdateBookingStageDto {
-    constructor(
-        public readonly workpackageId: string,
-        public readonly bookingStage: string
-    ) {}
+    @IsString()
+    @IsNotEmpty()
+    public readonly workpackageId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    public readonly bookingStage: string;
 }
