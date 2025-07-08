@@ -7,7 +7,10 @@ import {
 } from "@ns/definitions";
 import { Neo4jClient } from "@ns/neo4j";
 import { DomainEvents } from "@ns/cqrs";
-import { ProjectManagerDeletedEvent, ProjectManagerRemovedEvent } from "@ns/events";
+import {
+    ProjectManagerDeletedEvent,
+    ProjectManagerRemovedEvent,
+} from "@ns/events";
 
 @CommandHandler(RemoveProjectManagerCommand)
 export class RemoveProjectManagerHandler
@@ -42,8 +45,7 @@ export class RemoveProjectManagerHandler
 
     async examineLabels(id: string) {
         const queryResult = await this.client.read(this.labelsQuery, { id });
-        const labels = queryResult.records[0].get("pmLabels")
-        console.log(labels)
+        const labels = queryResult.records[0].get("pmLabels");
         return labels.length === 1;
     }
 

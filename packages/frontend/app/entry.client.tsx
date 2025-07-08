@@ -64,17 +64,17 @@ startTransition(() => {
     hydrateRoot(
         document,
         <StrictMode>
-            {/*<ClientCacheProvider>*/}
-            <ThemeProvider theme={theme}>
-                <LocalizationProvider
-                    dateAdapter={AdapterLuxon}
-                    adapterLocale="da"
-                >
-                    <CssBaseline />
-                    <RemixBrowser />
-                </LocalizationProvider>
-            </ThemeProvider>
-            {/*</ClientCacheProvider>*/}
+            <ClientCacheProvider>
+                <ThemeProvider theme={theme}>
+                    <LocalizationProvider
+                        dateAdapter={AdapterLuxon}
+                        adapterLocale="da"
+                    >
+                        <CssBaseline />
+                        <RemixBrowser />
+                    </LocalizationProvider>
+                </ThemeProvider>
+            </ClientCacheProvider>
         </StrictMode>
     );
 });

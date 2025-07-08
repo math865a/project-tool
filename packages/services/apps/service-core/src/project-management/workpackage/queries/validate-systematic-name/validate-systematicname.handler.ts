@@ -1,5 +1,5 @@
 import { Neo4jClient } from "@ns/neo4j";
-import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 import { ValidateSystematicNameQuery } from "./validate-systematicname.query";
 import { FormErrorResponse } from "@ns/definitions";
@@ -24,7 +24,6 @@ export class ValidateSystematicNameQueryHandler
             id: id,
         });
         const rec = queryResult.records[0];
-        console.log(rec)
         if (rec.get("isUnique") === true) {
             return rec.get("systematicName") as string;
         }

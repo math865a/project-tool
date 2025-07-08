@@ -10,7 +10,7 @@ import {
     TeamOptionsQuery,
 } from "./queries";
 import { ResourceAgentsQuery } from "./queries/resource-agents/resource-agents.query";
-import { ResourceCreatedEvent, ResourceRemovedEvent, UserCreatedEvent } from "@ns/events";
+import { ResourceCreatedEvent, ResourceRemovedEvent } from "@ns/events";
 import { DeleteOrphanAgentsCommand } from "./commands/delete-orphan-agents";
 
 @Controller()
@@ -49,9 +49,7 @@ export class ResourcePortfolioNastController {
 
     @MessagePattern(patterns.getTeamOptions)
     async getTeamOptions(workpackageId: string) {
-        const result = await this.queryBus.execute(new TeamOptionsQuery(workpackageId));
-        console.log(result);
-        return result
+        return await this.queryBus.execute(new TeamOptionsQuery(workpackageId));
     }
 
     @MessagePattern(patterns.getDeleteAgentConsequences)
@@ -63,18 +61,21 @@ export class ResourcePortfolioNastController {
 
     @EventPattern(ResourceCreatedEvent.name)
     async handleResourceCreated(@Payload() event: ResourceCreatedEvent) {
-        for (let i = 0; i < event.body.resourceTypes.length; i++){
+        for (let i = 0; i < event.body.resourceTypes.length; i++) {
             await this.commandBus.execute(
                 new CreateAgentCommand(
-                    { resourcetypeId: event.body.resourceTypes[i], resourceId: event.body.id },
+                    {
+                        resourcetypeId: event.body.resourceTypes[i],
+                        resourceId: event.body.id,
+                    },
                     event.uid
                 )
-            )
+            );
         }
     }
 
     @EventPattern(ResourceRemovedEvent.name)
-    async handleResourceRemoved(){
-        await this.commandBus.execute(new DeleteOrphanAgentsCommand())
+    async handleResourceRemoved() {
+        await this.commandBus.execute(new DeleteOrphanAgentsCommand());
     }
 }

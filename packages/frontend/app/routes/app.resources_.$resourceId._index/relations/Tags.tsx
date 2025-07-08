@@ -54,15 +54,6 @@ export function Tags() {
                                 ) : (
                                     <IconX color={theme.palette.error.main} />
                                 )}
-                                {/*<Symbol
-                                    size={0.9}
-                                    icon={isProjectManager ? faCheck : faTimes}
-                                    color={
-                                        isProjectManager
-                                            ? theme.palette.success.main
-                                            : theme.palette.error.main
-                                    }
-                                />*/}
                             </Box>
                         }
                         sx={{
@@ -82,15 +73,6 @@ export function Tags() {
                                 ) : (
                                     <IconX color={theme.palette.error.main} />
                                 )}
-                                {/*   <Symbol
-                                    size={0.9}
-                                    icon={isUser ? faCheck : faTimes}
-                                    color={
-                                        isUser
-                                            ? theme.palette.success.main
-                                            : theme.palette.error.main
-                                    }
-                                />*/}
                             </Box>
                         }
                         sx={{

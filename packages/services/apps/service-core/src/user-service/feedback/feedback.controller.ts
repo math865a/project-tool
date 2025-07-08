@@ -14,7 +14,6 @@ export class FeedbackNatsController {
         @Payload("dto") dto: SubmitFeatureDto,
         @Payload("uid") uid: string
     ) {
-        console.log(dto)
         return await this.commandBus.execute(
             new SubmitFeedbackCommand(dto, uid)
         );

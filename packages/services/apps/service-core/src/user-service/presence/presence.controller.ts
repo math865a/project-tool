@@ -5,6 +5,7 @@ import { presencePatterns as patterns } from "@ns/endpoints";
 import { TogglePresenceCommand } from "./commands";
 import { IsUserOnlineQuery, LoadPresenceQuery } from "./queries";
 import { UserJoinedEvent, UserLeftEvent } from "@ns/events";
+import { getSafeTime } from "@ns/util";
 
 @Controller()
 export class PresenceNatsController {
@@ -12,11 +13,10 @@ export class PresenceNatsController {
 
     @EventPattern(UserJoinedEvent.name)
     async registerPresence(event: UserJoinedEvent) {
-        console.log("Register presence", event);
         await this.commandBus.execute(
             new TogglePresenceCommand(
                 true,
-                event.timestamp.getTime(),
+                getSafeTime(event.timestamp),
                 event.uid
             )
         );
@@ -24,11 +24,10 @@ export class PresenceNatsController {
 
     @EventPattern(UserLeftEvent.name)
     async registerAbsence(event: UserLeftEvent) {
-        console.log("Register absence", event);
         await this.commandBus.execute(
             new TogglePresenceCommand(
                 false,
-                event.timestamp.getTime(),
+                getSafeTime(event.timestamp),
                 event.uid
             )
         );

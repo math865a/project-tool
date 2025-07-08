@@ -7,7 +7,6 @@ export class TasksHandler implements IQueryHandler<TasksQuery> {
     constructor(private client: Neo4jClient) {}
 
     async execute(query: TasksQuery): Promise<any> {
-        console.log(query.instruction)
         const queryResult = await this.client.read(this.query, {
             ...query.instruction,
         });

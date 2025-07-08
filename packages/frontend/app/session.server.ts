@@ -108,10 +108,7 @@ async function sendAPIRequest<T = any>({
     body,
     headers = {},
     queryParams = {},
-    ignoreUnauthorized = false,
-    request,
 }: ISendRequestProps): Promise<T> {
-    console.log(url);
     const options: { [index: string]: any } = {
         method: method,
         headers: new Headers({

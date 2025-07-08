@@ -76,7 +76,6 @@ export class UsersController {
 
     @Post()
     async createUser(@Body() dto: CreateUserDto, @HttpUser() uid: string) {
-        console.log(dto);
         return await this.client.request(userPatterns.createUser, {
             dto,
             uid,

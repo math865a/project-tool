@@ -195,7 +195,6 @@ export function ActionsMenu({
                         icon={IconTrash}
                         label="Slet"
                         onClick={() => {
-                            console.log(record.uid);
                             handleDeleteClick(record.uid);
                             menuProps.onClose();
                             notify("Brugeren blev slettet.");

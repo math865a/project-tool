@@ -14,10 +14,7 @@ import {
     presencePatterns,
     userPatterns,
 } from "@ns/endpoints";
-import {
-    UserJoinedEvent,
-    UserLeftEvent
-} from "@ns/events";
+import { UserJoinedEvent, UserLeftEvent } from "@ns/events";
 import { NatsClient } from "@ns/nats";
 import { WsGuard } from "@ns/session";
 import { Server, Socket } from "socket.io";
@@ -26,7 +23,7 @@ import { Server, Socket } from "socket.io";
     namespace: "user-service",
     cors: {
         origin: "*",
-    }
+    },
 })
 export class UserServiceGateway
     implements OnGatewayConnection, OnGatewayDisconnect
@@ -48,7 +45,6 @@ export class UserServiceGateway
 
     async handleDisconnect(client: Socket) {
         const uid = client.handshake.auth["uid"] as string;
-        console.log(uid)
         const roomSockets = await this.server.in(uid as string).fetchSockets();
         if (roomSockets.length === 0) {
             this.client.publish(new UserLeftEvent(uid));

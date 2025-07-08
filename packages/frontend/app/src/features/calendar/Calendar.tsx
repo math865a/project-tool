@@ -1,4 +1,4 @@
-import { Settings, DateTime as dt } from "luxon";
+import { DateTime as dt, Settings } from "luxon";
 import { Fallback, Page } from "~/src/design-system";
 import { useEvents } from "./useEvents";
 
@@ -6,8 +6,8 @@ import { Box, Divider } from "@mui/material";
 import { useMemo } from "react";
 import {
     Calendar as BigCalendar,
-    Views,
     luxonLocalizer,
+    Views,
 } from "react-big-calendar";
 
 export function Calendar({ resourceId }: { resourceId: string }) {
@@ -15,7 +15,6 @@ export function Calendar({ resourceId }: { resourceId: string }) {
 
     const handleRangeChange = (r: any) => {
         const range = r as unknown as { start: Date; end: Date };
-        console.log(r);
         loadEvents(dt.fromJSDate(range.start), dt.fromJSDate(range.end));
     };
 
@@ -40,7 +39,6 @@ export function Calendar({ resourceId }: { resourceId: string }) {
                         onRangeChange={handleRangeChange}
                         events={events}
                         views={[Views.MONTH]}
-                        onShowMore={(data) => console.log(data)}
                         {...props}
                     />
                 ) : (

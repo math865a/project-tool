@@ -31,7 +31,6 @@ export const useTransport = () => {
     };
 
     const deleteUser = (id: GridRowId) => {
-        console.log("ok");
         fetcher.submit(getBodyUid(id), {
             method: "POST",
             action: "/app/users?/deleteUser",

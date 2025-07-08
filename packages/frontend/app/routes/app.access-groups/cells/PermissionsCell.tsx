@@ -26,7 +26,6 @@ export default function PermissionsCell({
     const apiRef = useGridApiContext();
 
     const handleToggle = (permission: keyof Permissions) => {
-        console.log(id, value, field);
         if (!value || !isEditing) return;
         const newValue = {
             ...value,

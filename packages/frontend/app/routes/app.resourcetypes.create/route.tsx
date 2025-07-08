@@ -55,17 +55,11 @@ export default function CreateResourceType() {
     );
 
     const transform = (values: CreateValues) => {
-        const vals = {
+        return {
             ...values,
             resources: _.map(values.resources.map((d) => d.id)),
             typeNo: values.typeNo ? Number(values.typeNo) : 1,
         };
-        console.log(vals);
-        return vals;
-    };
-
-    const handleSubmit = () => {
-        console.log("submit");
     };
 
     const onSubmit = formSubmit.useActionSubmit<CreateValues, any>({
@@ -130,10 +124,7 @@ export default function CreateResourceType() {
                         </FormUI.VStack>
                     </Dialog.Body>
                     <Dialog.Footer>
-                        <FormUI.Actions
-                            onCancel={handleClose}
-                            onSubmit={handleSubmit}
-                        />
+                        <FormUI.Actions onCancel={handleClose} />
                     </Dialog.Footer>
                 </form>
             </FormProvider>

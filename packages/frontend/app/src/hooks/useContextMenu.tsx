@@ -1,5 +1,6 @@
 import { PopoverPosition } from "@mui/material";
 import { useState } from "react";
+
 export type AnchorPosition = { x: number; y: number };
 export interface IUseContextMenuProps<T extends any = any> {
     anchorPosition: PopoverPosition | undefined;
@@ -12,13 +13,12 @@ export interface IUseContextMenuProps<T extends any = any> {
 
 export const useContextMenu = <T extends any>(): IUseContextMenuProps<T> => {
     const [record, setRecord] = useState<T | null>(null);
-    const [anchorPosition, setAnchorPosition] = useState<PopoverPosition | undefined>(
-        undefined
-    );
+    const [anchorPosition, setAnchorPosition] = useState<
+        PopoverPosition | undefined
+    >(undefined);
     const open = Boolean(anchorPosition);
 
     const handleOpen = (record: T, coord: PopoverPosition) => {
-        console.log(record)
         setRecord(record);
         setAnchorPosition(coord);
     };
@@ -34,6 +34,6 @@ export const useContextMenu = <T extends any>(): IUseContextMenuProps<T> => {
         open,
         handleOpen,
         onClose,
-        anchorReference: "anchorPosition"
+        anchorReference: "anchorPosition",
     };
 };

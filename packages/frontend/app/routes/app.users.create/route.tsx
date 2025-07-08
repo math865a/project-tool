@@ -37,7 +37,6 @@ export async function loader({
 
 export async function action({ request }: ActionFunctionArgs) {
     const dto = await parseRequest(request);
-    console.log(dto);
     const result: FormResponse = await sendRequest(request, {
         url: getServiceUrl("users"),
         method: "POST",

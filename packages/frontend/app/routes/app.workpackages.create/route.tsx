@@ -36,7 +36,6 @@ export async function action({ request }: ActionFunctionArgs) {
         method: "POST",
         body: await parseRequest(request),
     });
-    console.log(result);
     if (result.status === "ok") {
         return redirect(`../${result.id}`);
     }

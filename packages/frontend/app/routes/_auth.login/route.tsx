@@ -31,8 +31,7 @@ export let action = async ({ request }: ActionFunctionArgs) => {
                 "/app"
             ),
         });
-    } catch (e: any) {
-        console.log(e);
+    } catch (e) {
         return json(e);
     }
 };

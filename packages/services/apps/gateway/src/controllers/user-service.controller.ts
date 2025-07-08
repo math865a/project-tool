@@ -16,7 +16,6 @@ export class UserServiceController {
 
     @Post("password")
     async pass(@Body() dto: UpdatePasswordDto, @HttpUser() uid: string) {
-        console.log(dto);
         return await this.client.request(
             authenticationPatterns.updatePassword,
             { dto: dto, uid: uid }
@@ -41,7 +40,6 @@ export class UserServiceController {
 
     @Get("test")
     test(@HttpUser() uid: string) {
-        console.log(uid);
         return { uid: uid };
     }
 

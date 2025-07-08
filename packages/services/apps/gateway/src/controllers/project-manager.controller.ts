@@ -37,7 +37,6 @@ export class ProjectManagerController {
         @Body() dto: CreateProjectManagerDto,
         @HttpUser() uid: string
     ) {
-        console.log(dto);
         return await this.client.request(
             projectManagerPatterns.createProjectManager,
             {
@@ -51,8 +50,7 @@ export class ProjectManagerController {
     async updateProjectManager(
         @Body() dto: Omit<UpdateProjectManagerDto, "id">,
         @Param("id") id: string,
-        @HttpUser() uid: string,
-
+        @HttpUser() uid: string
     ) {
         return await this.client.request(
             projectManagerPatterns.updateProjectManager,

@@ -11,7 +11,6 @@ export class ResourcePortfolioController {
 
     @Get("delete-consequences/:agentId")
     async getDeleteConsequences(@Param("agentId") agentId: string) {
-        console.log(agentId);
         return await this.client.request(
             resourcePortfolioPatterns.getDeleteAgentConsequences,
             agentId

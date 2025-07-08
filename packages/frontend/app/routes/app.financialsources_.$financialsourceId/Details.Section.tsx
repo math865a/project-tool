@@ -5,7 +5,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Action as A, Can, Subject } from "~/src";
 import { toFormData } from "~/util/formData";
 import { loader } from "./route";
-import {} from "./details/schema";
 import { getDefaultValues, schema } from "./details";
 import { ServerValidation } from "~/src/hooks";
 
@@ -19,7 +18,6 @@ export default function DetailsSection() {
     const submit = useSubmit();
 
     const onSubmit = (values: ReturnType<typeof getDefaultValues>) => {
-        console.log(values);
         submit(toFormData(values), { method: "post" });
     };
 

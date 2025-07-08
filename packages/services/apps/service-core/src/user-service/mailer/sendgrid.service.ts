@@ -8,6 +8,7 @@ import * as SendGrid from "@sendgrid/mail";
 import { getCredentialsHTML, getWelcomeHTML } from "./templates";
 import { FormErrorResponse, FormSuccessResponse } from "@ns/definitions";
 import { CredentialsForwardedEvent, WelcomeMailSentEvent } from "@ns/events";
+
 @Injectable()
 export class SendgridService {
     constructor(
@@ -60,7 +61,6 @@ export class SendgridService {
         };
         await SendGrid.send(mail);
 
-        console.log(`E-Mail sent to ${mail.to}`);
         return mail;
     }
 

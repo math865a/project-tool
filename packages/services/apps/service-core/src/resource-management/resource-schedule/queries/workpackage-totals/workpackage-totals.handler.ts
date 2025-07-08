@@ -3,13 +3,14 @@ import { Neo4jClient } from "@ns/neo4j";
 import { WorkpackageTotalsQuery } from "./workpackage-totals.query";
 
 @QueryHandler(WorkpackageTotalsQuery)
-export class WorkpackageTotalsQueryHandler implements IQueryHandler<WorkpackageTotalsQuery>{
-    constructor(private client: Neo4jClient){}
+export class WorkpackageTotalsQueryHandler
+    implements IQueryHandler<WorkpackageTotalsQuery>
+{
+    constructor(private client: Neo4jClient) {}
 
-    async execute({instruction}: WorkpackageTotalsQuery): Promise<any> {
-        console.log(instruction)
-        const queryResult = await this.client.read(this.query, instruction)
-        return queryResult.records.map(d => d.get("result"))
+    async execute({ instruction }: WorkpackageTotalsQuery): Promise<any> {
+        const queryResult = await this.client.read(this.query, instruction);
+        return queryResult.records.map((d) => d.get("result"));
     }
 
     query = `
@@ -27,5 +28,5 @@ export class WorkpackageTotalsQueryHandler implements IQueryHandler<WorkpackageT
             bookingStage: bs.name,
             booked: booked
         } AS result
-    `
+    `;
 }

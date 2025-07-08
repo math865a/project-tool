@@ -37,7 +37,6 @@ export function ResourceForm({
             ...values,
             resourceTypes: _.map(values.resourceTypes.map((d) => d.id)),
         };
-        console.log(vals);
         return vals;
     };
 

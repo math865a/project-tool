@@ -36,9 +36,7 @@ export const useGanttModel = () => {
     useEffect(() => {
         if (socket && !Root.Transport.socket) {
             Root.initializeSocket(socket);
-            socket.emit("join", workpackageId, (res) => {
-                console.log(res);
-            });
+            socket.emit("join", workpackageId);
         }
     }, [socket]);
 

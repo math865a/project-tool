@@ -5,7 +5,6 @@ import { ActionFunctionArgs } from "@remix-run/node";
 
 export async function action({ request, params }: ActionFunctionArgs) {
     invariant(params.uid);
-    console.log(params.uid);
     return await sendRequest(request, {
         url: getServiceUrl("users", "create-project-manager", params.uid),
         method: "POST",

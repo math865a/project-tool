@@ -25,7 +25,6 @@ export class SubmitFeedbackHandler
                 pageUrl: command.dto.pageUrl,
             },
         }).save();
-        console.log(submission);
 
         this.publisher.publish(
             new FeedbackSubmittedEvent(submission.toObject(), command.uid)

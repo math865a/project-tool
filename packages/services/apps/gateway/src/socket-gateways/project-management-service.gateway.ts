@@ -53,7 +53,6 @@ export class ProjectManagementGateway {
         @MessageBody() workpackageId: string,
         @ConnectedSocket() client: Socket
     ) {
-        console.log(client.handshake.headers);
         client.join(workpackageId);
         return { Status: "AY OKAY" };
     }
@@ -120,7 +119,6 @@ export class ProjectManagementGateway {
     @UseGuards(WsGuard)
     @SubscribeMessage("get:team-options")
     async getTeamOptions(@MessageBody() workpackageId: string) {
-        console.log(workpackageId);
         return await this.client.request(
             resourcePortfolioPatterns.getTeamOptions,
             workpackageId
@@ -170,7 +168,6 @@ export class ProjectManagementGateway {
         @MessageBody() dto: CreateActivityDto,
         @UserId() uid: string
     ) {
-        console.log(dto, uid);
         return await this.client.request(planningPatterns.createActivity, {
             dto,
             uid,

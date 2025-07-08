@@ -19,7 +19,6 @@ export class AuthenticationController {
         @Payload("dto") dto: UpdatePasswordDto,
         @Payload("uid") uid: string
     ) {
-        console.log(dto)
         return await this.commandBus.execute(
             new UpdatePasswordCommand(dto, uid)
         );
@@ -30,7 +29,9 @@ export class AuthenticationController {
         @Payload("email") email: string,
         @Payload("uid") uid?: string
     ) {
-        return await this.commandBus.execute(new ResetPasswordCommand(email, uid));
+        return await this.commandBus.execute(
+            new ResetPasswordCommand(email, uid)
+        );
     }
 
     @MessagePattern(authenticationPatterns.getCredentials)

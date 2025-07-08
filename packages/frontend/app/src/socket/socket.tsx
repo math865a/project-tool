@@ -18,7 +18,6 @@ export const useSocket = ({
     const [socket, setSocket] = useState<Socket | undefined>();
 
     useEffect(() => {
-        console.log(namespaces[namespace]);
         const socket = io(namespaces[namespace], {
             auth: {
                 access_token: token ?? "",
@@ -54,6 +53,5 @@ export function SocketProvider({
 }
 
 export const useSocketContext = () => {
-    const ctx = useContext(SocketContext);
-    return ctx;
+    return useContext(SocketContext);
 };

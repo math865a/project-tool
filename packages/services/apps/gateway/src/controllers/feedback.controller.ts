@@ -13,7 +13,6 @@ export class FeedbackController {
         @Body() dto: SubmitFeedbackDto,
         @HttpUser() uid: string
     ) {
-        console.log(dto)
         return await this.client.request(feedbackPatterns.submitFeedback, {
             dto,
             uid,

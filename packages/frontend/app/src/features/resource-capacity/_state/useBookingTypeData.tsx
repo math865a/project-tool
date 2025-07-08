@@ -29,7 +29,6 @@ export const useBookingTypeData = (params: IResourceCapacityParams) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const updateData = (data: IBookingTypeResponse) => {
-        console.log(data)
         setData(data.bookings);
         setTotals(data.totals);
         setIsLoading(false);
@@ -39,10 +38,10 @@ export const useBookingTypeData = (params: IResourceCapacityParams) => {
         setIsLoading(true);
         socket?.emit("get:booking-stage-timeseries", params, updateData);
     };
-    
+
     const isEmpty = useMemo(() => {
-        return totals?.hard === 0 && totals?.soft === 0
-    },[data])
+        return totals?.hard === 0 && totals?.soft === 0;
+    }, [data]);
 
     useEffect(() => {
         if (!socket) return;
@@ -53,6 +52,6 @@ export const useBookingTypeData = (params: IResourceCapacityParams) => {
         data,
         totals,
         isLoading,
-        isEmpty
+        isEmpty,
     };
 };

@@ -31,7 +31,6 @@ export const useFeedback = (socket?: Socket) => {
     };
 
     const submitFeedback = (values: any) => {
-        console.log(values);
         if (!type) {
             throw new Error("No feedback type selected");
         }
@@ -48,16 +47,11 @@ export const useFeedback = (socket?: Socket) => {
     };
 
     useEffect(() => {
-        if (
-            fetcher.state === "idle" &&
-            fetcher.type === "done" &&
-            fetcher.data &&
-            type !== null
-        ) {
+        if (fetcher.state === "idle" && fetcher.data && type !== null) {
             notifyResponse(fetcher.data);
             handleClose();
         }
-    }, [fetcher.state, null, fetcher.type, fetcher.data, notifyResponse]);
+    }, [fetcher.state, null, fetcher.data, notifyResponse]);
 
     const updateType = (type: FeedbackType) => setType(type);
 

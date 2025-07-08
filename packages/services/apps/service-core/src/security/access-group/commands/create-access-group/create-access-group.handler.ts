@@ -17,12 +17,10 @@ export class CreateAccessGroupHandler
     constructor(private client: Neo4jClient, private publisher: DomainEvents) {}
 
     async execute(command: CreateAccessGroupCommand): Promise<FormResponse> {
-        console.log(command, command.dto.permissions)
         const queryResult = await this.client.write(this.query, {
             uid: command.uid,
             ...command.dto,
         });
-        console.log(queryResult.records)
         if (queryResult.summary.updateStatistics.containsUpdates()) {
             this.publisher.publish(
                 new AccessGroupCreatedEvent(command.dto, command.uid)
@@ -67,4 +65,3 @@ export class CreateAccessGroupHandler
 
     `;
 }
-

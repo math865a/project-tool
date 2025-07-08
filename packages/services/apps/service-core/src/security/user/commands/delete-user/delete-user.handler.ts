@@ -1,13 +1,18 @@
-import { CommandHandler, ICommand, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DeleteUserCommand } from "./delete-user.command";
-import { FormErrorResponse, FormResponse, FormSuccessResponse } from "@ns/definitions";
+import {
+    FormErrorResponse,
+    FormResponse,
+    FormSuccessResponse,
+} from "@ns/definitions";
 import { DomainEvents } from "@ns/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
 import { UserDeletedEvent, UserRemovedEvent } from "@ns/events";
 
 @CommandHandler(DeleteUserCommand)
-export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand, FormResponse> {
-
+export class DeleteUserHandler
+    implements ICommandHandler<DeleteUserCommand, FormResponse>
+{
     constructor(private client: Neo4jClient, private publisher: DomainEvents) {}
 
     async execute(command: DeleteUserCommand): Promise<FormResponse> {
@@ -16,7 +21,7 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand, For
         if (shouldDelete) {
             const deleted = await this.deleteUser(id);
             if (deleted) {
-                this.publisher.publish(new UserDeletedEvent({uid: id}, uid));
+                this.publisher.publish(new UserDeletedEvent({ uid: id }, uid));
                 return new FormSuccessResponse({
                     message: "Brugeren er blevet slettet",
                 });
@@ -24,7 +29,7 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand, For
         } else {
             const removed = await this.removeUser(id);
             if (removed) {
-                this.publisher.publish(new UserRemovedEvent({uid: id}, uid));
+                this.publisher.publish(new UserRemovedEvent({ uid: id }, uid));
                 return new FormSuccessResponse({
                     message: "Brugeren er blevet fjernet",
                 });
@@ -37,8 +42,7 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand, For
 
     async examineLabels(uid: string) {
         const queryResult = await this.client.read(this.labelsQuery, { uid });
-        const labels = queryResult.records[0].get("uLabels")
-        console.log(labels)
+        const labels = queryResult.records[0].get("uLabels");
         return labels.length === 1;
     }
 

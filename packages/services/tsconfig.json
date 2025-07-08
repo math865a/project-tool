@@ -36,12 +36,6 @@
       "@ns/middleware/*": [
         "libs/middleware/src/*"
       ],
-      "@ns/redis": [
-        "libs/redis/src"
-      ],
-      "@ns/redis/*": [
-        "libs/redis/src/*"
-      ],
       "@ns/util": [
         "libs/util/src"
       ],

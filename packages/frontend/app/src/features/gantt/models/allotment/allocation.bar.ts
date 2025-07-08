@@ -190,9 +190,6 @@ export class AllocationBar extends Model(
     @computed
     get barDelta() {
         if (this.TaskBar?.hasEvent) {
-            console.log(
-                `Running barDelta for ${this.Allocation.Assignment?.TeamMember?.resource.name} and task has event:${this.TaskBar?.hasEvent} and the event is ${this.Timeline.TimelineEvent.eventType}`
-            );
             if (this.Timeline.TimelineEvent.eventType === "move") {
                 return this.syncWithBarMove(this.bounds);
             } else if (this.Timeline.TimelineEvent.eventType === "resize-end") {

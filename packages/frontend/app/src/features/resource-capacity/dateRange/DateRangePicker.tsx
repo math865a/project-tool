@@ -19,7 +19,8 @@ export function DateRangePicker() {
                 text={displayRange}
                 onClick={handleOpen}
                 reverse
-                textProps={{ fontWeight: "bold", fontSize: 12 }}
+                textProps={{ fontWeight: "bold", fontSize: 13 }}
+                sx={{ minWidth: "min-content" }}
             />
 
             <Menu

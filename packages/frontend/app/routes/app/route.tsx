@@ -18,16 +18,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
             method: "GET",
         });
         if (data.user.isDeactivated) {
-            throw await logout(request);
+            await logout(request);
         }
-        console.log(data);
 
         return json({
             ...data,
             token: token.access_token,
         });
     } catch (e) {
-        console.log("error", e);
         return await logout(request);
     }
 }

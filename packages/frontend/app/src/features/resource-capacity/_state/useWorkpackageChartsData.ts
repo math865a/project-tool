@@ -1,9 +1,5 @@
-import { useParams } from "@remix-run/react";
-import _ from "lodash";
-import { useEffect, useMemo, useState } from "react";
-import invariant from "tiny-invariant";
+import { useEffect, useState } from "react";
 import { useSocketContext } from "~/src/socket";
-import { IDateRange } from "./useDateRange";
 import { IResourceCapacityParams } from "./_useResourceCapacity";
 
 export interface IWorkpackageChartsResponse {
@@ -37,7 +33,6 @@ export const useWorkpackageChartsData = (params: IResourceCapacityParams) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const updateData = (data: IWorkpackageChartsResponse) => {
-        console.log(data);
         setTotals(data.totals.map((d, i) => ({ ...d, color: colors[i] })));
         setTimeseries(data.timeseries);
         setIsLoading(false);

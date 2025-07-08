@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
-import {HttpUser, Public} from "@ns/decorators";
+import { HttpUser, Public } from "@ns/decorators";
 import { CreateFinancialSourceDto, UpdateFinancialSourceDto } from "@ns/dto";
 import { financialsourcePatterns as patterns } from "@ns/endpoints";
 import { NatsClient } from "@ns/nats";
+
 @Controller("financialsources")
 export class FinancialSourcesController {
     constructor(private client: NatsClient) {}
@@ -10,7 +11,6 @@ export class FinancialSourcesController {
     @Public()
     @Get()
     async getView() {
-        console.log("Works")
         return await this.client.request(patterns.getFinancialSourcesView);
     }
 

@@ -16,10 +16,8 @@ export class LinkUserHandler
     constructor(private client: Neo4jClient, private publisher: DomainEvents) {}
 
     async execute(command: LinkUserCommand): Promise<FormResponse> {
-        console.log(command.dto)
         const queryResult = await this.client.write(this.query, command.dto);
         const result = queryResult.records[0].get("result");
-        console.log(result)
         if (result) {
             this.publisher.publish(
                 new UserLinkedEvent(
