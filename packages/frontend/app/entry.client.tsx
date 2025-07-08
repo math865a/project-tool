@@ -22,39 +22,38 @@ if (typeof window !== "undefined") {
 }*/
 
 interface ClientCacheProviderProps {
-	children: React.ReactNode;
+    children: React.ReactNode;
 }
 
-function ClientCacheProvider({children}: ClientCacheProviderProps) {
-	const [cache, setCache] = useState(createEmotionCache());
+function ClientCacheProvider({ children }: ClientCacheProviderProps) {
+    const [cache, setCache] = useState(createEmotionCache());
 
-	const clientStyleContextValue = React.useMemo(
-		() => ({
-			reset() {
-				setCache(createEmotionCache());
-			},
-		}),
-		[],
-	);
+    const clientStyleContextValue = React.useMemo(
+        () => ({
+            reset() {
+                setCache(createEmotionCache());
+            },
+        }),
+        []
+    );
 
-
-	return (
-		<ClientStylesContext.Provider value={clientStyleContextValue}>
-			<CacheProvider value={cache}>{children}</CacheProvider>
-		</ClientStylesContext.Provider>
-	);
+    return (
+        <ClientStylesContext.Provider value={clientStyleContextValue}>
+            <CacheProvider value={cache}>{children}</CacheProvider>
+        </ClientStylesContext.Provider>
+    );
 }
 
 // Configure MobX for development
 if (process.env.NODE_ENV === "development") {
-	const {configure} = await import("mobx");
-	configure({
-		enforceActions: "never",
-		computedRequiresReaction: false,
-		reactionRequiresObservable: false,
-		observableRequiresReaction: false,
-		disableErrorBoundaries: false,
-	});
+    const { configure } = await import("mobx");
+    configure({
+        enforceActions: "never",
+        computedRequiresReaction: false,
+        reactionRequiresObservable: false,
+        observableRequiresReaction: false,
+        disableErrorBoundaries: false,
+    });
 }
 /*
 startTransition(() => {
@@ -62,22 +61,23 @@ startTransition(() => {
 })
 */
 startTransition(() => {
-	hydrateRoot(
-		document,
-		<StrictMode>
-			<ClientCacheProvider>
-				<ThemeProvider theme={theme}>
-					<LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="da">
-
-						<CssBaseline/>
-						<RemixBrowser/>
-					</LocalizationProvider>
-				</ThemeProvider>
-			</ClientCacheProvider>
-		</StrictMode>
-	);
+    hydrateRoot(
+        document,
+        <StrictMode>
+            {/*<ClientCacheProvider>*/}
+            <ThemeProvider theme={theme}>
+                <LocalizationProvider
+                    dateAdapter={AdapterLuxon}
+                    adapterLocale="da"
+                >
+                    <CssBaseline />
+                    <RemixBrowser />
+                </LocalizationProvider>
+            </ThemeProvider>
+            {/*</ClientCacheProvider>*/}
+        </StrictMode>
+    );
 });
-
 
 /*
 startTransition(() => {

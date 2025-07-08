@@ -66,63 +66,15 @@ services:
       - 6222:6222
       - 8222:8222
 
-  monitoring:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    container_name: monitoring
-    command: pnpm run start:dev monitoring
 
-  organization:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    container_name: organization
-    command: pnpm run start:dev organization
-
-  project-management:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    container_name: project-management
-    command: pnpm run start:dev project-management
-
-  resource-capacity:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    container_name: resource-capacity
-    command: pnpm run start:dev resource-capacity
-
-  resource-management:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    container_name: resource-management
-    command: pnpm run start:dev resource-management
-
-  resource-scheduling:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    container_name: resource-scheduling
-    command: pnpm run start:dev resource-scheduling
-
-  security:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    container_name: security
-    command: pnpm run start:dev security
-
-  user-service:
+  service-core:
     extends:
       file: ./docker-compose.templates.yml
       service: service
     environment:
       SENDGRID_API_KEY: ${SENDGRID_API_KEY}
-    container_name: user-service
-    command: pnpm run start:dev user-service
+    container_name: service-core
+    command: pnpm run start:dev service-core
 
   gateway:
     extends:
