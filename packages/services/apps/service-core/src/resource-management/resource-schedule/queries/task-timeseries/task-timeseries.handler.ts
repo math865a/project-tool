@@ -3,7 +3,9 @@ import { TaskTimeseriesQuery } from "./task-timeseries.query";
 import { Neo4jClient } from "@ns/neo4j";
 
 @QueryHandler(TaskTimeseriesQuery)
-export class TaskTimeseriesHandler implements IQueryHandler<TaskTimeseriesQuery, any> {
+export class TaskTimeseriesHandler
+    implements IQueryHandler<TaskTimeseriesQuery, any>
+{
     constructor(private client: Neo4jClient) {}
 
     async execute(query: TaskTimeseriesQuery): Promise<any> {

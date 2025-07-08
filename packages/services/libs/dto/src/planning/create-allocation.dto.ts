@@ -1,4 +1,3 @@
-
 export class CreateAllocationDto {
     public readonly id: string;
     public readonly startDate: string;

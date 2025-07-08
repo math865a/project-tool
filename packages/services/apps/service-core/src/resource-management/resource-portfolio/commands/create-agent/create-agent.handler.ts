@@ -47,7 +47,7 @@ export class CreateAgentHandler
         });
     }
 
-    async checkIfExists(dto: CreateAgentDto){
+    async checkIfExists(dto: CreateAgentDto) {
         const queryResult = await this.client.read(this.existsQuery, dto);
         const result = queryResult.records[0].get("agentExists");
         return result;
@@ -62,7 +62,7 @@ export class CreateAgentHandler
             ELSE true
         END AS agentExists
     
-    `
+    `;
 
     query = `
         MATCH (u:User {uid: $uid})

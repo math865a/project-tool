@@ -20,6 +20,8 @@ export class AuthenticationController {
     @Public()
     @Post("reset-password")
     async resetPassword(@Body("email") email: string) {
-        return await this.client.request(authenticationPatterns.resetPassword, { email });
+        return await this.client.request(authenticationPatterns.resetPassword, {
+            email,
+        });
     }
 }

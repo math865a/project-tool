@@ -6,5 +6,5 @@ const service = "activity";
 
 export const activityPatterns = {
     getActivity: getPattern("get"),
-    getActivityCount: getPattern("get:count")
+    getActivityCount: getPattern("get:count"),
 };

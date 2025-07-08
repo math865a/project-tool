@@ -3,9 +3,7 @@ import { Neo4jClient } from "@ns/neo4j";
 import { PlanQuery } from "./plan.query";
 
 @QueryHandler(PlanQuery)
-export class PlanQueryHandler
-    implements IQueryHandler<PlanQuery>
-{
+export class PlanQueryHandler implements IQueryHandler<PlanQuery> {
     constructor(private client: Neo4jClient) {}
 
     async execute({ workpackageId }: PlanQuery): Promise<any> {

@@ -6,10 +6,7 @@ import { CQRSModule } from "@ns/cqrs";
 import { NatsModule } from "@ns/nats";
 import { Neo4jModule } from "@ns/neo4j";
 import { Duration as dur } from "luxon";
-import {
-    SignJwtHandler,
-    VerifySessionHandler
-} from "./commands";
+import { SignJwtHandler, VerifySessionHandler } from "./commands";
 import { JwtAuthGuard } from "./guards";
 import { ValidateCredentialsHandler } from "./queries";
 import { JwtStrategy } from "./strategies/jwt.strategy";

@@ -11,7 +11,7 @@ export class EventsService {
         const res = {
             _id: new ObjectId(),
             event: name,
-            ...event
+            ...event,
         };
         console.log("inserted event: ", res);
         await this.client.events.insertOne(res);

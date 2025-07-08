@@ -1,13 +1,13 @@
 import { Neo4jClient } from "@ns/neo4j";
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DateTime as dt, Interval as int } from 'luxon';
-import { capitalize } from 'lodash';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { DateTime as dt, Interval as int } from "luxon";
+import { capitalize } from "lodash";
 
 export class GenerateWorkDaysCommand {
     constructor(
         public readonly startDate: string,
         public readonly endDate: string
-    ){}
+    ) {}
 }
 
 @CommandHandler(GenerateWorkDaysCommand)
@@ -18,39 +18,39 @@ export class GenerateWorkDaysHandler
 
     async execute(command: GenerateWorkDaysCommand): Promise<any> {
         const days = this.mapDays(command.startDate, command.endDate);
-     
-        const result = await this.client.write(this.query, {days: days})
-        const syncResult = await this.client.write(this.syncCalendarsQuery, {capacity: 480})
-        return {done: true}
+
+        const result = await this.client.write(this.query, { days: days });
+        const syncResult = await this.client.write(this.syncCalendarsQuery, {
+            capacity: 480,
+        });
+        return { done: true };
     }
 
-
-    mapDays(startDate: string, endDate: string){
+    mapDays(startDate: string, endDate: string) {
         const interval = int.fromDateTimes(
-            dt.fromISO(startDate).setZone('utc').setLocale('da'),
-            dt.fromISO(endDate).setZone('utc').setLocale('da')
+            dt.fromISO(startDate).setZone("utc").setLocale("da"),
+            dt.fromISO(endDate).setZone("utc").setLocale("da")
         );
         return interval.splitBy({ days: 1 }).map((date) => {
             let labels: string[] = ["CalendarDay"];
-            if ([6,7].includes(date.start.weekday)){
-                labels.push("Weekend")
+            if ([6, 7].includes(date.start.weekday)) {
+                labels.push("Weekend");
             } else {
-                labels.push("BusinessDay")
+                labels.push("BusinessDay");
             }
             const properties = {
-                date: date.start.toFormat('yyyy-MM-dd'),
+                date: date.start.toFormat("yyyy-MM-dd"),
                 week: date.start.weekNumber,
-                weekdayName: capitalize(date.start.toFormat('cccc')),
+                weekdayName: capitalize(date.start.toFormat("cccc")),
                 weekday: date.start.weekday,
-                year: date.start.year
-            }
+                year: date.start.year,
+            };
             return {
                 labels: labels,
-                properties: properties
-            }
-        } )
+                properties: properties,
+            };
+        });
     }
-
 
     query = `
         UNWIND $days as day
@@ -64,7 +64,7 @@ export class GenerateWorkDaysHandler
             weekday: toInteger(day.properties.weekday),
             year: toInteger(day.properties.year)
         }
-    `
+    `;
 
     syncCalendarsQuery = `
         MATCH (c:Calendar {isDefault: true})
@@ -76,8 +76,7 @@ export class GenerateWorkDaysHandler
             SET rel.capacity = toInteger($capacity)
         }
 
-    `
-  
+    `;
 }
 /*        CALL {
             WITH c

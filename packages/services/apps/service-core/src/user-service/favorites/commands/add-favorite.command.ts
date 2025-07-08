@@ -1,4 +1,4 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
 import { DomainEvents } from "@ns/cqrs";
 
@@ -8,7 +8,6 @@ export class AddFavoriteCommand {
         public readonly uid: string
     ) {}
 }
-
 
 @CommandHandler(AddFavoriteCommand)
 export class AddFavoriteHandler
@@ -24,8 +23,6 @@ export class AddFavoriteHandler
             recordId: command.recordId,
             uid: command.uid,
         });
-
-
     }
 
     query = `

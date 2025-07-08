@@ -51,10 +51,7 @@ export class ResourcesController {
     }
 
     @Delete(":id")
-    async delete(
-        @Param("id") id: string,
-        @HttpUser() uid: string
-    ) {
+    async delete(@Param("id") id: string, @HttpUser() uid: string) {
         return await this.client.request(patterns.deleteResource, {
             id,
             uid,

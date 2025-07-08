@@ -2,7 +2,10 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
 
 export class LoadPresenceQuery {
-    constructor(public readonly uid: string, public readonly except: boolean = false) {}
+    constructor(
+        public readonly uid: string,
+        public readonly except: boolean = false
+    ) {}
 }
 
 @QueryHandler(LoadPresenceQuery)
@@ -13,7 +16,10 @@ export class LoadPresenceQueryHandler
 
     async execute(query: LoadPresenceQuery): Promise<any[]> {
         const { uid, except } = query;
-        const queryResult = await this.client.read(except ? this.exceptQuery : this.query, { uid });
+        const queryResult = await this.client.read(
+            except ? this.exceptQuery : this.query,
+            { uid }
+        );
         return queryResult.records.map((d) => d.get("user"));
     }
 

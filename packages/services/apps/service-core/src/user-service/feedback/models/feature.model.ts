@@ -7,7 +7,7 @@ import { FeedbackMeta } from "./feedback.model";
 export class FeatureSubmission extends Document {
     @Prop()
     page: string;
-    
+
     @Prop()
     problem: string;
 
@@ -21,17 +21,16 @@ export class FeatureSubmission extends Document {
     reach: number;
 
     @Prop()
-    urgency: number
+    urgency: number;
 
     @Prop()
     goals: string;
 
     @Prop()
-    solution: string
+    solution: string;
 
     @Prop()
-    remarks: string
-
+    remarks: string;
 }
 
 @Schema()

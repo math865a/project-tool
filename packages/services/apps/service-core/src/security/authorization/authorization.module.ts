@@ -5,6 +5,6 @@ import { ComposeAbilitiesQueryHandler } from "./compose-abilities";
 @Module({
     imports: [],
     providers: [ComposeAbilitiesQueryHandler],
-    controllers: [AuthorizationNatsController]
+    controllers: [AuthorizationNatsController],
 })
 export class AuthorizationModule {}

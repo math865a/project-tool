@@ -10,5 +10,5 @@ export const resourcePatterns = {
     updateResource: getPattern("update"),
     getResourceProfile: getPattern("get:profile"),
     getResourcesView: getPattern("get:view"),
-    getResourceOptions: getPattern("get:options")
+    getResourceOptions: getPattern("get:options"),
 };

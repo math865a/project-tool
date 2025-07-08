@@ -4,8 +4,8 @@ import { EventPattern } from "@nestjs/microservices";
 import {
     AllocationCreatedEvent,
     AllocationUpdatedEvent,
-    PeriodUpdatedEvent
-} from "@ns/events"
+    PeriodUpdatedEvent,
+} from "@ns/events";
 import { SyncBookingsCommand } from "./sync-bookings/sync-bookings.command";
 
 @Controller()

@@ -1,6 +1,6 @@
-import { Neo4jClient } from '@ns/neo4j';
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { FinancialSourceProfileQuery } from './financialsource-profile.query';
+import { Neo4jClient } from "@ns/neo4j";
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
+import { FinancialSourceProfileQuery } from "./financialsource-profile.query";
 
 @QueryHandler(FinancialSourceProfileQuery)
 export class FinancialSourceProfileQueryHandler
@@ -12,7 +12,7 @@ export class FinancialSourceProfileQueryHandler
         const queryResult = await this.client.read(this.query, {
             financialSourceId: query.financialSourceId,
         });
-        return queryResult.records[0].get('result');
+        return queryResult.records[0].get("result");
     }
 
     query = `

@@ -8,7 +8,7 @@ export class WorkpackageTimeseriesQueryHandler
 {
     constructor(private client: Neo4jClient) {}
 
-    async execute({instruction}: WorkpackageTimeseriesQuery): Promise<any> {
+    async execute({ instruction }: WorkpackageTimeseriesQuery): Promise<any> {
         const queryResult = await this.client.read(this.query, instruction);
         return queryResult.records.map((d) => d.get("bookings"));
     }

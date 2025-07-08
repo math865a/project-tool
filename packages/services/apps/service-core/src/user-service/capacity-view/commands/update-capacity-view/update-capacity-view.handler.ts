@@ -3,7 +3,7 @@ import { DomainEvents } from "@ns/cqrs";
 import {
     FormErrorResponse,
     FormResponse,
-    FormSuccessResponse
+    FormSuccessResponse,
 } from "@ns/definitions";
 import { CapacityViewUpdatedEvent } from "@ns/events";
 import { Neo4jClient } from "@ns/neo4j";

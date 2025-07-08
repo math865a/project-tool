@@ -25,7 +25,9 @@ export class UpdateActivityColorHandler
             color: command.dto.color,
         });
         if (queryResult.summary.updateStatistics.containsUpdates()) {
-            this.publisher.publish(new ActivityUpdatedEvent(command.dto, command.uid))
+            this.publisher.publish(
+                new ActivityUpdatedEvent(command.dto, command.uid)
+            );
             return new FormSuccessResponse({ message: "Farven er opdateret." });
         }
         return new FormErrorResponse({

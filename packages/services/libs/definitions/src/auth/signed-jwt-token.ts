@@ -1,5 +1,3 @@
-
-
 export class SignedJwtToken {
-    constructor(public readonly access_token: string){}
+    constructor(public readonly access_token: string) {}
 }

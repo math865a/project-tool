@@ -1,9 +1,13 @@
-import { ProjectManagerAssignedEvent } from "@ns/events"
+import { ProjectManagerAssignedEvent } from "@ns/events";
 import { Neo4jClient } from "@ns/neo4j";
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { AssignProjectManagerCommand } from './assign-project-manager.command';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { AssignProjectManagerCommand } from "./assign-project-manager.command";
 import { DomainEvents } from "@ns/cqrs";
-import { FormErrorResponse, FormResponse, FormSuccessResponse } from '@ns/definitions';
+import {
+    FormErrorResponse,
+    FormResponse,
+    FormSuccessResponse,
+} from "@ns/definitions";
 
 @CommandHandler(AssignProjectManagerCommand)
 export class AssignProjectManagerHandler
@@ -11,7 +15,7 @@ export class AssignProjectManagerHandler
 {
     constructor(
         private readonly client: Neo4jClient,
-        private readonly publisher: DomainEvents,
+        private readonly publisher: DomainEvents
     ) {}
 
     async execute(command: AssignProjectManagerCommand): Promise<FormResponse> {
@@ -21,10 +25,13 @@ export class AssignProjectManagerHandler
         });
         if (queryResult.summary.updateStatistics.containsUpdates()) {
             this.publisher.publish(new ProjectManagerAssignedEvent());
-            return new FormSuccessResponse({message: 'Projektlederen er tildelt arbejdspakken.'});
-
+            return new FormSuccessResponse({
+                message: "Projektlederen er tildelt arbejdspakken.",
+            });
         }
-        return new FormErrorResponse({message: "Projektlederen kunne ikke tildeles arbejdspakken."});
+        return new FormErrorResponse({
+            message: "Projektlederen kunne ikke tildeles arbejdspakken.",
+        });
     }
 
     query = `

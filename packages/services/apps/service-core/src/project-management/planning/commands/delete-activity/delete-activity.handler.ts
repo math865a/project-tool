@@ -1,5 +1,9 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { FormErrorResponse, FormResponse, FormSuccessResponse } from "@ns/definitions";
+import {
+    FormErrorResponse,
+    FormResponse,
+    FormSuccessResponse,
+} from "@ns/definitions";
 import { DomainEvents } from "@ns/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
 import { ActivityDeletedEvent } from "@ns/events";
@@ -20,12 +24,18 @@ export class DeleteActivityHandler
             uid: command.uid,
         });
         const result = queryResult.records[0].get("result");
-        if (result){
-            this.publisher.publish(new ActivityDeletedEvent({id: command.activityId}, command.uid))
-            return new FormSuccessResponse({message: "Aktiviteten blev slettet."})
+        if (result) {
+            this.publisher.publish(
+                new ActivityDeletedEvent(
+                    { id: command.activityId },
+                    command.uid
+                )
+            );
+            return new FormSuccessResponse({
+                message: "Aktiviteten blev slettet.",
+            });
         }
-        return new FormErrorResponse({message: "Der skete en fejl."})
-       
+        return new FormErrorResponse({ message: "Der skete en fejl." });
     }
 
     query = `

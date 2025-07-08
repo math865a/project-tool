@@ -68,7 +68,11 @@ export class ResourceNatsController {
 
     @EventPattern(UserCreatedEvent.name)
     async onUserCreated(event: UserCreatedEvent) {
-        if (event.body.isResource && event.body.connect === "Ingen" && event.body.resourceDto) {
+        if (
+            event.body.isResource &&
+            event.body.connect === "Ingen" &&
+            event.body.resourceDto
+        ) {
             const dto = {
                 ...event.body.resourceDto,
                 id: event.body.uid,

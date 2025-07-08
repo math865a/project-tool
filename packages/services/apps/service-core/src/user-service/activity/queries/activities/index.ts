@@ -1,2 +1,2 @@
-export * from './activities.handler';
-export * from './activities.query';
+export * from "./activities.handler";
+export * from "./activities.query";

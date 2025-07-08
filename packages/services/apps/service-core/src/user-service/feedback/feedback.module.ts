@@ -30,8 +30,8 @@ import { FeedbackNatsController } from "./feedback.controller";
                     },
                     {
                         name: Feature.name,
-                        schema: FeatureSchema
-                    }
+                        schema: FeatureSchema,
+                    },
                 ],
             },
         ]),

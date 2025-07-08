@@ -16,6 +16,6 @@ export class PeriodUpdatedEvent extends EventBase {
         },
         public readonly uid: string
     ) {
-        super()
+        super();
     }
 }

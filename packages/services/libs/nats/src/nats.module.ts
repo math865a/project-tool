@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { NatsClient } from './nats.client';
-import { NatsPublisher } from './nats.publisher';
-import { NATS } from './_constants';
+import { Module } from "@nestjs/common";
+import { ClientsModule, Transport } from "@nestjs/microservices";
+import { NatsClient } from "./nats.client";
+import { NatsPublisher } from "./nats.publisher";
+import { NATS } from "./_constants";
 
 @Module({
     imports: [
@@ -11,9 +11,7 @@ import { NATS } from './_constants';
                 name: NATS,
                 transport: Transport.NATS,
                 options: {
-                    servers: [
-                        process.env.NATS_CONN
-                    ],
+                    servers: [process.env.NATS_CONN],
                 },
             },
         ]),

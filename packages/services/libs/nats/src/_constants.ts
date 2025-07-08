@@ -1,2 +1,2 @@
-export const NATS = "NATS"
+export const NATS = "NATS";
 //

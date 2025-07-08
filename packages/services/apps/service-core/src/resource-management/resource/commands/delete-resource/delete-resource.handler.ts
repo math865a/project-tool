@@ -24,7 +24,7 @@ export class DeleteResourceHandler
         if (shouldDelete) {
             const deleted = await this.deleteResource(id);
             if (deleted) {
-                this.publisher.publish(new ResourceDeletedEvent({id}, uid));
+                this.publisher.publish(new ResourceDeletedEvent({ id }, uid));
                 return new FormSuccessResponse({
                     message: "Ressourcen er blevet slettet",
                 });
@@ -32,7 +32,7 @@ export class DeleteResourceHandler
         } else {
             const removed = await this.removeResource(id);
             if (removed) {
-                this.publisher.publish(new ResourceRemovedEvent({id}, uid));
+                this.publisher.publish(new ResourceRemovedEvent({ id }, uid));
                 return new FormSuccessResponse({
                     message: "Ressourcen er blevet fjernet",
                 });

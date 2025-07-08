@@ -14,5 +14,5 @@ export const schedulePatterns = {
     ),
     getWorkpackageTasks: getPattern("get:workpackage-tasks"),
     getWorkpackageTimeseries: getPattern("get:workpackage-timeseries"),
-    getWorkpackageTotals: getPattern("get:workpackage-totals")
+    getWorkpackageTotals: getPattern("get:workpackage-totals"),
 };

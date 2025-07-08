@@ -1,8 +1,5 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from "@nestjs/common";
-import {
-    ScheduleInstruction,
-    SummaryView
-} from "@ns/definitions";
+import { ScheduleInstruction, SummaryView } from "@ns/definitions";
 import { DateTime as dt } from "luxon";
 
 @Injectable()

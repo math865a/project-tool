@@ -1,3 +1,3 @@
 export class IsProjectManagerQuery {
-    constructor(public readonly id: string){}
+    constructor(public readonly id: string) {}
 }

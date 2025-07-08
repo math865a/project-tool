@@ -7,5 +7,5 @@ export const queryHandlers = [
     ResourceAgentsQueryHandler,
     ResourceTypeAgentsQueryHandler,
     TeamOptionsQueryHandler,
-    DeleteAgentConsequencesQueryHandler
+    DeleteAgentConsequencesQueryHandler,
 ];

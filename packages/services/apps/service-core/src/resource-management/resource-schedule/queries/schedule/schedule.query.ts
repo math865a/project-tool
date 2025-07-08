@@ -1,5 +1,5 @@
 import { ScheduleInstruction } from "@ns/definitions";
 
 export class ScheduleQuery {
-    constructor(public readonly instruction: ScheduleInstruction){}
+    constructor(public readonly instruction: ScheduleInstruction) {}
 }

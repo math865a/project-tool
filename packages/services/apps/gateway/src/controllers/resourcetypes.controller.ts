@@ -46,9 +46,8 @@ export class ResourceTypesController {
                 salesOvertime: 0,
                 typeNo: "",
                 contract:
-                    (res[0] as any[]).find(
-                        (d) => d.name === "Rådgiverkontrakt"
-                    )?.id ?? "",
+                    (res[0] as any[]).find((d) => d.name === "Rådgiverkontrakt")
+                        ?.id ?? "",
                 resources: [],
             },
         }));

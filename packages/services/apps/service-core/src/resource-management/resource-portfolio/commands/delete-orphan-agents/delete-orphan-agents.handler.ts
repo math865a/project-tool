@@ -12,8 +12,8 @@ export class DeleteOrphanAgentsHandler
 
     async execute(): Promise<void> {
         const queryResult = await this.client.write(this.query);
-        if (queryResult.summary.updateStatistics.containsUpdates()){
-            this.publisher.publish(new OrphanAgentsDeletedEvent())
+        if (queryResult.summary.updateStatistics.containsUpdates()) {
+            this.publisher.publish(new OrphanAgentsDeletedEvent());
         }
     }
 

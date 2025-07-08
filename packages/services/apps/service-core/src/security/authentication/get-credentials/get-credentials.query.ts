@@ -1,5 +1,3 @@
 export class GetCredentialsQuery {
-    constructor(
-        public readonly uid: string
-    ) {}
+    constructor(public readonly uid: string) {}
 }

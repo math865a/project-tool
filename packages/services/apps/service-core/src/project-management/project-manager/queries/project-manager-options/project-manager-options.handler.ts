@@ -1,20 +1,22 @@
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs'
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
-import { ProjectManagerOptionsQuery } from './project-manager-options.query';
+import { ProjectManagerOptionsQuery } from "./project-manager-options.query";
 
 @QueryHandler(ProjectManagerOptionsQuery)
-export class ProjectManagerOptionsQueryHandler implements IQueryHandler<ProjectManagerOptionsQuery, any[]>{
+export class ProjectManagerOptionsQueryHandler
+    implements IQueryHandler<ProjectManagerOptionsQuery, any[]>
+{
+    constructor(private readonly client: Neo4jClient) {}
 
-   constructor(private readonly client: Neo4jClient){}
+    async execute(): Promise<any[]> {
+        const queryResult = await this.client.read(this.query);
+        const response: any[] = queryResult.records.map((d) =>
+            d.get("projectManager")
+        );
+        return response;
+    }
 
-   async execute(): Promise<any[]>{
-       const queryResult = await this.client.read(this.query);
-       const response: any[] = queryResult.records.map(d => d.get("projectManager"))
-       return response;
-   }
-
-
-   query = `
+    query = `
         MATCH (pm:ProjectManager)
         WITH pm ORDER BY pm.name
         RETURN {
@@ -23,4 +25,4 @@ export class ProjectManagerOptionsQueryHandler implements IQueryHandler<ProjectM
             color: pm.color
         } AS projectManager
    `;
-};
+}

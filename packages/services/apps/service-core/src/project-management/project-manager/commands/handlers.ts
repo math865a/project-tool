@@ -7,5 +7,5 @@ export const commandHandlers = [
     AssignProjectManagerHandler,
     CreateProjectManagerHandler,
     RemoveProjectManagerHandler,
-    UpdateProjectManagerHandler
+    UpdateProjectManagerHandler,
 ];

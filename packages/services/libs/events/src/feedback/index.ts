@@ -1,1 +1,1 @@
-export * from './feedback-submitted.event';
+export * from "./feedback-submitted.event";

@@ -4,17 +4,13 @@ import { CapacityDifferenceTimeseriesQuery } from "./capacity-difference.query";
 
 @QueryHandler(CapacityDifferenceTimeseriesQuery)
 export class CapacityDifferenceTimeseriesQueryHandler
-    implements
-        IQueryHandler<
-            CapacityDifferenceTimeseriesQuery,
-            any[]
-        >
+    implements IQueryHandler<CapacityDifferenceTimeseriesQuery, any[]>
 {
     constructor(private readonly client: Neo4jClient) {}
 
-    async execute(
-        {instruction}: CapacityDifferenceTimeseriesQuery
-    ): Promise<any[]> {
+    async execute({
+        instruction,
+    }: CapacityDifferenceTimeseriesQuery): Promise<any[]> {
         const queryResult = await this.client.read(this.query, instruction);
         return queryResult.records.map((d) => d.get("result"));
     }

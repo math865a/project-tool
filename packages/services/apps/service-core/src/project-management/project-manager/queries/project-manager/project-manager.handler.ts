@@ -10,7 +10,7 @@ export class ProjectManagerHandler
 
     async execute(query: ProjectManagerQuery): Promise<any> {
         const result = await this.client.read(this.query, { id: query.id });
-        return result.records[0].get("projectManager")
+        return result.records[0].get("projectManager");
     }
 
     query = `

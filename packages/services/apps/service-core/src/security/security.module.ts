@@ -11,7 +11,7 @@ import { UserModule } from "./user/user.module";
         AccessGroupModule,
         AuthenticationModule,
         AuthorizationModule,
-        UserModule
+        UserModule,
     ],
 })
 export class SecurityModule {}

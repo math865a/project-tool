@@ -7,8 +7,7 @@ export class CredentialsForwardedEvent extends EventBase {
             uid: string;
             mail: MailDataRequired;
         },
-        public readonly uid?: string,
-
+        public readonly uid?: string
     ) {
         super();
     }

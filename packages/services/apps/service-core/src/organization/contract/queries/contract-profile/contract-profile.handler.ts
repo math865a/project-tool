@@ -1,6 +1,6 @@
-import { Neo4jClient } from '@ns/neo4j';
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { ContractProfileQuery } from './contract-profile.query';
+import { Neo4jClient } from "@ns/neo4j";
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
+import { ContractProfileQuery } from "./contract-profile.query";
 
 @QueryHandler(ContractProfileQuery)
 export class ContractProfileQueryHandler
@@ -12,7 +12,7 @@ export class ContractProfileQueryHandler
         const queryResult = await this.client.read(this.query, {
             contractId: query.contractId,
         });
-        return queryResult.records[0].get('result');
+        return queryResult.records[0].get("result");
     }
 
     query = `

@@ -16,5 +16,5 @@ export const commandHandlers = [
     UpdateAllocationHandler,
     UpdatePeriodHandler,
     UpdateActivityNameHandler,
-    UpdateActivityNameHandler
+    UpdateActivityNameHandler,
 ];

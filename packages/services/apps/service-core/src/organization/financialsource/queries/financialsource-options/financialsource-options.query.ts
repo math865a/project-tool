@@ -1,1 +1,1 @@
-export class FinancialSourceOptionsQuery{}
+export class FinancialSourceOptionsQuery {}

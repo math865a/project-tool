@@ -1,9 +1,9 @@
-import { SignedJwtToken } from '@ns/definitions';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { JwtService } from '@nestjs/jwt';
-import { DomainEvents } from '@ns/cqrs';
-import { JwtTokenSignedEvent } from '@ns/events';
-import { SignJwtCommand } from './sign-jwt.command';
+import { SignedJwtToken } from "@ns/definitions";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { JwtService } from "@nestjs/jwt";
+import { DomainEvents } from "@ns/cqrs";
+import { JwtTokenSignedEvent } from "@ns/events";
+import { SignJwtCommand } from "./sign-jwt.command";
 
 @CommandHandler(SignJwtCommand)
 export class SignJwtHandler
@@ -11,12 +11,12 @@ export class SignJwtHandler
 {
     constructor(
         private readonly jwtService: JwtService,
-        private readonly publisher: DomainEvents,
+        private readonly publisher: DomainEvents
     ) {}
 
     async execute({ uid }: SignJwtCommand): Promise<SignedJwtToken> {
-        const token = this.jwtService.sign({uid: uid});
-        this.publisher.publish(new JwtTokenSignedEvent())
+        const token = this.jwtService.sign({ uid: uid });
+        this.publisher.publish(new JwtTokenSignedEvent());
         return new SignedJwtToken(token);
     }
 }

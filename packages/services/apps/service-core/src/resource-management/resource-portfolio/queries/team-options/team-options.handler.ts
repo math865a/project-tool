@@ -12,8 +12,7 @@ export class TeamOptionsQueryHandler
         const queryResult = await this.client.read(this.query, {
             workpackageId: query.workpackageId,
         });
-        const response: any[] =
-            queryResult.records[0].get("options");
+        const response: any[] = queryResult.records[0].get("options");
         return response;
     }
 

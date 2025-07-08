@@ -1,12 +1,14 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DomainEvents } from "@ns/cqrs";
 import {
-    FormErrorResponse, FormResponse, FormSuccessResponse
-} from '@ns/definitions';
-import { CreateResourceTypeDto } from '@ns/dto';
-import { ResourcetypeCreatedEvent } from '@ns/events';
+    FormErrorResponse,
+    FormResponse,
+    FormSuccessResponse,
+} from "@ns/definitions";
+import { CreateResourceTypeDto } from "@ns/dto";
+import { ResourcetypeCreatedEvent } from "@ns/events";
 import { Neo4jClient } from "@ns/neo4j";
-import { CreateResourceTypeCommand } from './create-resourcetype.command';
+import { CreateResourceTypeCommand } from "./create-resourcetype.command";
 
 @CommandHandler(CreateResourceTypeCommand)
 export class CreateResourceTypeHandler
@@ -20,13 +22,11 @@ export class CreateResourceTypeHandler
     async execute(command: CreateResourceTypeCommand): Promise<FormResponse> {
         const validation = await this.checkDuplicates(command.dto);
 
-        if (typeof validation !== 'boolean') {
+        if (typeof validation !== "boolean") {
             return validation;
         }
         const result = await this.create(command.dto, command.uid);
-        this.publisher.publish(
-            new ResourcetypeCreatedEvent()
-        );
+        this.publisher.publish(new ResourcetypeCreatedEvent());
 
         const response = new FormSuccessResponse({
             id: result.resourceType.id,
@@ -42,19 +42,19 @@ export class CreateResourceTypeHandler
             name: dto.name,
         });
         const result: { abbrevation: boolean; name: boolean; typeNo: boolean } =
-            duplicates.records[0].get('duplicates');
+            duplicates.records[0].get("duplicates");
         const errors: { [index: string]: string } = {};
         if (result.abbrevation) {
             errors.abbrevation =
-                'En ressourcetype med denne forkortelse eksisterer allerede på den valgte kontrakt.';
+                "En ressourcetype med denne forkortelse eksisterer allerede på den valgte kontrakt.";
         }
         if (result.name) {
             errors.name =
-                'En ressourcetype med dette navn eksisterer allerede på den valgte kontrakt.';
+                "En ressourcetype med dette navn eksisterer allerede på den valgte kontrakt.";
         }
         if (result.typeNo) {
             errors.typeNo =
-                'En ressourcetype med dette typenummer eksisterer allerede på den valgte kontrakt.';
+                "En ressourcetype med dette typenummer eksisterer allerede på den valgte kontrakt.";
         }
         if (Object.keys(errors).length > 0) {
             return new FormErrorResponse({ validation: errors });
@@ -67,7 +67,7 @@ export class CreateResourceTypeHandler
             ...dto,
             uid: uid,
         });
-        return queryResult.records[0].get('result');
+        return queryResult.records[0].get("result");
     }
 
     duplicatesQuery = `

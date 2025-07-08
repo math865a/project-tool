@@ -1,1 +1,1 @@
-export const MONGO_CLIENT_TOKEN = "MONGO_CLIENT"
+export const MONGO_CLIENT_TOKEN = "MONGO_CLIENT";

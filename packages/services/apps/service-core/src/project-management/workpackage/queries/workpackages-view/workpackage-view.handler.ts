@@ -1,6 +1,6 @@
 import { Neo4jClient } from "@ns/neo4j";
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { WorkpackageViewQuery } from './workpackage-view.query';
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
+import { WorkpackageViewQuery } from "./workpackage-view.query";
 
 @QueryHandler(WorkpackageViewQuery)
 export class WorkpackageViewQueryHandler
@@ -10,10 +10,8 @@ export class WorkpackageViewQueryHandler
 
     async execute(): Promise<any[]> {
         const queryResult = await this.client.read(this.query);
-        return queryResult.records.map((d) => d.get('row'));
+        return queryResult.records.map((d) => d.get("row"));
     }
-
-    
 
     query = `
         MATCH (defaultPM:DefaultProjectManager)

@@ -1,7 +1,4 @@
-import {
-    FormResponse,
-    FormSuccessResponse,
-} from "@ns/definitions";
+import { FormResponse, FormSuccessResponse } from "@ns/definitions";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DomainEvents } from "@ns/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
@@ -17,9 +14,7 @@ export class UpdateResourceHandler
         private readonly publisher: DomainEvents
     ) {}
 
-    async execute(
-        command: UpdateResourceCommand
-    ): Promise<FormResponse> {
+    async execute(command: UpdateResourceCommand): Promise<FormResponse> {
         const queryResult = await this.client.write(this.query, {
             resourceId: command.dto.resourceId,
             name: command.dto.name,

@@ -1,1 +1,1 @@
-export * from './piped-permissions';
+export * from "./piped-permissions";

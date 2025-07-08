@@ -2,14 +2,18 @@ import { Controller } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import {
-    CreateWorkpackageDto, UpdateBookingStageDto,
-    UpdateStageDto, UpdateWorkpackageDto
+    CreateWorkpackageDto,
+    UpdateBookingStageDto,
+    UpdateStageDto,
+    UpdateWorkpackageDto,
 } from "@ns/dto";
 import { workpackagePatterns as patterns } from "@ns/endpoints";
 import {
-    CreateWorkpackageCommand, DeleteWorkpackageCommand,
+    CreateWorkpackageCommand,
+    DeleteWorkpackageCommand,
     UpdateBookingStageCommand,
-    UpdateStageCommand, UpdateWorkpackageCommand
+    UpdateStageCommand,
+    UpdateWorkpackageCommand,
 } from "./commands";
 import {
     ProjectManagerWorkpackagesQuery,
@@ -17,7 +21,7 @@ import {
     WorkpackageCreateFormQuery,
     WorkpackageFormOptionsQuery,
     WorkpackageProfileQuery,
-    WorkpackageViewQuery
+    WorkpackageViewQuery,
 } from "./queries";
 
 @Controller()
@@ -101,7 +105,8 @@ export class WorkpackageNatsController {
 
     @MessagePattern(patterns.getProjectManagerWorkpackages)
     async getProjectManagerWorkpackages(id: string) {
-        return await this.queryBus.execute(new ProjectManagerWorkpackagesQuery(id));
+        return await this.queryBus.execute(
+            new ProjectManagerWorkpackagesQuery(id)
+        );
     }
-
 }

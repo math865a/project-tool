@@ -5,5 +5,5 @@ export class CreateResourceTypeDto {
     public readonly salesOvertime: number;
     public readonly typeNo: number;
     public readonly contract: string;
-    public readonly resources: string[]
+    public readonly resources: string[];
 }

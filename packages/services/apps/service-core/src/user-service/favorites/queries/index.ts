@@ -1,3 +1,3 @@
 import { LoadFavoritesQueryHandler } from "./load-favorites.query";
 
-export const queryHandlers = [LoadFavoritesQueryHandler]
+export const queryHandlers = [LoadFavoritesQueryHandler];

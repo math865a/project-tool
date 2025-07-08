@@ -42,7 +42,7 @@ import { UserServiceNats, UserServiceGateway } from "./user-service";
         SchduleController,
         ResourcePortfolioController,
         UserServiceNats,
-        FeedbackController
+        FeedbackController,
     ],
     providers: [
         CapacityBoardGateway,

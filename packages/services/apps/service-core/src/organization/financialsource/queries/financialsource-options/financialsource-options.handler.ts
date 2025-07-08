@@ -3,12 +3,14 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { FinancialSourceOptionsQuery } from "./financialsource-options.query";
 
 @QueryHandler(FinancialSourceOptionsQuery)
-export class FinancialSourceOptionsQueryHandler implements IQueryHandler<FinancialSourceOptionsQuery, any[]> {
-    constructor(private client: Neo4jClient){}
+export class FinancialSourceOptionsQueryHandler
+    implements IQueryHandler<FinancialSourceOptionsQuery, any[]>
+{
+    constructor(private client: Neo4jClient) {}
 
     async execute(): Promise<any[]> {
         const queryResult = await this.client.read(this.query);
-        return queryResult.records.map((d) => d.get('option') as any);
+        return queryResult.records.map((d) => d.get("option") as any);
     }
 
     query = `
@@ -18,5 +20,4 @@ export class FinancialSourceOptionsQueryHandler implements IQueryHandler<Financi
             name: f.name
         } AS option
     `;
-
 }

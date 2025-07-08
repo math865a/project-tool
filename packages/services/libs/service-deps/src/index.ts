@@ -1,1 +1,1 @@
-export * from "./deps.module"
+export * from "./deps.module";

@@ -1,14 +1,16 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { ResourceAgentsQuery } from './resource-agents.query';
-import { Neo4jClient } from '@ns/neo4j';
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { ResourceAgentsQuery } from "./resource-agents.query";
+import { Neo4jClient } from "@ns/neo4j";
 
 @QueryHandler(ResourceAgentsQuery)
-export class ResourceAgentsQueryHandler implements IQueryHandler<ResourceAgentsQuery, any>{
-    constructor(private readonly client: Neo4jClient){}
+export class ResourceAgentsQueryHandler
+    implements IQueryHandler<ResourceAgentsQuery, any>
+{
+    constructor(private readonly client: Neo4jClient) {}
 
-    async execute(query: ResourceAgentsQuery): Promise<any>{
+    async execute(query: ResourceAgentsQuery): Promise<any> {
         const queryResult = await this.client.read(this.query, query);
-        return queryResult.records.map(d => d.get("resourcetype"))
+        return queryResult.records.map((d) => d.get("resourcetype"));
     }
 
     query = `
@@ -22,4 +24,4 @@ export class ResourceAgentsQueryHandler implements IQueryHandler<ResourceAgentsQ
             ORDER BY resourcetype.contract.name, resourcetype.typeNo
         RETURN resourcetype
     `;
-};
+}

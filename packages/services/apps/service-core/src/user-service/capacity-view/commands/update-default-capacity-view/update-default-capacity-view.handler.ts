@@ -1,7 +1,4 @@
-import {
-    FormResponse,
-    FormSuccessResponse,
-} from "@ns/definitions";
+import { FormResponse, FormSuccessResponse } from "@ns/definitions";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DomainEvents } from "@ns/cqrs";
 import { DefaultCapacityViewUpdatedEvent } from "@ns/events";

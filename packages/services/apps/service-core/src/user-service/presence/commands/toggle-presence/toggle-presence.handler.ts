@@ -5,7 +5,6 @@ import { Neo4jClient } from "@ns/neo4j";
 import { TogglePresenceCommand } from "./toggle-presence.command";
 import { UserPresenceChangedEvent } from "@ns/events";
 
-
 @CommandHandler(TogglePresenceCommand)
 export class TogglePresenceHandler
     implements ICommandHandler<TogglePresenceCommand, void>
@@ -18,15 +17,11 @@ export class TogglePresenceHandler
     async execute(command: TogglePresenceCommand) {
         const { uid, isOnline } = command;
         const properties = this.getProperties(isOnline);
-        const queryResult = await this.client.write(this.query, {
+        await this.client.write(this.query, {
             uid,
             properties,
         });
-        const data = queryResult.records[0].get("data");
-
-        this.publisher.publish(
-            new UserPresenceChangedEvent(uid, isOnline)
-        );
+        this.publisher.publish(new UserPresenceChangedEvent(uid, isOnline));
     }
 
     query = `

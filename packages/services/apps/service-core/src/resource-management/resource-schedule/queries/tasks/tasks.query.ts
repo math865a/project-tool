@@ -1,15 +1,9 @@
 import { ScheduleInstruction } from "@ns/definitions";
 import { ResourceCapacityInstructionsDto } from "@ns/dto";
 
-
 export class TasksQuery {
-    constructor(
-        public readonly instruction: ScheduleInstruction
-    ){}
+    constructor(public readonly instruction: ScheduleInstruction) {}
 
-
-
-    
     query = `
         MATCH (a:Allocation)--(t:Task)<-[:HAS]-(d:Delivery)<-[:HAS]-(p:Plan)<-[:HAS]-(w:Workpackage)--(bs:BookingStage)
             WHERE (a)<-[:IS_ASSIGNED_TO]-(:Agent)-[:IS]->(:Resource {id: $resourceId})

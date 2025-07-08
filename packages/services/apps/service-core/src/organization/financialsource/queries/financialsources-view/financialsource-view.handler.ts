@@ -1,6 +1,6 @@
-import { Neo4jClient } from '@ns/neo4j';
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { FinancialSourceViewQuery } from './financialsource-view.query';
+import { Neo4jClient } from "@ns/neo4j";
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
+import { FinancialSourceViewQuery } from "./financialsource-view.query";
 
 @QueryHandler(FinancialSourceViewQuery)
 export class FinancialSourceViewQueryHandler
@@ -10,7 +10,7 @@ export class FinancialSourceViewQueryHandler
 
     async execute(): Promise<any[]> {
         const queryResult = await this.client.read(this.query);
-        return queryResult.records.map((d) => d.get('row'));
+        return queryResult.records.map((d) => d.get("row"));
     }
 
     query = `

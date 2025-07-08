@@ -1,16 +1,9 @@
-import {
-
-    FormResponse,
-    FormSuccessResponse,
-} from '@ns/definitions';
+import { FormResponse, FormSuccessResponse } from "@ns/definitions";
 import { Neo4jClient } from "@ns/neo4j";
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
 export class CreateCalendarCommand {
-    constructor(
-        public readonly dto: any,
-        public readonly uid: string
-    ) {}
+    constructor(public readonly dto: any, public readonly uid: string) {}
 }
 
 @CommandHandler(CreateCalendarCommand)
@@ -24,7 +17,7 @@ export class CreateCalendarHandler
             name: command.dto.name,
             uid: command.uid,
         });
-        const result = queryResult.records[0].get('result');
+        const result = queryResult.records[0].get("result");
         return new FormSuccessResponse({ id: result.calendar.id });
     }
 

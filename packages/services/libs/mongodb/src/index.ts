@@ -1,2 +1,2 @@
-export * from "./mongo.module"
-export * from "./mongodb.client"
+export * from "./mongo.module";
+export * from "./mongodb.client";

@@ -15,6 +15,5 @@ export class CreateActivityDto {
         id: string;
         children: string[];
     };
-    public readonly kind: "Delivery" | "Task"
-
+    public readonly kind: "Delivery" | "Task";
 }

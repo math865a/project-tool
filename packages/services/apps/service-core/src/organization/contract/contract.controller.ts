@@ -35,7 +35,9 @@ export class ContractsNastController {
         @Payload("dto") dto: CreateContractDto,
         @Payload("uid") uid: string
     ) {
-        return await this.commandBus.execute(new CreateContractCommand(dto, uid));
+        return await this.commandBus.execute(
+            new CreateContractCommand(dto, uid)
+        );
     }
 
     @MessagePattern(patterns.updateContract)
@@ -43,7 +45,9 @@ export class ContractsNastController {
         @Payload("dto") dto: UpdateContractDto,
         @Payload("uid") uid: string
     ) {
-        return await this.commandBus.execute(new UpdateContractCommand(dto, uid));
+        return await this.commandBus.execute(
+            new UpdateContractCommand(dto, uid)
+        );
     }
 
     @MessagePattern(patterns.deleteContract)
@@ -51,6 +55,8 @@ export class ContractsNastController {
         @Payload("id") id: string,
         @Payload("uid") uid: string
     ) {
-        return await this.commandBus.execute(new DeleteContractCommand(id, uid));
+        return await this.commandBus.execute(
+            new DeleteContractCommand(id, uid)
+        );
     }
 }

@@ -4,10 +4,6 @@ import { FinancialsourceModule } from "./financialsource/financialsource.module"
 import { ServiceModule } from "@ns/service-deps";
 
 @Module({
-    imports: [
-        ServiceModule,
-        ContractModule,
-        FinancialsourceModule,
-    ],
+    imports: [ServiceModule, ContractModule, FinancialsourceModule],
 })
 export class OrganizationModule {}

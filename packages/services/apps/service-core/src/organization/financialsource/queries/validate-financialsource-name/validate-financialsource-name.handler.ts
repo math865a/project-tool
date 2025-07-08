@@ -1,6 +1,6 @@
-import { Neo4jClient } from '@ns/neo4j';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { ValidateFinancialSourceNameQuery } from './validate-financialsource-name.query';
+import { Neo4jClient } from "@ns/neo4j";
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { ValidateFinancialSourceNameQuery } from "./validate-financialsource-name.query";
 
 @QueryHandler(ValidateFinancialSourceNameQuery)
 export class ValidateFinancialSourceNameQueryHandler
@@ -12,7 +12,7 @@ export class ValidateFinancialSourceNameQueryHandler
         const queryResult = await this.client.read(this.query, {
             name: name,
         });
-        const exists = queryResult.records[0]?.get('exists');
+        const exists = queryResult.records[0]?.get("exists");
         return exists;
     }
 

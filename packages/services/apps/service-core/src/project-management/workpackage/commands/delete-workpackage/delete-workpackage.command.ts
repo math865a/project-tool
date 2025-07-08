@@ -1,4 +1,3 @@
-
 export class DeleteWorkpackageCommand {
     constructor(
         public readonly workpackageId: string,

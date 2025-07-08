@@ -1,2 +1,2 @@
-export * from './user-service.gateway';
-export * from './user-service.nats';
+export * from "./user-service.gateway";
+export * from "./user-service.nats";

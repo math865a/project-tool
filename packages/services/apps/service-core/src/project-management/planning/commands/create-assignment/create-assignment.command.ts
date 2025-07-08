@@ -1,4 +1,4 @@
-import { CreateAssignmentDto } from '@ns/dto';
+import { CreateAssignmentDto } from "@ns/dto";
 
 export class CreateAssignmentCommand {
     constructor(

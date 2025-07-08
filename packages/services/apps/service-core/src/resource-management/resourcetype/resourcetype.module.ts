@@ -5,6 +5,6 @@ import { ResourceTypeNastController } from "./resourcetype.controller";
 
 @Module({
     providers: [...commandHandlers, ...queryHandlers],
-    controllers: [ResourceTypeNastController]
+    controllers: [ResourceTypeNastController],
 })
 export class ResourceTypeModule {}

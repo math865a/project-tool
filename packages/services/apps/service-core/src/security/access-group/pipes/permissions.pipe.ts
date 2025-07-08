@@ -5,16 +5,16 @@ import { map } from "lodash";
 @Injectable()
 export class PermissionsPipe implements PipeTransform {
     transform(
-        value: {dto: UpsertAccessGroupDto, uid: string},
+        value: { dto: UpsertAccessGroupDto; uid: string },
         metadata: ArgumentMetadata
-    ): {dto: PipedUpsertAccessGroupDto, uid: string} {
+    ): { dto: PipedUpsertAccessGroupDto; uid: string } {
         return {
             ...value,
             dto: {
                 ...value.dto,
                 permissions: this.formatPermissions(value.dto.permissions),
-            }
-        }
+            },
+        };
     }
 
     formatPermissions(permissions: {

@@ -1,6 +1,6 @@
-import { Neo4jClient } from '@ns/neo4j';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { ContractOptionsQuery } from './contract-options.query';
+import { Neo4jClient } from "@ns/neo4j";
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { ContractOptionsQuery } from "./contract-options.query";
 
 @QueryHandler(ContractOptionsQuery)
 export class ContractOptionsHandler
@@ -11,8 +11,8 @@ export class ContractOptionsHandler
     async execute(): Promise<any[]> {
         const result = await this.client.read(this.query);
         return result.records.map((record) => ({
-            id: record.get('id'),
-            name: record.get('name'),
+            id: record.get("id"),
+            name: record.get("name"),
         }));
     }
 

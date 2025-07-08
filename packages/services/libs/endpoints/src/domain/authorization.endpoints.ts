@@ -2,8 +2,8 @@ function getPattern(action: string) {
     return `${service}.${action}`;
 }
 
-const service = 'authorization';
+const service = "authorization";
 
 export const authorizationPatterns = {
-    getAbilities: getPattern('get:abilities'),
+    getAbilities: getPattern("get:abilities"),
 };

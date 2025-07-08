@@ -13,12 +13,10 @@ import { AccessGroupOptionsQuery } from "./queries";
 export class AccessGroupsController {
     constructor(private commandBus: CommandBus, private queryBus: QueryBus) {}
 
-
     @UsePipes(new PermissionsPipe())
     @MessagePattern(patterns.createAccessGroup)
     async createAccessGroup(
-        @Payload() payload: {dto: PipedUpsertAccessGroupDto, uid: string},
-
+        @Payload() payload: { dto: PipedUpsertAccessGroupDto; uid: string }
     ) {
         return await this.commandBus.execute(
             new CreateAccessGroupCommand(payload.dto, payload.uid)
@@ -28,7 +26,7 @@ export class AccessGroupsController {
     @UsePipes(new PermissionsPipe())
     @MessagePattern(patterns.updateAccessGroup)
     async updateAccessGroup(
-        @Payload() payload: {dto: PipedUpsertAccessGroupDto, uid: string},
+        @Payload() payload: { dto: PipedUpsertAccessGroupDto; uid: string }
     ) {
         return await this.commandBus.execute(
             new UpdateAccessGroupCommand(payload.dto, payload.uid)

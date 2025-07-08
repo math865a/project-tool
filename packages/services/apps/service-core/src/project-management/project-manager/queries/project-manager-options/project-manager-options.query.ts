@@ -1,6 +1,3 @@
-
-
-export class ProjectManagerOptionsQuery{
-   constructor(){}
-};
-
+export class ProjectManagerOptionsQuery {
+    constructor() {}
+}

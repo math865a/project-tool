@@ -1,18 +1,18 @@
-import { Controller } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller } from "@nestjs/common";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { MessagePattern, Payload } from "@nestjs/microservices";
 import {
     CreateFinancialSourceCommand,
     DeleteFinancialSourceCommand,
     UpdateFinancialSourceCommand,
-} from './commands';
-import { CreateFinancialSourceDto, UpdateFinancialSourceDto } from '@ns/dto';
+} from "./commands";
+import { CreateFinancialSourceDto, UpdateFinancialSourceDto } from "@ns/dto";
 import {
     FinancialSourceOptionsQuery,
     FinancialSourceProfileQuery,
     FinancialSourceViewQuery,
-} from './queries';
-import { financialsourcePatterns as patterns } from '@ns/endpoints';
+} from "./queries";
+import { financialsourcePatterns as patterns } from "@ns/endpoints";
 
 @Controller()
 export class FinancialSourcesNatsController {
@@ -35,31 +35,31 @@ export class FinancialSourcesNatsController {
 
     @MessagePattern(patterns.createFinancialSource)
     async createFinancialSource(
-        @Payload('dto') dto: CreateFinancialSourceDto,
-        @Payload('uid') uid: string,
+        @Payload("dto") dto: CreateFinancialSourceDto,
+        @Payload("uid") uid: string
     ) {
         return await this.commandBus.execute(
-            new CreateFinancialSourceCommand(dto, uid),
+            new CreateFinancialSourceCommand(dto, uid)
         );
     }
 
     @MessagePattern(patterns.updateFinancialSource)
     async updateFinancialSource(
-        @Payload('dto') dto: UpdateFinancialSourceDto,
-        @Payload('uid') uid: string,
+        @Payload("dto") dto: UpdateFinancialSourceDto,
+        @Payload("uid") uid: string
     ) {
         return await this.commandBus.execute(
-            new UpdateFinancialSourceCommand(dto, uid),
+            new UpdateFinancialSourceCommand(dto, uid)
         );
     }
 
     @MessagePattern(patterns.deleteFinancialSource)
     async deleteFinancialSource(
-        @Payload('id') id: string,
-        @Payload('uid') uid: string,
+        @Payload("id") id: string,
+        @Payload("uid") uid: string
     ) {
         return await this.commandBus.execute(
-            new DeleteFinancialSourceCommand(id, uid),
+            new DeleteFinancialSourceCommand(id, uid)
         );
     }
 }

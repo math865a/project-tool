@@ -1,8 +1,5 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import {
-    FormResponse,
-    FormSuccessResponse,
-} from "@ns/definitions";
+import { FormResponse, FormSuccessResponse } from "@ns/definitions";
 import { Neo4jClient } from "@ns/neo4j";
 import { DomainEvents } from "@ns/cqrs";
 import { UpdateResourceTypeCommand } from "./update-resourcetype.command";

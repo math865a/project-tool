@@ -1,1 +1,1 @@
-export const NEO4J_TOKEN = "NEO4J"
+export const NEO4J_TOKEN = "NEO4J";

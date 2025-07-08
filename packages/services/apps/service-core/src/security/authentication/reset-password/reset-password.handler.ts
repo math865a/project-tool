@@ -29,8 +29,9 @@ export class ResetPasswordHandler
             this.publisher.publish(new PasswordResetEvent({ uid }, id));
         }
         return new FormSuccessResponse({
-            message:
-                id ? "Der er blevet sendt en mail med den nye adgangskode" : "Såfremt mailen eksisterer, er der sendt en mail med et nyt kodeord",
+            message: id
+                ? "Der er blevet sendt en mail med den nye adgangskode"
+                : "Såfremt mailen eksisterer, er der sendt en mail med et nyt kodeord",
         });
     }
 

@@ -21,6 +21,4 @@ export class ActivityController {
             pageSize: Number(pageSize),
         });
     }
-
-
 }

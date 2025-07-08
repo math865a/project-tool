@@ -16,8 +16,8 @@ export class IntervalWeeksPipe implements PipeTransform {
     }
 
     getWeeks(startDate?: string, endDate?: string): IQueryWeek[] {
-        const dtStart = dt.fromISO(startDate)
-        const dtEnd =  dt.fromISO(endDate)
+        const dtStart = dt.fromISO(startDate);
+        const dtEnd = dt.fromISO(endDate);
         return int
             .fromDateTimes(dtStart, dtEnd)
             .splitBy({ weeks: 1 })

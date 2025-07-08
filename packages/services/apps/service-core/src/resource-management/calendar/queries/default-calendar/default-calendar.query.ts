@@ -1,4 +1,1 @@
-
-export class DefaultCalendarQuery {
-    
-}
+export class DefaultCalendarQuery {}

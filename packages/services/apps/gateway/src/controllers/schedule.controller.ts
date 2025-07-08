@@ -28,7 +28,7 @@ export class SchduleController {
         return await this.client.request(schedulePatterns.getSchedule, {
             start,
             end,
-            id
+            id,
         });
     }
 

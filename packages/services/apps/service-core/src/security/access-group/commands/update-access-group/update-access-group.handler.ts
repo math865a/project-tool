@@ -1,4 +1,8 @@
-import { FormErrorResponse, FormResponse, FormSuccessResponse } from "@ns/definitions";
+import {
+    FormErrorResponse,
+    FormResponse,
+    FormSuccessResponse,
+} from "@ns/definitions";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DomainEvents } from "@ns/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
@@ -35,14 +39,11 @@ export class UpdateAccessGroupHandler
         return new FormErrorResponse({
             message: "Adgangsgruppen kunne ikke opdateres",
         });
-
     }
 
     getProperties(dto: PipedUpsertAccessGroupDto) {
         return omit(dto, ["users", "permissions", "isAdmin", "id"]);
     }
-
-    
 
     query = `
         MATCH (u:User {uid: $uid})

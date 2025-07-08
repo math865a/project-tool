@@ -19,5 +19,4 @@ export class ActivityController {
     async getActivityCount() {
         return await this.queryBus.execute(new CountQuery());
     }
-
 }

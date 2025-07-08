@@ -1,5 +1,3 @@
-
-
 export class CreateProjectManagerDto {
     public readonly id: string;
     public readonly name: string;

@@ -1,4 +1,4 @@
 export enum SummaryView {
     Short,
-    Long
+    Long,
 }

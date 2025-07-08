@@ -1,9 +1,11 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
-import { GetCredentialsQuery } from "./get-credentials.query"
+import { GetCredentialsQuery } from "./get-credentials.query";
 
 @QueryHandler(GetCredentialsQuery)
-export class GetCredentialsQueryHandler implements IQueryHandler<GetCredentialsQuery> {
+export class GetCredentialsQueryHandler
+    implements IQueryHandler<GetCredentialsQuery>
+{
     constructor(private client: Neo4jClient) {}
 
     async execute(query: GetCredentialsQuery): Promise<any> {

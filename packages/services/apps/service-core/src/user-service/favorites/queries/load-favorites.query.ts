@@ -1,9 +1,11 @@
-
 import { Neo4jClient } from "@ns/neo4j";
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 export class LoadFavoritesQuery {
-    constructor(public readonly uid: string, public readonly recordIds?: string[]) {}
+    constructor(
+        public readonly uid: string,
+        public readonly recordIds?: string[]
+    ) {}
 }
 
 @QueryHandler(LoadFavoritesQuery)
@@ -15,10 +17,9 @@ export class LoadFavoritesQueryHandler
     async execute(query: LoadFavoritesQuery): Promise<any[]> {
         const queryResult = await this.client.read(this.query, {
             uid: query.uid,
-            recordIds: query.recordIds ?? null
+            recordIds: query.recordIds ?? null,
         });
-        const response: any[] =
-            queryResult.records[0].get('favorites') ?? [];
+        const response: any[] = queryResult.records[0].get("favorites") ?? [];
         return response;
     }
 

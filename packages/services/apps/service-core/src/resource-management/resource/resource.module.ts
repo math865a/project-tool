@@ -5,6 +5,6 @@ import { ResourceNatsController } from "./resource.controller";
 
 @Module({
     providers: [...commandHandlers, ...queryHandlers],
-    controllers: [ResourceNatsController]
+    controllers: [ResourceNatsController],
 })
 export class ResourceModule {}

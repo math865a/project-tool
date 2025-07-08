@@ -1,7 +1,7 @@
 import { Neo4jClient } from "@ns/neo4j";
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
-import { WorkpackageProfileQuery } from './workpackage-profile.query';
+import { WorkpackageProfileQuery } from "./workpackage-profile.query";
 
 @QueryHandler(WorkpackageProfileQuery)
 export class WorkpackageProfileQueryHandler
@@ -23,12 +23,12 @@ export class WorkpackageProfileQueryHandler
         const queryResult = await this.client.read(this.query, {
             workpackageId,
         });
-        return queryResult.records[0].get('profile');
+        return queryResult.records[0].get("profile");
     }
 
     async getOptions() {
         const queryResult = await this.client.read(this.optionsQuery);
-        return queryResult.records[0].get('options');
+        return queryResult.records[0].get("options");
     }
 
     query = `

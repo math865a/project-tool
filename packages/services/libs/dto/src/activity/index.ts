@@ -1,1 +1,1 @@
-export * from './get-activities.query';
+export * from "./get-activities.query";

@@ -1,3 +1,1 @@
-export class ResourceTypeOptionsQuery {
-    
-}
+export class ResourceTypeOptionsQuery {}

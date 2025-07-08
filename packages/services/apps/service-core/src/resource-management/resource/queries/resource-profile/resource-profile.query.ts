@@ -1,6 +1,3 @@
-
 export class ResourceProfileQuery {
-    constructor(
-        public readonly resourceId: string
-    ) {}
+    constructor(public readonly resourceId: string) {}
 }

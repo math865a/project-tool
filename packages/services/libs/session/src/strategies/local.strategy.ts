@@ -18,10 +18,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         const { uid } = await this.validateCredentials.execute(
             new ValidateCredentialsQuery(email, password)
         );
-            
 
         if (!uid) {
-            throw new UnauthorizedException("Der findes ingen bruger med denne email og/eller adgangskode");
+            throw new UnauthorizedException(
+                "Der findes ingen bruger med denne email og/eller adgangskode"
+            );
         }
         return { uid };
     }

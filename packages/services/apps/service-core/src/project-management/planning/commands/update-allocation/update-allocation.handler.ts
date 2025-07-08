@@ -24,7 +24,9 @@ export class UpdateAllocationHandler
             uid: command.uid,
         });
         if (queryResult.summary.updateStatistics.containsUpdates()) {
-            this.publisher.publish(new AllocationUpdatedEvent(command.dto, command.uid));
+            this.publisher.publish(
+                new AllocationUpdatedEvent(command.dto, command.uid)
+            );
             return new FormSuccessResponse({
                 message: "Allokeringen er opdateret.",
             });

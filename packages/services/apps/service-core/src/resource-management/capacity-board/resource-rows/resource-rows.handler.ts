@@ -1,6 +1,6 @@
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { Neo4jClient } from "@ns/neo4j";
-import { ResourceRowsQuery } from './resource-rows.query';
+import { ResourceRowsQuery } from "./resource-rows.query";
 
 @QueryHandler(ResourceRowsQuery)
 export class ResourceRowsQueryHandler
@@ -10,9 +10,7 @@ export class ResourceRowsQueryHandler
 
     async execute(): Promise<any[]> {
         const queryResult = await this.client.read(this.query);
-        const response: any[] = queryResult.records.map((d) =>
-            d.get('row')
-        );
+        const response: any[] = queryResult.records.map((d) => d.get("row"));
         return response;
     }
 

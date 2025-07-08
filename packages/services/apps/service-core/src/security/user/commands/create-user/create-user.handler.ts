@@ -20,7 +20,7 @@ export class CreateUserHandler
         const labels = this.getLabels(command.dto);
         const queryResult = await this.client.write(this.query, {
             ...command.dto,
-            labels: labels
+            labels: labels,
         });
         if (queryResult.summary.updateStatistics.containsUpdates()) {
             this.publisher.publish(
@@ -35,12 +35,12 @@ export class CreateUserHandler
         });
     }
 
-    getLabels(dto: CreateUserDto){
+    getLabels(dto: CreateUserDto) {
         const labels = ["User"];
-        if (dto.isProjectManager){
+        if (dto.isProjectManager) {
             labels.push("ProjectManager");
         }
-        if (dto.isResource){
+        if (dto.isResource) {
             labels.push("Resource");
         }
         return labels;

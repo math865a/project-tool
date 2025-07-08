@@ -3,8 +3,10 @@ import { IsUserOnlineQuery } from "./is-user-online.query";
 import { Neo4jClient } from "@ns/neo4j";
 
 @QueryHandler(IsUserOnlineQuery)
-export class IsUserOnlineHandler implements IQueryHandler<IsUserOnlineQuery, boolean> {
-    constructor(private client: Neo4jClient){}
+export class IsUserOnlineHandler
+    implements IQueryHandler<IsUserOnlineQuery, boolean>
+{
+    constructor(private client: Neo4jClient) {}
 
     async execute(query: IsUserOnlineQuery): Promise<boolean> {
         const queryResult = await this.client.read(this.query, query);
@@ -17,5 +19,4 @@ export class IsUserOnlineHandler implements IQueryHandler<IsUserOnlineQuery, boo
 
         RETURN u.isOnline AS isOnline
     `;
-
 }

@@ -1,22 +1,29 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DomainEvents } from "@ns/cqrs";
-import { BookingStageUpdatedEvent } from '@ns/events';
+import { BookingStageUpdatedEvent } from "@ns/events";
 import { Neo4jClient } from "@ns/neo4j";
-import { UpdateBookingStageCommand } from './update-booking-stage.command';
+import { UpdateBookingStageCommand } from "./update-booking-stage.command";
 
 @CommandHandler(UpdateBookingStageCommand)
-export class UpdateBookingStageHandler implements ICommandHandler<UpdateBookingStageCommand, any>{
+export class UpdateBookingStageHandler
+    implements ICommandHandler<UpdateBookingStageCommand, any>
+{
+    constructor(
+        private readonly client: Neo4jClient,
+        private readonly publisher: DomainEvents
+    ) {}
 
-   constructor(private readonly client: Neo4jClient, private readonly publisher: DomainEvents){}
+    async execute(command: UpdateBookingStageCommand): Promise<any> {
+        const queryResult = await this.client.write(this.query, {
+            ...command.dto,
+            uid: command.uid,
+        });
+        const result: any = queryResult.records[0].get("result");
+        this.publisher.publish(new BookingStageUpdatedEvent());
+        return result;
+    }
 
-   async execute(command: UpdateBookingStageCommand): Promise<any>{
-       const queryResult = await this.client.write(this.query, {...command.dto, uid: command.uid});
-       const result: any = queryResult.records[0].get('result');
-       this.publisher.publish(new BookingStageUpdatedEvent());
-       return result;
-   }
-
-   query = `
+    query = `
         MATCH (w:Workpackage)-[rel:AT]->(b:BookingStage)
                 WHERE w.id = $workpackageId
         MATCH (newStage:BookingStage)
@@ -35,7 +42,7 @@ export class UpdateBookingStageHandler implements ICommandHandler<UpdateBookingS
         }
         RETURN {} AS result
    `;
-};
+}
 
 /*        CALL {
             WITH w, newStage

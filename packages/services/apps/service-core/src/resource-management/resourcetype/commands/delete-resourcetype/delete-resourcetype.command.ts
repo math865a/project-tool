@@ -1,5 +1,3 @@
-
-
 export class DeleteResourceTypeCommand {
     constructor(
         public readonly resourceTypeId: string,

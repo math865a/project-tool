@@ -8,7 +8,7 @@ export class BookingStageTimeseriesQueryHandler
 {
     constructor(private client: Neo4jClient) {}
 
-    async execute({instruction}: BookingStageTimeseriesQuery): Promise<any> {
+    async execute({ instruction }: BookingStageTimeseriesQuery): Promise<any> {
         const queryResult = await this.client.read(this.query, instruction);
         return queryResult.records[0]?.get("result");
     }

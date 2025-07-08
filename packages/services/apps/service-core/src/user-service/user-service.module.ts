@@ -17,7 +17,7 @@ import { ActivityModule } from "./activity/activity.module";
         CapacityViewModule,
         MailerModule,
         FeedbackModule,
-        ActivityModule
+        ActivityModule,
     ],
 })
 export class UserServiceModule {}

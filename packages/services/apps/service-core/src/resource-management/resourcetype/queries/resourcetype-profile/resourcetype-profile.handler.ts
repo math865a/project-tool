@@ -12,8 +12,7 @@ export class ResourceTypeProfileQueryHandler
         const queryResult = await this.client.read(this.query, {
             resourceTypeId: query.resourceTypeId,
         });
-        const response: any =
-            queryResult.records[0].get("result");
+        const response: any = queryResult.records[0].get("result");
         return response;
     }
 

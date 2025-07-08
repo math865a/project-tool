@@ -9,5 +9,5 @@ export const commandHandlers = [
     UpdateWorkpackageHandler,
     DeleteWorkpackageHandler,
     UpdateBookingStageHandler,
-    UpdateStageHandler
+    UpdateStageHandler,
 ];

@@ -1,2 +1,2 @@
-export * from './access-group-options.handler';
-export * from './access-group-options.query';
+export * from "./access-group-options.handler";
+export * from "./access-group-options.query";

@@ -1,7 +1,7 @@
 import {
     FormErrorResponse,
     FormResponse,
-    FormSuccessResponse
+    FormSuccessResponse,
 } from "@ns/definitions";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DomainEvents } from "@ns/cqrs";

@@ -3,8 +3,16 @@ import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { CreateResourceTypeDto, UpdateResourceTypeDto } from "@ns/dto";
 import { resourceTypePatterns as patterns } from "@ns/endpoints";
-import { CreateResourceTypeCommand, DeleteResourceTypeCommand, UpdateResourceTypeCommand } from "./commands";
-import { ResourceTypeOptionsQuery, ResourceTypeProfileQuery, ResourceTypesViewQuery } from "./queries";
+import {
+    CreateResourceTypeCommand,
+    DeleteResourceTypeCommand,
+    UpdateResourceTypeCommand,
+} from "./commands";
+import {
+    ResourceTypeOptionsQuery,
+    ResourceTypeProfileQuery,
+    ResourceTypesViewQuery,
+} from "./queries";
 
 @Controller()
 export class ResourceTypeNastController {

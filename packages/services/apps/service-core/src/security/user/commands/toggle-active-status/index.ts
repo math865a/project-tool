@@ -1,2 +1,2 @@
-export * from './toggle-active-status.command';
-export * from './toggle-active-status.handler';
+export * from "./toggle-active-status.command";
+export * from "./toggle-active-status.handler";

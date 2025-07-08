@@ -2,10 +2,11 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { IsProjectManagerQuery } from "./is-project-manager.query";
 import { Neo4jClient } from "@ns/neo4j";
 
-
 @QueryHandler(IsProjectManagerQuery)
-export class IsProjectManagerHandler implements IQueryHandler<IsProjectManagerQuery, boolean> {
-    constructor(private client: Neo4jClient){}
+export class IsProjectManagerHandler
+    implements IQueryHandler<IsProjectManagerQuery, boolean>
+{
+    constructor(private client: Neo4jClient) {}
 
     async execute(query: IsProjectManagerQuery): Promise<boolean> {
         const queryResult = await this.client.read(this.query, query);
@@ -20,5 +21,4 @@ export class IsProjectManagerHandler implements IQueryHandler<IsProjectManagerQu
             ELSE true
         END AS result
     `;
-
 }

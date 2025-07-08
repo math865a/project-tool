@@ -12,7 +12,7 @@ import { GetCredentialsQueryHandler } from "./get-credentials";
         ResetPasswordHandler,
         UpdatePasswordHandler,
         UpdateUsernameHandler,
-        GetCredentialsQueryHandler
+        GetCredentialsQueryHandler,
     ],
     controllers: [AuthenticationController],
 })

@@ -1,9 +1,8 @@
-import { CreateAgentDto } from '@ns/dto';
+import { CreateAgentDto } from "@ns/dto";
 
 export class CreateAgentCommand {
-  constructor(
-    public readonly dto: CreateAgentDto,
-    public readonly uid: string,
-  ) {}
+    constructor(
+        public readonly dto: CreateAgentDto,
+        public readonly uid: string
+    ) {}
 }
-

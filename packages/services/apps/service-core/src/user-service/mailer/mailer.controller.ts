@@ -1,11 +1,7 @@
 import { Controller } from "@nestjs/common";
 import { EventPattern, MessagePattern, Payload } from "@nestjs/microservices";
-import {
-    mailerPatterns as patterns
-} from "@ns/endpoints";
-import {
-    CredentialsCreatedEvent, PasswordResetEvent
-} from "@ns/events";
+import { mailerPatterns as patterns } from "@ns/endpoints";
+import { CredentialsCreatedEvent, PasswordResetEvent } from "@ns/events";
 import { SendgridService } from "./sendgrid.service";
 
 @Controller()

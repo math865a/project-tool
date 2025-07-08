@@ -1,5 +1,5 @@
-import { DomainEvent } from './domain.event';
+import { DomainEvent } from "./domain.event";
 
 export abstract class DomainEvents {
-  abstract publish(event: DomainEvent): void;
+    abstract publish(event: DomainEvent): void;
 }

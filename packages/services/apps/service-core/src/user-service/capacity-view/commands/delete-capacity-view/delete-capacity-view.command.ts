@@ -1,8 +1,3 @@
-
-
 export class DeleteCapacityViewCommand {
-    constructor(
-        public readonly viewId: string,
-        public readonly uid: string
-    ) {}
+    constructor(public readonly viewId: string, public readonly uid: string) {}
 }

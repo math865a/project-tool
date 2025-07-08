@@ -1,3 +1,3 @@
 export class IsUserOnlineQuery {
-    constructor(public readonly uid: string){}
+    constructor(public readonly uid: string) {}
 }

@@ -11,5 +11,5 @@ export const queryHandlers = [
     WorkpackageProfileQueryHandler,
     StagesQueryHandler,
     WorkpackageCreateFormQueryHandler,
-    ProjectManagerWorkpackagesHandler
+    ProjectManagerWorkpackagesHandler,
 ];

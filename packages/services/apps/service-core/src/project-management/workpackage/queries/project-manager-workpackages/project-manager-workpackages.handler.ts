@@ -1,5 +1,5 @@
 import { Neo4jClient } from "@ns/neo4j";
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { ProjectManagerWorkpackagesQuery } from "./project-manager-workpackages.query";
 
 @QueryHandler(ProjectManagerWorkpackagesQuery)
@@ -10,7 +10,7 @@ export class ProjectManagerWorkpackagesHandler
 
     async execute(query: ProjectManagerWorkpackagesQuery): Promise<any[]> {
         const queryResult = await this.client.read(this.query, query);
-        return queryResult.records.map((d) => d.get('row'));
+        return queryResult.records.map((d) => d.get("row"));
     }
 
     query = `

@@ -16,14 +16,20 @@ export class FavoritesNatsController {
     }
 
     @MessagePattern(patterns.addFavorite)
-    async addFavorite(@Payload("recordId") recordId: string, @Payload("uid") uid: string) {
+    async addFavorite(
+        @Payload("recordId") recordId: string,
+        @Payload("uid") uid: string
+    ) {
         return await this.commandBus.execute(
             new AddFavoriteCommand(recordId, uid)
         );
     }
 
     @MessagePattern(patterns.removeFavorite)
-    async removeFavorite(@Payload("recordId") recordId: string, @Payload("uid") uid: string) {
+    async removeFavorite(
+        @Payload("recordId") recordId: string,
+        @Payload("uid") uid: string
+    ) {
         return await this.commandBus.execute(
             new RemoveFavoriteCommand(recordId, uid)
         );

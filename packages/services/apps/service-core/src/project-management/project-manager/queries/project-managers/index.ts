@@ -1,2 +1,2 @@
-export * from './project-managers.handler';
-export * from './project-managers.query';
+export * from "./project-managers.handler";
+export * from "./project-managers.query";
