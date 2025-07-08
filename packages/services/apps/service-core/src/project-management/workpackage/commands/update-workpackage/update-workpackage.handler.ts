@@ -36,6 +36,8 @@ export class UpdateWorkpackageHandler
             return systematicName;
         }
 
+        console.log(command);
+
         const result = await this.client.write(this.query, {
             ...command.dto,
             systematicName: systematicName,
