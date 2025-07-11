@@ -1,6 +1,6 @@
 import { Outlet, ShouldRevalidateFunction } from "@remix-run/react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { namedAction } from "remix-utils/named-action";
+
 import { getServiceUrl } from "~/server";
 import { sendRequest } from "~/session.server";
 import { HasAccess, Subject } from "~/src";
@@ -11,6 +11,7 @@ import GridSection from "./Grid.Section";
 import HeaderSection from "./Header.Section";
 import { IUsersLoaderData, UserRow } from "./definitions";
 import v from "voca";
+import { namedAction } from "~/util/named-action";
 
 export const handle = {
     BackAction: <BackAction title="Brugere" noBack />,
@@ -28,8 +29,8 @@ export async function loader({
 export type UsersLoader = typeof loader;
 
 export async function action({ request }: ActionFunctionArgs) {
-    const data = await request.formData();
-    return namedAction(data, {
+    //const data = await request.formData();
+    return namedAction(request, {
         async update() {
             const body = await parseRequest<UserRow>(request);
             return await sendRequest(request, {
