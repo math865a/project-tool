@@ -20,16 +20,12 @@ export default function EditingActions({
             <Action.Symbol
                 icon={IconCheck}
                 symbolProps={{ color: theme.palette.success.main }}
-                iconSize={1}
-                color="inherit"
                 title="Gem"
                 onClick={handleSaveClick(id)}
             />
             <Action.Symbol
                 icon={IconX}
                 symbolProps={{ color: theme.palette.error.main }}
-                iconSize={1}
-                color="inherit"
                 title="Annuller"
                 onClick={handleCancelClick(id)}
             />

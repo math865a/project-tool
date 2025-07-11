@@ -1,4 +1,13 @@
-import { IsString, IsEmail, IsArray, IsBoolean, IsOptional, IsNotEmpty, IsHexColor, ArrayMinSize } from "class-validator";
+import {
+    ArrayMinSize,
+    IsArray,
+    IsBoolean,
+    IsEmail,
+    IsHexColor,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+} from "class-validator";
 import { CreateResourceDto } from "../resource";
 
 export class CreateUserDto {
@@ -29,7 +38,6 @@ export class CreateUserDto {
     public readonly isResource: boolean;
 
     @IsString()
-    @IsNotEmpty()
     public readonly connect: string;
 
     @IsOptional()

@@ -20,6 +20,7 @@ import {
     Symbol as SymbolComponent,
     SymbolProps,
 } from "../index";
+import { TablerIcon } from "@tabler/icons-react";
 
 export namespace ActionTypes {
     export type ITooltipPlacement =
@@ -38,7 +39,7 @@ export namespace ActionTypes {
         | undefined;
 
     export interface IIconActionProps extends IconButtonProps {
-        icon?: IconDef;
+        icon?: TablerIcon;
         iconSize?: number;
         symbolProps?: Omit<SymbolProps, "icon">;
         to?: string;
@@ -55,7 +56,11 @@ export namespace ActionTypes {
 const SymbolBase = React.forwardRef<
     HTMLButtonElement,
     ActionTypes.IIconActionProps
->(({ icon, iconSize, symbolProps, to, handleProps, ...rest }, ref) => {
+>(({ icon: Icon, iconSize, symbolProps, to, handleProps, ...rest }, ref) => {
+    if (!Icon) {
+        return null;
+    }
+
     if (to) {
         return (
             <IconButton
@@ -64,6 +69,7 @@ const SymbolBase = React.forwardRef<
                 ref={ref}
                 component={RemixLink}
                 to={to}
+                zIndex={1000}
                 prefetch="intent"
                 sx={{
                     borderRadius: "50%",
@@ -71,14 +77,14 @@ const SymbolBase = React.forwardRef<
                     height: "min-content",
                 }}
             >
-                <SymbolComponent icon={icon} size={iconSize} {...symbolProps} />
+                <Icon size={iconSize} color={symbolProps?.color} stroke={1.5} />
             </IconButton>
         );
     }
 
     return (
         <IconButton {...rest} ref={ref} {...handleProps}>
-            <SymbolComponent icon={icon} size={iconSize} {...symbolProps} />
+            <Icon size={iconSize} color={symbolProps?.color} stroke={1.5} />
         </IconButton>
     );
 });

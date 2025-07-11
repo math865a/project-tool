@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsHexColor } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateProjectManagerDto {
     @IsString()
@@ -10,6 +10,5 @@ export class CreateProjectManagerDto {
     public readonly name: string;
 
     @IsString()
-    @IsHexColor()
     public readonly color: string;
 }

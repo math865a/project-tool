@@ -107,7 +107,10 @@ export const useColumns = ({
                             <Tooltip title="Gem" placement="top" arrow>
                                 <GridActionsCellItem
                                     icon={
-                                        <IconDeviceFloppy color={"inherit"} />
+                                        <IconDeviceFloppy
+                                            size={20}
+                                            stroke={1.5}
+                                        />
                                     }
                                     label="Save"
                                     onClick={handleSaveClick(id)}
@@ -115,7 +118,7 @@ export const useColumns = ({
                             </Tooltip>,
                             <Tooltip title="Fortryd" placement="top" arrow>
                                 <GridActionsCellItem
-                                    icon={<IconX color={"inherit"} />}
+                                    icon={<IconX size={20} stroke={1.5} />}
                                     label="Cancel"
                                     className="textPrimary"
                                     onClick={handleCancelClick(id)}
@@ -130,16 +133,15 @@ export const useColumns = ({
                     return [
                         <Tooltip title="Rediger" placement="top" arrow>
                             <GridActionsCellItem
-                                icon={<IconPencil color={"inherit"} />}
+                                icon={<IconPencil size={20} stroke={1.5} />}
                                 label="Edit"
                                 className="textPrimary"
                                 onClick={handleEditClick(id)}
-                                color="inherit"
                             />
                         </Tooltip>,
                         <Tooltip title="Slet" placement="top" arrow>
                             <GridActionsCellItem
-                                icon={<IconTrash color={"inherit"} />}
+                                icon={<IconTrash size={20} stroke={1.5} />}
                                 label="Delete"
                                 onClick={handleDeleteClick(id)}
                                 color="inherit"

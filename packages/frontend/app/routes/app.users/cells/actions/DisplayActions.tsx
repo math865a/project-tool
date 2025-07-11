@@ -34,15 +34,11 @@ export default function DisplayActions({
         <Stack direction="row" alignItems="center" spacing={0.5}>
             <Action.Symbol
                 icon={IconPencil}
-                iconSize={1}
-                color="inherit"
                 title="Rediger"
                 onClick={handleEditClick(id)}
             />
             <Action.Symbol
                 icon={IconDots}
-                iconSize={1}
-                color="inherit"
                 title="Handlinger"
                 onClick={handleOpen}
             />

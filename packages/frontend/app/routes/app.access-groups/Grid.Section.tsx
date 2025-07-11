@@ -1,14 +1,10 @@
 import { Box } from "@mui/material";
-import { useLoaderData } from "@remix-run/react";
 import { Grid, Page } from "~/src/design-system";
 import { gridStyles } from "./definitions/gridStyles";
 import { useColumns } from "./hooks/useColumns";
 import { useRowState } from "./hooks/useRowState";
-import { AccessGroupsLoader } from "./route";
 
 export default function GridSection(rowState: ReturnType<typeof useRowState>) {
-    const data = useLoaderData<AccessGroupsLoader>();
-
     const {
         rows,
         rowModesModel,
@@ -23,8 +19,8 @@ export default function GridSection(rowState: ReturnType<typeof useRowState>) {
         <Page.SubLayout>
             <Box
                 flexGrow={1}
-                height={"78vh"}
-                maxHeight={"78vh"}
+                height={"85vh"}
+                maxHeight={"85vh"}
                 sx={{
                     "& .column-group-header": {
                         borderColor: "transparent",

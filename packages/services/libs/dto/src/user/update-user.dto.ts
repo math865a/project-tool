@@ -1,6 +1,5 @@
 import {
     IsArray,
-    IsBoolean,
     IsEmail,
     IsHexColor,
     IsNotEmpty,
@@ -26,7 +25,4 @@ export class UpdateUserDto {
     @IsString()
     @IsHexColor()
     public readonly color: string;
-
-    @IsBoolean()
-    public readonly isDeactivated: boolean;
 }

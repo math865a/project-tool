@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class UpdateWorkpackageDto {
     @IsString()
@@ -6,11 +6,9 @@ export class UpdateWorkpackageDto {
     public readonly workpackageId: string;
 
     @IsString()
-    @IsNotEmpty()
     public readonly name: string;
 
     @IsString()
-    @IsNotEmpty()
     public readonly description: string;
 
     @IsString()

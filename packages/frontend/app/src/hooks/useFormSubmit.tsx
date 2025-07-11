@@ -40,8 +40,7 @@ const useActionSubmit = <
 ) => {
     const submit = useSubmit();
 
-    const onSubmit = (values: I) => {
-        const formData = new FormData();
+    return (values: I) => {
         const transformedValues: O | I = props?.transform
             ? props?.transform(values)
             : values;
@@ -52,8 +51,6 @@ const useActionSubmit = <
         });
         props?.afterSubmit && props.afterSubmit(transformedValues);
     };
-
-    return onSubmit;
 };
 
 const useSocketSubmit = <

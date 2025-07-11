@@ -1,6 +1,9 @@
-export function toFormData(values: any) {
+export function toFormData(values: any, intent?: string) {
     const formData = new FormData();
     formData.set("data", JSON.stringify(values));
+    if (intent) {
+        formData.set("intent", intent);
+    }
     return formData;
 }
 

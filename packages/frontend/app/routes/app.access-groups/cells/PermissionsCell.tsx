@@ -3,7 +3,7 @@ import {
     useGridApiContext,
 } from "@mui/x-data-grid-pro";
 import { useMemo } from "react";
-import { Action, IconDef } from "~/src/design-system";
+import { Action } from "~/src/design-system";
 import { AccessGroupRow, Permissions } from "../definitions/types";
 import { Box, Stack } from "@mui/material";
 import {
@@ -13,6 +13,7 @@ import {
     IconEyeSpark,
     IconTrash,
     IconTrashOff,
+    TablerIcon,
 } from "@tabler/icons-react";
 
 export default function PermissionsCell({
@@ -92,7 +93,7 @@ function Permission({
             disableFocusRipple={disabled}
             disableRipple={disabled}
             disableTouchRipple={disabled}
-            iconSize={0.9}
+            iconSize={20}
             icon={actionProps.icon}
             onClick={() => onToggle(permission)}
             sx={{ cursor: disabled ? "default" : "pointer" }}
@@ -103,11 +104,11 @@ function Permission({
 const permissionIconMap: {
     [property in keyof Permissions]: {
         active: {
-            icon: IconDef;
+            icon: TablerIcon;
             title: string;
         };
         inactive: {
-            icon: IconDef;
+            icon: TablerIcon;
             title: string;
         };
     };

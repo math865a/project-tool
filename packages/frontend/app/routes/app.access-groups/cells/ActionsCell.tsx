@@ -24,21 +24,21 @@ export default function ActionsCell({
         return (
             <Stack direction="row" alignItems="center" spacing={0.5}>
                 <Action.Symbol
-                    icon={IconPencil}
-                    iconSize={1}
-                    color="inherit"
-                    title="Rediger"
-                    onClick={handleEditClick(id)}
-                />
-                <Action.Symbol
                     icon={IconTrash}
-                    iconSize={1}
-                    color="inherit"
                     title="Handlinger"
                     onClick={handleDeleteClick(id)}
+                />
+                <Action.Symbol
+                    icon={IconPencil}
+                    title="Rediger"
+                    onClick={handleEditClick(id)}
                 />
             </Stack>
         );
     }
     return <></>;
 }
+
+/*
+
+                 */
