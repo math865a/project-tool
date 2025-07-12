@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { sendRequest } from "session";
-import CapacityBoard from "~/pages/capacity";
+import CapacityBoard from "~/src/features/capacity";
 import { getServiceUrl } from "~/server";
 import { Action as A, Subject } from "~/src/_definitions";
 import { Fallback, Page } from "~/src/design-system";

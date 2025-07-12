@@ -120,7 +120,9 @@ export default function CreateUserForm() {
         <Dialog.Modal open onClose={handleClose} maxWidth="sm">
             <FormProvider {...methods}>
                 <form
-                    onSubmit={methods.handleSubmit(onSubmit)}
+                    onSubmit={methods.handleSubmit(onSubmit, (errors) =>
+                        console.log(errors)
+                    )}
                     style={{ width: "100%" }}
                 >
                     <ServerValidation />

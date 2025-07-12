@@ -33,5 +33,5 @@ export const schema = yup.object({
         otherwise: yup.mixed().default(null),
     }),
     sendWelcomeEmail: yup.boolean(),
-    accessGroups: yup.array(yup.string())
+    accessGroups: yup.array(),
 });

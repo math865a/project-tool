@@ -12,7 +12,7 @@ import { TimelineController } from "../controllers/controller";
 import { BAR_HEIGHT, ROW_PADDING } from "../controllers/_constants";
 import { TimelineTask } from "./task.model";
 import { ProjectManager } from "~/src";
-import { BookingStageNode } from "~/pages/capacity/_definitions";
+import { BookingStageNode } from "~/src/features/capacity/_definitions";
 
 @model("timeline-workpackage")
 export class TimelineWorkpackage extends Model({
