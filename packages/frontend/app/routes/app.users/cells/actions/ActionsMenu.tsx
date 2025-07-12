@@ -96,6 +96,7 @@ export function ActionsMenu({
 
                 <Directory.ContextMenuItem
                     icon={IconMailForward}
+                    disabled={true}
                     label={
                         record.lastSeen
                             ? "Mail adgangsoplysninger"

@@ -273,7 +273,7 @@ function BooleanCell({ value, title }: { value: boolean; title?: string }) {
         <Action.Symbol
             icon={value ? IconCheck : IconX}
             title={title}
-            iconSize={1.1}
+            iconSize={18}
             disableFocusRipple
             disableRipple
             disableTouchRipple
