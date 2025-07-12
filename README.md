@@ -52,15 +52,39 @@ To address this challenge, the company initiated the development of a custom pro
 
 Project Tool was developed to meet those needs, tailored specifically to the company's processes and constraints.
 
-## Domain
+## Domain and data model
 The client is a large, public actor with a complex financial structure and as two contracts (framework agreements) were secured, each **work package** was identified by their **financial source** and **contract**:
 
 ![Organizational context of a work package](/docs/workpackage-organizational-context.png)
 
 The framework agreement included fixed hourly rates for different kinds of skilled work. These were defined by roles (**resource types**) such as *senior project manager*, *technical project manager*, *network technician* etc.
-An agreed upon list of employees (**resources**) from various departments in the company were designated one or more **resource types**:
+An agreed upon list of employees (**resources**) from various departments in the company were designated one or more **resource types**. This also meant that a single resource could work on both contracts under different resource type aliases.
 
 ![Context of a resource type](/docs/resource-type-context.png)
+
+A work package had a well defined purpose and scope, and crucially it was defined by a set of measurable deliverables (**deliveries**) with a well defined deadline. These **deliveries** we part of the negotiation between the company
+and the client when defining each work package. For practical project management purposes, each delivery was broken down into several **tasks** that together would complete a delivery:
+
+![Work package activities](/docs/workpackage-activities.png)
+
+The main purpose of **Project Tool** was to manage resource allocations and capacity. In practice, each **resource** (with an assigned **resource type**) would be assigned individual **tasks** in
+a **work package** creating an **allocation**. In practise, **allocations** had to be very flexible since multiple **resources** could be assigned a **task**, but the amount of work could be spread unevenly over the duration of the **task**
+and this uneven distribution was not necessarily the same for each **resource**. Thus each **resource** could have multiple **allocations** for a single **task** that could be discontinuous over the duration of the **task**.
+
+![Planing context](/docs/planning-context.png)
+
+When a **work package** was ordered by the client, the company first generated a proposal. Internally, this involved planning out the entire workpackage including allocation resources to tasks in order to reserve (soft book) the required **resources**
+for **tasks**. After consulting with the client, the **work package** could be accepted and the **resources** should be hard booked. Thus a **booking stage** was introduced on the **work package** level in order to manage whether
+the **resources** **allocated** to the **tasks** where final or not.
+
+![Booking stage](/docs/booking-stage.png)
+
+When a **work package** was first ordered by the client, a **project manager** was assigned to the work package. The **project manager** was in charge of planning the **work package** and allocation **resources**:
+
+![Project manager manages a workpackage](/docs/project-manager-workpackage.png)
+
+
+![Authorization and user roles](/docs/authorization-and-user-resource-project-manager.png)
 
 ## Requirements
 
