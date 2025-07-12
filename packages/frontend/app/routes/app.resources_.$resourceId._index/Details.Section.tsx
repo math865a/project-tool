@@ -25,7 +25,9 @@ export default function DetailsSection() {
     const submit = useSubmit();
 
     const onSubmit = (values: ReturnType<typeof getDefaultValues>) => {
-        submit(toFormData(values), { method: "post" });
+        submit(toFormData(values), {
+            method: "post",
+        });
     };
 
     return (
@@ -45,7 +47,7 @@ export default function DetailsSection() {
                 <Can I={A.Write} a={Subject.Resources} passThrough>
                     {(allowed) => (
                         <form style={{ width: "100%", paddingBottom: "8px" }}>
-                            <ServerValidation/>
+                            <ServerValidation />
                             <Details.Container>
                                 <Details.Item
                                     title="Navn"

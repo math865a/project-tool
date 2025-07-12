@@ -192,6 +192,7 @@ export class ProjectManagementGateway {
         @MessageBody() dto: CreateAssignmentDto,
         @UserId() uid: string
     ) {
+        console.log(dto);
         return await this.client.request(planningPatterns.createAssignment, {
             dto,
             uid,

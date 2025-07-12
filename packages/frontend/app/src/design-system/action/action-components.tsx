@@ -225,7 +225,7 @@ const TextButton = React.forwardRef<
 function TextLink({
     text,
     icon,
-    iconSize = 1,
+    iconSize = 18,
     fontSize = 13,
     spacing = 1,
     pbText = 0,
@@ -284,7 +284,7 @@ function TextLink({
                         : "inherit",
                 }}
             />*/}
-            {Icon && <Icon size={iconSize} />}
+            {Icon && <Icon size={iconSize} color={symbolProps?.color} />}
             <Typography
                 pb={pbText}
                 pt={ptText}

@@ -65,6 +65,17 @@ export class DeleteResourceHandler
     deleteQuery = `
         MATCH (r:Resource)
             WHERE r.id = $id
+        CALL {
+            WITH r
+            OPTIONAL MATCH (r)<-[:IS]->(a:Agent)
+            RETURN a
+        }
+        CALL {
+            WITH a
+            OPTIONAL MATCH (a)-[:IS_ASSIGNED_TO]->(al:Allocation)
+            DETACH DELETE al
+        }
+        DETACH DELETE a
         DETACH DELETE r
     `;
 
@@ -82,11 +93,17 @@ export class DeleteResourceHandler
         CALL {
             WITH r
             OPTIONAL MATCH (r)<-[:IS]->(a:Agent)
-            DETACH DELETE a
+            RETURN a
+        }
+        CALL {
+            WITH a
+            OPTIONAL MATCH (a)-[:IS_ASSIGNED_TO]->(al:Allocation)
+            DETACH DELETE al
         }
         REMOVE r:Resource
         REMOVE r.initials
         REMOVE r.costDefault
         REMOVE r.costOvertime
+        DETACH DELETE a        
     `;
 }

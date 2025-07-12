@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsHexColor, IsIn, IsObject, IsArray, IsString as IsStringArray } from "class-validator";
+import {
+    IsArray,
+    IsIn,
+    IsNotEmpty,
+    IsString,
+    IsString as IsStringArray,
+} from "class-validator";
 
 export class TaskProperties {
     @IsString()
@@ -16,7 +22,6 @@ export class TaskProperties {
 
 export class DeliveryProperties extends TaskProperties {
     @IsString()
-    @IsHexColor()
     public readonly color: string;
 }
 
@@ -32,12 +37,10 @@ export class ParentDto {
 
 export class CreateActivityDto {
     @IsString()
-    @IsNotEmpty()
     public readonly anchorId: string;
 
     public readonly properties: TaskProperties | DeliveryProperties;
 
-    @IsObject()
     public readonly parent: ParentDto;
 
     @IsIn(["Delivery", "Task"])

@@ -25,6 +25,7 @@ function PageContext() {
 
 export async function action({ request, params }: ActionFunctionArgs) {
     invariant(params.resourceId);
+    console.log(params.resourceId);
     if (request.method === "DELETE") {
         const result: FormResponse = await sendRequest(request, {
             url: getServiceUrl("resources", params.resourceId),

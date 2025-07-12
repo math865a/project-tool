@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsDateString, IsNumber, Min } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateAllocationDto {
     @IsString()
@@ -6,19 +6,15 @@ export class CreateAllocationDto {
     public readonly id: string;
 
     @IsString()
-    @IsDateString()
     public readonly startDate: string;
 
     @IsString()
-    @IsDateString()
     public readonly endDate: string;
 
     @IsNumber()
-    @Min(0)
     public readonly defaultMinutes: number;
 
     @IsNumber()
-    @Min(0)
     public readonly overtimeMinutes: number;
 
     @IsString()

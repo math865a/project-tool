@@ -3,7 +3,6 @@ import { getServiceUrl } from "~/server";
 import { sendRequest } from "~/session.server";
 import { Page } from "~/src/design-system";
 import GridSection from "./Grid.Section";
-import HeaderSection from "./Header.Section";
 import { IProjectManagerRow } from "./grid/types";
 import BackAction from "~/src/layout/topbar/BackAction";
 import { HasAccess, Subject } from "~/src";
@@ -27,7 +26,6 @@ export default function ProjectManagersPage() {
         <HasAccess to={Subject.ProjectManagers}>
             <Page.Root maxWidth="md">
                 <Page.Layout>
-                    <HeaderSection />
                     <GridSection />
                 </Page.Layout>
             </Page.Root>
