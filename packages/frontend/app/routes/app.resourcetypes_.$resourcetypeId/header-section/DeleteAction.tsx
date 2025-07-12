@@ -1,17 +1,21 @@
-import { useSubmit } from "@remix-run/react";
+import { useLoaderData, useSubmit } from "@remix-run/react";
 import { Action, ConfirmationDialog } from "design";
 import { useState } from "react";
 import { Can } from "~/src/session-user";
 import { Action as A, Subject } from "~/src/_definitions";
 import { IconTrash } from "@tabler/icons-react";
+import { ResourceTypeLoader } from "~/routes/app.resourcetypes_.$resourcetypeId/route";
 
 export function ResourceTypeDeleteAction() {
     const submit = useSubmit();
+
+    const { node } = useLoaderData<ResourceTypeLoader>();
 
     const [open, setOpen] = useState<boolean>(false);
 
     const handleDelete = () => {
         setOpen(false);
+        submit({}, { method: "delete", replace: true });
         /*submit(
             {},
             {
@@ -37,11 +41,12 @@ export function ResourceTypeDeleteAction() {
                         text="Slet"
                         icon={IconTrash}
                         onClick={handleOpen}
-                        disabled
                     />
                 )}
             </Can>
             <ConfirmationDialog
+                title={`Er du sikker på, at du vil slette ressourcetypen ${node.name}?`}
+                text={`Ressourcetypen vil blive fjernet fra alle abejdspakker, herunder allokeringer og bookinger. Dette kan ikke fortrydes.`}
                 open={open}
                 onCancel={handleCancel}
                 onConfirm={handleDelete}

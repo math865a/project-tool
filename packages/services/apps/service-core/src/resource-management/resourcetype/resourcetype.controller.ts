@@ -20,7 +20,7 @@ export class ResourceTypeNastController {
 
     @MessagePattern(patterns.deleteResourceType)
     async deleteResourceType(
-        @Payload("resourceTypeId") resourceTypeId: string,
+        @Payload("resourcetypeId") resourceTypeId: string,
         @Payload("uid") uid: string
     ) {
         return await this.commandBus.execute(
