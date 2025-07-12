@@ -12,7 +12,7 @@ import {
     onSnapshot,
     prop,
 } from "mobx-keystone";
-import { Gantt } from "../../controllers/Gantt";
+import { Gantt } from "~/src/features";
 import { UpdatePeriodDto } from "~/src";
 
 @model("interval")

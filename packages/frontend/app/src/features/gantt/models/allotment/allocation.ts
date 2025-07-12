@@ -8,11 +8,10 @@ import {
     Model,
     model,
     modelAction,
-    prop
+    prop,
 } from "mobx-keystone";
-import { Gantt } from "../../controllers/Gantt";
-import { Interval } from "../_shared/interval";
-import { AllocationBar } from "./allocation.bar";
+import { Gantt } from "~/src/features";
+import { AllocationBar, Interval } from "gantt/models";
 import { getContrastColor } from "~/util";
 
 @model("allocation")
@@ -30,10 +29,7 @@ export class Allocation extends Model({
     get AllotmentStore() {
         try {
             return getRoot<Gantt>(this)?.AllotmentStore;
-        } catch(e){
-      
-        }
-
+        } catch (e) {}
     }
     @computed
     get Assignment() {
@@ -153,20 +149,22 @@ export class Allocation extends Model({
                 week: (d.start as dt).weekNumber,
                 year: (d.start as dt).year,
                 work: this.dailyWork,
-                weekId: String((d.start as dt).weekNumber) + String((d.start as dt).year),
+                weekId:
+                    String((d.start as dt).weekNumber) +
+                    String((d.start as dt).year),
             }));
     }
 
     @computed
     get weeks() {
         return _.uniqBy(
-            this.Interval.interval
-                .splitBy({ weeks: 1 })
-                .map((d) => ({
-                    week: (d.start as dt).weekNumber,
-                    year: (d.start as dt).year,
-                    weekId: String((d.start as dt).weekNumber) + String((d.start as dt).year),
-                })),
+            this.Interval.interval.splitBy({ weeks: 1 }).map((d) => ({
+                week: (d.start as dt).weekNumber,
+                year: (d.start as dt).year,
+                weekId:
+                    String((d.start as dt).weekNumber) +
+                    String((d.start as dt).year),
+            })),
             (d) => d.weekId
         );
     }

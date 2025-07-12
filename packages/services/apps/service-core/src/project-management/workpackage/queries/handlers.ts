@@ -3,7 +3,7 @@ import { StagesQueryHandler } from "./stages";
 import { ValidateSystematicNameQueryHandler } from "./validate-systematic-name";
 import { WorkpackageCreateFormQueryHandler } from "./workpackage-create-form";
 import { WorkpackageViewQueryHandler } from "./workpackages-view";
-import { WorkpackageProfileQueryHandler } from "./workpackge-profile";
+import { WorkpackageProfileQueryHandler } from "./workpackage-profile";
 
 export const queryHandlers = [
     ValidateSystematicNameQueryHandler,

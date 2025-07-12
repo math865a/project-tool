@@ -5,14 +5,11 @@ import { Action } from "design";
 import { Activity, Assignment } from "gantt-models";
 import { computed } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useWorkpackage } from "useWorkpackage";
 
 export const ActivityTreeCell = observer(
     (props: GridRenderCellParams<Activity | Assignment>) => {
         const { id, field, rowNode } = props;
         const apiRef = useGridApiContext();
-
-        const { Gantt } = useWorkpackage();
 
         const handleClick: ButtonProps["onClick"] = (event) => {
             event.stopPropagation();

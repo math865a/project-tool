@@ -5,4 +5,4 @@ export * from "./validate-systematic-name";
 export * from "./workpackage-create-form";
 export * from "./workpackage-form-options";
 export * from "./workpackages-view";
-export * from "./workpackge-profile";
+export * from "./workpackage-profile";

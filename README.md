@@ -36,9 +36,9 @@ The system provides comprehensive project planning, resource allocation, capacit
 - **Financial Tracking**: Contract and financial source management
 - **User Management**: Role-based access control and user administration
 
-## Domain & Business Context
+## Business Context
 A Danish company (hereafter referred to as the company) operates across a broad range of sectors, with a strong foundation in networking and IT infrastructure. One of its key business areas is project management.
-At the time this system was initiated, the company had just secured a major framework agreement with a large client—an engagement valued at approximately 500 million DKK. This agreement comprised hundreds of smaller sub-projects, referred to internally as work packages. A team of around 15 project managers would be responsible for planning these work packages: defining their scope, assigning appropriate personnel, and monitoring progress throughout the lifecycle.
+At the time this system was initiated, the company had just secured two major framework agreements with a large client—an engagement valued at approximately 500 million DKK. This agreement comprised hundreds of smaller sub-projects, referred to internally as work packages. A team of around 15 project managers would be responsible for planning these work packages: defining their scope, assigning appropriate personnel, and monitoring progress throughout the lifecycle.
 However, the existing resource management approach—based on spreadsheets, emails, and manual coordination—proved inefficient and error-prone, especially at this scale. As the volume and complexity of projects grew, it became increasingly clear that the company faced a critical technology gap in planning and allocating its human resources.
 To address this challenge, the company initiated the development of a custom project and resource management tool. The goal was to create a centralized system that could:
 
@@ -51,6 +51,16 @@ To address this challenge, the company initiated the development of a custom pro
 - Personnel being able to view their assignments and workload in real-time
 
 Project Tool was developed to meet those needs, tailored specifically to the company's processes and constraints.
+
+## Domain
+The client is a large, public actor with a complex financial structure and as two contracts (framework agreements) were secured, each **work package** was identified by their **financial source** and **contract**:
+
+![Organizational context of a work package](/docs/workpackage-organizational-context.png)
+
+The framework agreement included fixed hourly rates for different kinds of skilled work. These were defined by roles (**resource types**) such as *senior project manager*, *technical project manager*, *network technician* etc.
+An agreed upon list of employees (**resources**) from various departments in the company were designated one or more **resource types**:
+
+![Context of a resource type](/docs/resource-type-context.png)
 
 ## Requirements
 

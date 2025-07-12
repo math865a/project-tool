@@ -1,5 +1,5 @@
 import { Neo4jClient } from "@ns/neo4j";
-import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { WorkpackageViewQuery } from "./workpackage-view.query";
 
 @QueryHandler(WorkpackageViewQuery)
@@ -94,7 +94,7 @@ export class WorkpackageViewQueryHandler
 
         CALL {
             WITH plan
-            RETURN round((plan.defaultWork + plan.overtimeWork)/60,1) AS work
+            RETURN 0 as work
         }
 
 
@@ -140,4 +140,4 @@ CALL {
                 color: pm.color
             } AS propositionManager
             RETURN tblCount, propositionManager
-        }*/
+        }RETURN round((plan.defaultWork + plan.overtimeWork)/60,1) AS work*/

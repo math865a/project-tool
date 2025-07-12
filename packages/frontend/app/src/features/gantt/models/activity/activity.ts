@@ -114,9 +114,9 @@ export class Activity extends Model({
     @modelAction
     addChild(id: string, sequence: number) {
         this.children.splice(sequence, 0, id);
-        if (this.ChildRows.length > 0) {
+        /*if (this.ChildRows.length > 0) {
             this.Table.expandRow(this);
-        }
+        }*/
         // this.Table.api?.current.setRowChildrenExpansion(this.id, true)
     }
 
