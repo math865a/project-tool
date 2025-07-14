@@ -88,14 +88,27 @@ When a **work package** was first ordered by the client, a **project manager** w
 
 ## Requirements
 
+## Architecture
+
+### High level application architecture
+
+The application consists of several components with clear interaction patterns. 
+The **frontend** is a React and RemixJS (server-rendered React app with client-side transitions) that communicates with the NestJS **gateway**. The **gateway** is responsible for serving the frontend with the needed data from
+one or more services living in the NestJS **service core**. The **gateway** communicates with the **service core** using request-reply via NATS. Services within the **service core** does not communicate directly but only via domain events
+decoupling the services from each other. The **service core** is responsible for the business logic and data access, using **Neo4j** as the primary data store. **MongoDB** is used for storing domain events.
+
+![High level application architecture](/docs/high-level-application-architecture.png)
+
+
+### Deployment architecture
+The application is designed to be deployed in multiple docker containers, allowing for scalability and separation of concerns. The **service core**, **gateway**, **frontend**, and databases are all containerized. 
+The architecture supports horizontal scaling of services and can be deployed in a cloud environment or on-premises. In practice, the application was deployed on a single linux machine residing on Google Cloud Platform.
+A webserver (Nginx) was used to serve the frontend. This constricted outside access to the application to a single port (80) and allowed for SSL termination.
+
+![Deployment architecture](/docs/deployment-diagram.png)
 
 
 
-## Data Model
-
-The application uses a hybrid data model combining MongoDB for document storage and Neo4j for graph relationships:
-
-### Core Entities
 
 #### Project Management
 - **Workpackage**: Core project unit with planning, stages, and financial tracking
