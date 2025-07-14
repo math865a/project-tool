@@ -40,9 +40,9 @@ export class Activity extends Model({
         const expandListener = reaction(
             () => this.ChildRows.length,
             (childCount, prev) => {
-                if (childCount > 0 && prev === 0) {
+                /* if (childCount > 0 && prev === 0) {
                     this.Table.expandRow(this);
-                } else if (childCount === 0 && prev > 0) {
+                } else */ if (childCount === 0 && prev > 0) {
                     this.Table.collapseRow(this);
                 }
             },

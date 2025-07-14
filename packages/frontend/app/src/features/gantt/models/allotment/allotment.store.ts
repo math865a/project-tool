@@ -8,9 +8,9 @@ import {
 import _ from "lodash";
 import { action, computed } from "mobx";
 import {
-    Model,
     getRoot,
     idProp,
+    Model,
     model,
     modelAction,
     prop,
@@ -19,7 +19,7 @@ import type { EditValues } from "~/routes/app.workpackages_.$workpackageId.gantt
 import { Gantt } from "~/src/features";
 import { DateTime as dt, Interval as int } from "luxon";
 import { CreateAllocationDto, CreateAssignmentDto } from "~/src/_definitions";
-import { generateId, getDateObjectFromString } from "~/util";
+import { generateId, getDateObject } from "~/util";
 import { AllocationJson, AssignmentJson } from "../../types";
 
 @model("allotment-store")
@@ -129,8 +129,8 @@ export class AllotmentStore extends Model({
             new AllocationJson({
                 id: dto.id,
                 interval: {
-                    start: getDateObjectFromString(dto.startDate),
-                    end: getDateObjectFromString(dto.endDate),
+                    start: getDateObject(interval.start as dt),
+                    end: getDateObject(interval.end as dt),
                 },
                 timesheet: {
                     defaultMinutes: dto.defaultMinutes,

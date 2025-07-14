@@ -16,7 +16,7 @@ export default function ProjectManagerMenu() {
                     py: 1,
                     borderRadius: 4,
                     backgroundColor: "#fff",
-                    width: 330
+                    width: 330,
                 },
             }}
         >
