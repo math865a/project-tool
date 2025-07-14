@@ -12,11 +12,11 @@ import { Gantt } from "~/src/features";
 
 // Configure MobX for better Vite compatibility
 configure({
-  enforceActions: "never",
-  computedRequiresReaction: false,
-  reactionRequiresObservable: false,
-  observableRequiresReaction: false,
-  disableErrorBoundaries: false,
+    enforceActions: "never",
+    computedRequiresReaction: false,
+    reactionRequiresObservable: false,
+    observableRequiresReaction: false,
+    disableErrorBoundaries: false,
 });
 
 export interface IWorkpackageBag {
@@ -42,7 +42,7 @@ export function WorkpackageProvider({
     const managers = useManagers();
     const Gantt = useGanttModel();
     const details = useDetails();
-    const {inform, informProps} = useInform()
+    const { inform, informProps } = useInform();
 
     return (
         <WorkpackageContext.Provider

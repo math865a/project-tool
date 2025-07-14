@@ -56,6 +56,23 @@ export class RemoveProjectManagerHandler
         RETURN pmLabels as pmLabels
     `;
 
+    refactorToDefaultProjectManagerQuery = `
+        CALL {
+            MATCH (defaultPM:ProjectManager)
+                WHERE defaultPM.name = "Ingen"
+            RETURN defaultPM
+        }
+        
+        CALL {
+            WITH pm, defaultPM
+            OPTIONAL MATCH (pm)-[rel:MANAGES]->(p:Plan)
+            
+            CALL apoc.refactor.from(rel, defaultPM)
+            YIELD output
+            RETURN {} AS nothing
+        }
+    `;
+
     async deleteProjectManager(id: string) {
         const queryResult = await this.client.write(this.deleteQuery, { id });
         const { summary } = queryResult;
@@ -65,6 +82,9 @@ export class RemoveProjectManagerHandler
     deleteQuery = `
         MATCH (pm:ProjectManager)
             WHERE pm.id = $id
+        
+        ${this.refactorToDefaultProjectManagerQuery}
+        
         DETACH DELETE pm
     `;
 
@@ -79,11 +99,7 @@ export class RemoveProjectManagerHandler
     removeLabelQuery = `
         MATCH (pm:ProjectManager)
             WHERE pm.id = $id
-        CALL {
-            WITH pm
-            OPTIONAL MATCH (pm)-[rel:MANAGES]->(p:Plan)
-            DELETE rel
-        }
+        ${this.refactorToDefaultProjectManagerQuery}
         REMOVE pm:ProjectManager
     `;
 }
