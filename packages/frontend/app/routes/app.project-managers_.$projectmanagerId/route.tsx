@@ -14,10 +14,10 @@ import WorkpackagesSection from "./Workpackages.Section";
 import { IProjectManagerProfile } from "./types";
 import { useRouteLoaderData } from "@remix-run/react";
 import BackAction from "~/src/layout/topbar/BackAction";
-import { namedAction } from "remix-utils/named-action";
 
 import { parseRequest } from "~/util/formData";
-import { FormResponse, HasAccess, Subject } from "~/src";
+import { HasAccess, Subject } from "~/src";
+import { namedAction } from "~/util";
 
 export const handle = {
     BackAction: <PageContext />,
@@ -48,10 +48,9 @@ export async function loader({
 
 export async function action({ request, params }: ActionFunctionArgs) {
     invariant(params.projectmanagerId, "Missing projectmanagerId");
-    const data = await request.formData();
-    return namedAction(data, {
+    return namedAction(request, {
         async deleteProjectManager() {
-            const result: FormResponse = await sendRequest(request, {
+            const result = await sendRequest(request, {
                 url: getServiceUrl("projectManager", params.projectmanagerId),
                 method: "DELETE",
             });
@@ -61,19 +60,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
             return json(result);
         },
         async deleteResource() {
-            const result: FormResponse = await sendRequest(request, {
+            return await sendRequest(request, {
                 url: getServiceUrl("resources", params.projectmanagerId),
                 method: "DELETE",
             });
-            return json(result);
         },
         async updateDetails() {
-            const result: FormResponse = await sendRequest(request, {
+            return await sendRequest(request, {
                 url: getServiceUrl("projectManager", params.projectmanagerId),
                 method: "POST",
                 body: await parseRequest(request),
             });
-            return json(result);
         },
     });
 }
