@@ -1,3 +1,2 @@
-export * from './AddUserAction';
-export * from './DeleteAction';
-export * from './ToggleResourceAction';
+export * from "./AddUserAction";
+export * from "./DeleteAction";

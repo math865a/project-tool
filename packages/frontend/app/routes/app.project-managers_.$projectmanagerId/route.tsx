@@ -59,12 +59,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
             }
             return json(result);
         },
-        async deleteResource() {
-            return await sendRequest(request, {
-                url: getServiceUrl("resources", params.projectmanagerId),
-                method: "DELETE",
-            });
-        },
         async updateDetails() {
             return await sendRequest(request, {
                 url: getServiceUrl("projectManager", params.projectmanagerId),
