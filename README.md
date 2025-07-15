@@ -2,27 +2,6 @@
 
 A comprehensive project management and resource allocation system designed for enterprise-level project coordination and team management.
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Domain & Business Context](#domain--business-context)
-- [Requirements](#requirements)
-- [Data Model](#data-model)
-- [Technology Stack](#technology-stack)
-- [Architecture & Design](#architecture--design)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Development](#development)
-- [Deployment](#deployment)
-- [Features](#features)
-- [API Documentation](#api-documentation)
-- [Testing Strategy](#testing-strategy)
-- [Performance & Scalability](#performance--scalability)
-- [Security](#security)
-- [Monitoring & Logging](#monitoring--logging)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Project Overview
 
 Project Tool is a sophisticated project management application that was developed for a company and successfully served 60+ concurrent users. 
@@ -69,7 +48,8 @@ and the client when defining each work package. For practical project management
 
 The main purpose of **Project Tool** was to manage resource allocations and capacity. In practice, each **resource** (with an assigned **resource type**) would be assigned individual **tasks** in
 a **work package** creating an **allocation**. In practise, **allocations** had to be very flexible since multiple **resources** could be assigned a **task**, but the amount of work could be spread unevenly over the duration of the **task**
-and this uneven distribution was not necessarily the same for each **resource**. Thus each **resource** could have multiple **allocations** for a single **task** that could be discontinuous over the duration of the **task**.
+and this uneven distribution was not necessarily the same for each **resource**. Thus each **resource** could have multiple **allocations** for a single **task** that could be discontinuous over the duration of the **task**. 
+Each **allocation** would thus result in an array of **bookings**, one for each day over its period with the total duration divided by the number of days as the booking duration of each day. 
 
 ![Planing context](/docs/planning-context.png)
 
@@ -93,7 +73,7 @@ When a **work package** was first ordered by the client, a **project manager** w
 ### High level application architecture
 
 The application consists of several components with clear interaction patterns. 
-The **frontend** is a React and RemixJS (server-rendered React app with client-side transitions) that communicates with the NestJS **gateway**. The **gateway** is responsible for serving the frontend with the needed data from
+The **frontend** is a React and RemixJS (server-rendered React app with client-side transitions) that communicates with the NestJS **gateway** via https and websockets. The **gateway** is responsible for serving the frontend with the needed data from
 one or more services living in the NestJS **service core**. The **gateway** communicates with the **service core** using request-reply via NATS. Services within the **service core** does not communicate directly but only via domain events
 decoupling the services from each other. The **service core** is responsible for the business logic and data access, using **Neo4j** as the primary data store. **MongoDB** is used for storing domain events.
 
@@ -108,273 +88,117 @@ A webserver (Nginx) was used to serve the frontend. This constricted outside acc
 ![Deployment architecture](/docs/deployment-diagram.png)
 
 
+### Database schema
 
+The database schema looks a lot like the ER models of the domains above. Notably, **bookings** are modeled as relationships between an **allocation** and a **business day**. This lets me take advantage of the strong relational capabilities
+of the graph database as i can query the bookings as a relationship. A **calendar** is defined by a specific pattern of work days and time per week and a **resource** is assigned a **calendar**. This allows for modeling different work hours
+quite flexibly. 
 
-#### Project Management
-- **Workpackage**: Core project unit with planning, stages, and financial tracking
-- **Plan/Activity**: Detailed project planning with timelines and resource allocation
-- **ProjectManager**: Project leadership and management roles
-- **Stage**: Project lifecycle stages (e.g., Planning, Execution, Completion)
-- **BookingStage**: Resource booking status tracking
+As mentioned in the domain description, it is a pair consisting of a **resource** and a **resourcetype** that are booking to tasks. In the data model, this is modeled as an **agent** who is then the entity that is allocated to tasks.
 
-#### Resource Management
-- **Resource**: Human resources with skills, costs, and availability
-- **ResourceType**: Categorization of resource types and specializations
-- **Team**: Dynamic team compositions for project assignments
-- **Assignment**: Resource-to-task allocations with time periods
+**Plans**, **deliveries**, **tasks**, and **allocations** all have a label called **activity** besides their own specific label (such as allocation) in order enable hierarchical queries. 
 
-#### Financial & Contract Management
-- **Contract**: Project contracts and agreements
-- **FinancialSource**: Funding sources and budget allocation
-- **Cost Tracking**: Resource costs, sales, profit calculations
+If i were to redesign this data model, i would omit **plans** and make a **work package** have an **activity** label instead and making a **project manager** manage the **work package** instead. 
+The introduction of a **plan** is redundant and not needed. 
 
-#### User Management & Security
-- **User**: System users with authentication and profiles
-- **AccessGroup**: Role-based permission groups
-- **Credentials**: Secure authentication data
-- **Permissions**: Granular access control per page/feature
+![Database schema](/docs/database-schema.png)
 
-### Graph Relationships (Neo4j)
-- `(User)-[:HAS_CREDENTIALS]->(Credentials)`
-- `(User)-[:IN_ACCESS_GROUP]->(AccessGroup)`
-- `(Workpackage)-[:HAS]->(Plan)`
-- `(Plan)-[:MANAGES]->(ProjectManager)`
-- `(Plan)<-[:IS_ASSIGNED_TO]-(Agent)-[:IS]->(Resource)`
-- `(Workpackage)-[:IS_UNDER]->(Contract)`
-- `(Workpackage)-[:IS_FINANCED_BY]->(FinancialSource)`
+### Rationale behind choosing a graph database
+The main feature that required significant consideration in regard to performance, were the writing and (especially) the reading of bookings.
+The work packages were planned on a Gantt chart, which were very write heavy since tasks and allocations were moved around a lot. We wanted to have a real time view of the bookings, so every time someone adjusted the period of a task,
+all the bookings should immediately show on the capacity board and we wanted to show this in 3 different views - daily, weekly, and monthly. Besides, we wanted the ability to filter and for example only show the soft bookings.
+This requirement meant that I ruled out aggregating periodically, which would otherwise be a good choice (and would perhaps even making a traditional SQL database a better choice), 
+and instead opting for a query-on-demand strategy. This required a database that excelled at querying relationships (deep traversal), such as a graph database. 
 
-## Technology Stack
+SQL databases are quite efficient at joining 1-2 relationships but when we get to 3-5 hops a graph database is about 10x faster.
 
-### Frontend
-- **Framework**: Remix (React-based full-stack framework)
-- **UI Library**: Material-UI (MUI) with custom design system
-- **State Management**: MobX with MobX-Keystone for reactive state
-- **Charts & Visualization**: 
-  - Visx for custom data visualizations
-  - Recharts for standard charts
-  - React Big Calendar for scheduling
-- **Forms**: React Hook Form with Yup validation
-- **Real-time**: Socket.IO client for live updates
-- **Build Tool**: Vite for fast development and building
+Equipped with a graph database, I could query the bookings directly and with excellent performance, resulting in a seamless experience when viewing the bookings from the capacity board:
 
-### Backend
-- **Framework**: NestJS with TypeScript
-- **Architecture**: Microservices with CQRS pattern
-- **Message Broker**: NATS for inter-service communication
-- **Authentication**: JWT with Passport.js
-- **Validation**: Class-validator and class-transformer
-- **Email**: SendGrid for transactional emails
+```typescript
+@QueryHandler(CapacityBatchQuery)
+export class CapacityBatchQueryHandler
+    implements IQueryHandler<CapacityBatchQuery, CapacityBatch[]>
+{
+    constructor(private readonly client: Neo4jClient) {}
 
-### Databases
-- **Document Store**: MongoDB with Mongoose ODM
-- **Graph Database**: Neo4j Enterprise with APOC procedures
-- **Caching**: Redis for session and data caching
+    async execute({ dto }: CapacityBatchQuery): Promise<CapacityBatch[]> {
+        const queryResult = await this.client.read(this.query, {
+            ...dto,
+            bookingStages: ["Soft", "Hard"],
+        });
+        const response: any[] = queryResult.records.map((d) =>
+            d.get("capacity")
+        );
+        return response;
+    }
 
-### Infrastructure
-- **Containerization**: Docker with Docker Compose
-- **Package Manager**: pnpm for monorepo management
-- **Development**: Hot reloading, TypeScript compilation
-- **Testing**: Jest for unit and integration tests
+    query = `
+            UNWIND $bounds AS bound
+            MATCH (resource:Resource)--(calendar:Calendar)-[cap:HAS_WORKDAY]-(day:CalendarDay)
+                WHERE date(bound.ts) <= date(day.date) AND date(bound.tf) > date(day.date)
+                AND resource.id IN $rows
+            WITH resource, bound, round(sum(cap.capacity)/60,1) as capacityDuration
 
-## Architecture & Design
+            CALL {
+                WITH bound, resource
+                OPTIONAL MATCH (resource)<-[:IS]-(:Agent)-[:IS_ASSIGNED_TO]->(a:Allocation)-[b:HAS_BOOKING]->(day:CalendarDay)
+                    WHERE date(bound.ts) <= date(day.date) AND date(bound.tf) > date(day.date)
+                    AND (a)<-[:HAS*4]-(:Workpackage)--(:BookingStage {name: "Soft"})
+                RETURN round(sum(b.duration),1)/60 AS softBookedDuration
+            }
 
-### System Architecture
-The application follows a microservices architecture with clear separation of concerns:
+            CALL {
+                WITH bound, resource
+                OPTIONAL MATCH (resource)<-[:IS]-(:Agent)-[:IS_ASSIGNED_TO]->(a:Allocation)-[b:HAS_BOOKING]->(day:CalendarDay)
+                    WHERE bound.ts <= day.date AND bound.tf > day.date
+                    AND (a)<-[:HAS*4]-(:Workpackage)--(:BookingStage {name: "Hard"})
+                RETURN round(sum(b.duration),1)/60 AS hardBookedDuration
+            }
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │    Gateway      │    │  Service Core   │
-│   (Remix)       │◄──►│   (NestJS)      │◄──►│   (NestJS)      │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                              │                        │
-                              ▼                        ▼
-                       ┌─────────────────┐    ┌─────────────────┐
-                       │      NATS       │    │   MongoDB +     │
-                       │   (Message      │    │     Neo4j       │
-                       │    Broker)      │    │   (Databases)   │
-                       └─────────────────┘    └─────────────────┘
-```
-
-### Design Patterns
-- **CQRS (Command Query Responsibility Segregation)**: Separate read and write operations
-- **Event Sourcing**: Track all changes as events
-- **Repository Pattern**: Abstract data access layer
-- **Factory Pattern**: Object creation and initialization
-- **Observer Pattern**: Reactive state management with MobX
-
-### Frontend Architecture
-- **Component-Based**: Reusable UI components with Material-UI
-- **State Management**: MobX-Keystone for complex state modeling
-- **Routing**: Remix file-based routing with nested layouts
-- **Real-time Updates**: WebSocket connections for live data synchronization
-
-## Project Structure
+            RETURN {
+                id: apoc.text.join([resource.id, bound.ts],"-"),
+                rowId: resource.id,
+                stats: {
+                    softBookedDuration: softBookedDuration,
+                    hardBookedDuration: hardBookedDuration,
+                    capacityDuration: capacityDuration
+                },
+                interval: {
+                    ts: bound.ts,
+                    tf: bound.tf
+                },
+                viewMode: $viewMode,
+                rowMode: $rowMode
+            } AS capacity
+    `;
+}
 
 ```
-project-tool/
-├── packages/
-│   ├── frontend/                 # Remix-based frontend application
-│   │   ├── app/
-│   │   │   ├── routes/          # File-based routing
-│   │   │   ├── src/
-│   │   │   │   ├── components/  # Reusable UI components
-│   │   │   │   ├── features/    # Feature-specific modules
-│   │   │   │   ├── hooks/       # Custom React hooks
-│   │   │   │   └── design-system/ # Design tokens and themes
-│   │   │   └── pages/           # Page-specific components
-│   │   └── public/              # Static assets
-│   └── services/                # Backend microservices
-│       ├── apps/
-│       │   ├── gateway/         # API gateway service
-│       │   └── service-core/    # Core business logic service
-│       └── libs/                # Shared libraries
-│           ├── cqrs/            # CQRS implementation
-│           ├── definitions/     # Shared type definitions
-│           ├── dto/             # Data transfer objects
-│           ├── events/          # Event definitions
-│           ├── mongodb/         # MongoDB utilities
-│           ├── neo4j/           # Neo4j utilities
-│           └── nats/            # NATS messaging utilities
-├── docker-compose.yml           # Development environment setup
-└── package.json                 # Root package configuration
+
+Here the variables are defined as follow:
+- *viewMode* = The time scale we are using i.e. daily, weekly, or monthly
+- *rows* = The ids of the resources that we are query for
+- *bounds* = A list of start dates and end dates that we are querying for
+
+As you can tell from the query, we are filtering on 4+ connected relationships. In words, what we are doing is:
+
+```
+For a given resource and a time range defined by bound.ts (start time) and bound.tf (finish time):
+- Find all CalendarDay nodes (called day) that are connected to the resource via this path:
+    - The resource is linked by an IS relationship from an Agent,
+    - The Agent is assigned to an Allocation via an IS_ASSIGNED_TO relationship,
+    - That Allocation has a booking (b) on a CalendarDay (day) via a HAS_BOOKING relationship.
+- Filter those bookings where:
+    - The booking's date (day.date) falls within the range from bound.ts (inclusive) to bound.tf (exclusive),
+    - And the Allocation is connected (via **4 HAS relationships**) up to a Workpackage that is associated (via a -- relationship) to a BookingStage node named "Soft".*
 ```
 
-## Getting Started
+And we do this 2x the amount of rows given. Here, a graph database is unmatched.
 
-### Prerequisites
-- Node.js >= 20.0.0
-- pnpm >= 8.0.0
-- Docker and Docker Compose
-- Neo4j Enterprise (for production)
 
-### Environment Setup
-1. Clone the repository
-2. Install dependencies: `pnpm install`
-3. Set up environment variables (see `.env.example`)
-4. Start development services: `docker-compose up -d`
-5. Run the application: `pnpm dev`
 
-### Environment Variables
-```bash
-# Database Connections
-NEO4J_AUTH=neo4j/password
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=password
-MONGO_CONN=mongodb://mongo-db:27017
 
-# Messaging
-NATS_CONN=nats://nats-service:4222
 
-# Authentication
-JWT_SECRET=your-jwt-secret
 
-# External Services
-SENDGRID_API_KEY=your-sendgrid-key
-```
 
-## Development
 
-### Available Scripts
-```bash
-# Development
-pnpm dev              # Start all services in development mode
-pnpm build            # Build all packages
-pnpm test             # Run tests across all packages
-pnpm lint             # Lint all packages
-
-# Individual package commands
-pnpm --filter @project-tool/frontend dev
-pnpm --filter @project-tool/services start:dev
-```
-
-### Development Workflow
-1. **Frontend Development**: Hot reloading with Vite
-2. **Backend Development**: NestJS with file watching
-3. **Database Changes**: Neo4j Cypher queries and MongoDB migrations
-4. **Testing**: Jest with coverage reporting
-
-### Code Quality
-- **TypeScript**: Strict type checking across all packages
-- **ESLint**: Consistent code style and best practices
-- **Prettier**: Automated code formatting
-- **Pre-commit Hooks**: Automated quality checks
-
-## Deployment
-
-[TO BE FILLED: Deployment strategies, CI/CD pipeline, production environment setup]
-
-## Features
-
-### Core Features
-- **Project Management**: Complete workpackage lifecycle management
-- **Resource Planning**: Advanced capacity and resource allocation
-- **Gantt Charts**: Interactive project timeline visualization
-- **Team Management**: Dynamic team composition and assignment
-- **Financial Tracking**: Contract and budget management
-- **User Administration**: Role-based access control
-- **Real-time Updates**: Live data synchronization across users
-
-### Advanced Features
-- **Capacity Planning**: Resource utilization and availability tracking
-- **Timeline Management**: Interactive scheduling and timeline manipulation
-- **Reporting**: Comprehensive project and resource reports
-- **Email Notifications**: Automated user communication
-- **Multi-tenancy**: Support for multiple organizations
-
-## API Documentation
-
-[TO BE FILLED: API endpoints, request/response schemas, authentication]
-
-## Testing Strategy
-
-### Test Types
-- **Unit Tests**: Individual component and service testing
-- **Integration Tests**: Service-to-service communication testing
-- **E2E Tests**: Full user workflow testing
-- **Performance Tests**: Load and stress testing
-
-### Test Coverage
-- Frontend components and hooks
-- Backend services and controllers
-- Database operations and queries
-- API endpoints and validation
-
-## Performance & Scalability
-
-### Performance Optimizations
-- **Database Indexing**: Optimized Neo4j and MongoDB queries
-- **Caching**: Redis-based caching for frequently accessed data
-- **Lazy Loading**: Component and data lazy loading
-- **Code Splitting**: Dynamic imports for better bundle sizes
-
-### Scalability Considerations
-- **Microservices**: Horizontally scalable service architecture
-- **Message Queuing**: NATS for reliable inter-service communication
-- **Database Sharding**: Support for distributed data storage
-- **Load Balancing**: Gateway-level request distribution
-
-## Security
-
-### Security Measures
-- **Authentication**: JWT-based secure authentication
-- **Authorization**: Role-based access control (RBAC)
-- **Input Validation**: Comprehensive input sanitization
-- **HTTPS**: Secure communication protocols
-- **Session Management**: Secure session handling
-
-### Data Protection
-- **Password Hashing**: Secure credential storage
-- **API Security**: Rate limiting and request validation
-- **Audit Logging**: Comprehensive activity tracking
-
-## Monitoring & Logging
-
-[TO BE FILLED: Monitoring tools, logging strategy, alerting, performance metrics]
-
-## Contributing
-
-[TO BE FILLED: Contribution guidelines, code review process, development standards]
-
-## License
-
-[TO BE FILLED: License information and terms]
