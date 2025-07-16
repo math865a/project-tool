@@ -196,6 +196,8 @@ For a given resource and a time range defined by bound.ts (start time) and bound
 And we do this 2x the amount of rows given. Here, a graph database is unmatched.
 
 
+### Known bugs
+
 
 
 
