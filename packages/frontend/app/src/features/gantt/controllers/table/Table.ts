@@ -23,7 +23,7 @@ export class GanttTable extends Model({
         identity: 175,
         period: 125,
         duration: 60,
-        work: 90,
+        work: 120,
         team: 140,
         timeline: 500,
     })),

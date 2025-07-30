@@ -12,7 +12,7 @@ import {
 } from "mobx-keystone";
 import { Gantt } from "~/src/features";
 import { AllocationBar, Interval } from "gantt/models";
-import { getContrastColor } from "~/util";
+import { getContrastColor, normalize } from "~/util";
 
 @model("allocation")
 export class Allocation extends Model({
@@ -33,9 +33,13 @@ export class Allocation extends Model({
     }
     @computed
     get Assignment() {
-        return this.AllotmentStore?.Assignments?.find(
+        const A = this.AllotmentStore?.Assignments?.find(
             (d) => d.id === this.assignment
         );
+        if (!A) {
+            throw new Error(`Allocation with id ${this.id} has no Assignment`);
+        }
+        return A;
     }
 
     @computed
@@ -49,6 +53,8 @@ export class Allocation extends Model({
             defaultMinutes: _.round(defaultWork * 60),
             overtimeMinutes: _.round(overtimeWork * 60),
         });
+
+        this.AllotmentStore?.saveTimesheet(this);
     }
 
     @modelAction
@@ -111,10 +117,8 @@ export class Allocation extends Model({
     @computed
     get periodState() {
         return {
-            start: this.Timeline.xScale.invert(this.Bar.coord.x),
-            end: this.Timeline.xScale.invert(
-                this.Bar.coord.x + this.Bar.coord.w
-            ),
+            start: this.Timeline.xScale.invert(this.Bar.x1),
+            end: this.Timeline.xScale.invert(this.Bar.x1 + this.Bar.w),
         };
     }
 
@@ -184,4 +188,28 @@ export class Allocation extends Model({
             };
         });
     }
+
+    normalizeOrGetCurrentDate(date: dt | null) {
+        if (date) {
+            return normalize(date);
+        }
+        return this.Interval.startDate;
+    }
+
+    @modelAction
+    handleDatePickerChange = (value: [dt | null, dt | null]) => {
+        let [start, end] = value;
+        const { startDate: taskStartDate, endDate: taskEndDate } =
+            this.Assignment.Task.Interval;
+
+        start = this.normalizeOrGetCurrentDate(start);
+        end = this.normalizeOrGetCurrentDate(end);
+
+        const period = int.fromDateTimes(
+            dt.min(start, end),
+            dt.max(start, end)
+        );
+
+        this.Interval.updatePeriod(period);
+    };
 }

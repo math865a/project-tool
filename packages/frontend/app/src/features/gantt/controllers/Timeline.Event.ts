@@ -3,9 +3,9 @@ import { scaleLinear } from "@visx/scale";
 import { Bar } from "gantt-models";
 import { Granularity } from "gantt/constants";
 import _ from "lodash";
-import { DurationLike, DateTime as dt, Interval as int } from "luxon";
+import { DateTime as dt, DurationLike, Interval as int } from "luxon";
 import { computed, runInAction } from "mobx";
-import { Model, Ref, getRoot, model, modelAction, prop } from "mobx-keystone";
+import { getRoot, Model, model, modelAction, prop, Ref } from "mobx-keystone";
 import { ActivityDataBag } from "../columns/timeline/activity.cell/dnd";
 import { Gantt } from "./Gantt";
 
@@ -121,17 +121,17 @@ export default class TimelineEvent extends Model({
     }
 
     @computed
-    get TimelineIntervals(){
-        return getRoot<Gantt>(this).TimelineIntervals
+    get TimelineIntervals() {
+        return getRoot<Gantt>(this).TimelineIntervals;
     }
 
     @computed
     get throttleStep() {
         switch (this.TimelineIntervals.granularity) {
             case Granularity.q:
-                return 0.5*this.Timeline.dpx;
+                return 0.5 * this.Timeline.dpx;
             case Granularity.m:
-                return 0.25*this.Timeline.dpx;
+                return 0.25 * this.Timeline.dpx;
             default:
                 return (1 / 4) * this.Timeline.dpx;
         }
@@ -279,15 +279,11 @@ export default class TimelineEvent extends Model({
         this.setBar(null);
         this.setBarId(null);
         this.setIsDragging(false);
-
         runInAction(() => {
             const dt = this.Timeline.dtScale.invert(this.Timeline.dxBounds);
-            this.Timeline.setDs(
-                this.Timeline.ds +
-                    dt
-            );
-            this.Timeline.setDf(this.Timeline.df + dt)
-        })
+            this.Timeline.setDs(this.Timeline.ds + dt);
+            this.Timeline.setDf(this.Timeline.df + dt);
+        });
 
         this.Timeline.setDxBounds(0);
         this.setDxBoundary(0);

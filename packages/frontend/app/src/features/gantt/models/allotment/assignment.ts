@@ -2,24 +2,23 @@ import _ from "lodash";
 import { DateTime as dt, Duration as dur, Interval as int } from "luxon";
 import { computed } from "mobx";
 import {
-    Model,
     getRoot,
     idProp,
+    Model,
     model,
     modelAction,
-    prop
+    prop,
 } from "mobx-keystone";
 import { Gantt } from "../../controllers/Gantt";
 import { Allocation } from "./allocation";
-import { AssignmentCanvas } from "./assignment.canvas";
 import { formatDecimal } from "~/util";
 import { AssignmentJson } from "../../types";
+
 @model("assignment")
 export class Assignment extends Model({
     id: idProp.typedAs<string>(),
     agent: prop<string>().withSetter(),
     task: prop<string>().withSetter(),
-    Canvas: prop<AssignmentCanvas>(() => new AssignmentCanvas({})),
     Allocations: prop<Allocation[]>(() => []),
     kind: prop<"Assignment">("Assignment"),
 }) {
@@ -37,6 +36,17 @@ export class Assignment extends Model({
     onDragEnd = () => {
         this.Allocations.forEach((Allocation) => Allocation.Bar.save());
     };
+
+    @computed
+    get Allocation() {
+        const al = this.Allocations[0];
+        if (!al) {
+            throw new Error(
+                "Assignment has no allocations, cannot access Allocation"
+            );
+        }
+        return al;
+    }
 
     @computed
     get path() {
@@ -66,7 +76,11 @@ export class Assignment extends Model({
 
     @computed
     get Task() {
-        return this.ActivityStore.Activities.find((d) => d.id === this.task);
+        const T = this.ActivityStore.Activities.find((d) => d.id === this.task);
+        if (!T) {
+            throw new Error(`Assignment with id ${this.id} has no Task`);
+        }
+        return T;
     }
 
     @computed
@@ -238,7 +252,6 @@ export class Assignment extends Model({
     get hasAllocationDragEvent() {
         return _.some(this.Allocations, (d) => d.Bar.event !== null);
     }
-
 
     @modelAction
     update(json: AssignmentJson) {}

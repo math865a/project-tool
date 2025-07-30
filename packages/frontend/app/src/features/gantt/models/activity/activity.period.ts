@@ -90,19 +90,9 @@ export class ActivityPeriod extends Model(
         let end: dt = this.Activity.Interval.endDate;
         if (values[0]) {
             start = normalize(values[0]);
-            /*this.Activity.Interval.setStart({
-				day: values[0].day,
-				month: values[0].month,
-				year: values[0].year,
-			});*/
         }
         if (values[1]) {
             end = normalize(values[1]);
-            /*this.Activity.Interval.setEnd({
-				day: values[1].day,
-				month: values[1].month,
-				year: values[1].year,
-			});*/
         }
         const period = int.fromDateTimes(
             dt.min(start, end),

@@ -18,8 +18,12 @@ import {
 import type { EditValues } from "~/routes/app.workpackages_.$workpackageId.gantt.$allocationId/dialog/definitions/types";
 import { Gantt } from "~/src/features";
 import { DateTime as dt, Interval as int } from "luxon";
-import { CreateAllocationDto, CreateAssignmentDto } from "~/src/_definitions";
-import { generateId, getDateObject } from "~/util";
+import {
+    CreateAllocationDto,
+    CreateAssignmentDto,
+    UpdateAllocationDto,
+} from "~/src/_definitions";
+import { generateId, getDateObject, getDatetimeFromObject } from "~/util";
 import { AllocationJson, AssignmentJson } from "../../types";
 
 @model("allotment-store")
@@ -171,6 +175,24 @@ export class AllotmentStore extends Model({
 
         this.Transport.updateAllocation(dto);
     }
+
+    @modelAction
+    saveTimesheet(Allocation: Allocation) {
+        const dto: UpdateAllocationDto = {
+            allocationId: Allocation.id,
+            agentId: Allocation.Assignment.agent,
+            startDate: getDatetimeFromObject(
+                Allocation.Interval.start
+            ).toFormat("yyyy-MM-dd"),
+            endDate: getDatetimeFromObject(Allocation.Interval.end).toFormat(
+                "yyyy-MM-dd"
+            ),
+            defaultMinutes: Allocation.timesheet.defaultMinutes,
+            overtimeMinutes: Allocation.timesheet.overtimeMinutes,
+        };
+        this.Transport.updateAllocation(dto);
+    }
+
     @modelAction
     deleteAllocation(Allocation: Allocation) {
         const Assignment = Allocation.Assignment;
