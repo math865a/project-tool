@@ -185,3 +185,4 @@ The query filters on 4+ connected relationships. In summary, for a given resourc
    - The Allocation is connected (via 4 HAS relationships) to a Workpackage associated with a BookingStage node named "Soft"
 
 This process is repeated twice for the number of rows given. In this scenario, a graph database provides unmatched performance.
+
