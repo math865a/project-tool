@@ -1,3 +1,4 @@
+
 services:
   mongo-db:
     extends:
@@ -8,7 +9,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongo-data-dev:/data/db
+      - mongo-data:/data/db
 
   mongo-express:
     image: mongo-express
@@ -18,7 +19,7 @@ services:
       - ME_CONFIG_MONGODB_PORT=27017
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
     networks:
-      - db-tier-dev
+      - db-tier
     depends_on:
       - mongo-db
     ports:
@@ -35,7 +36,7 @@ services:
       - 7999:7687
       - 2004:2004
     volumes:
-      - neo4j-data-dev:/data
+      - neo4j-data:/data
       - ./neo4j/logs:/var/lib/neo4j/logs
       - ./neo4j/plugins:/var/lib/neo4j/plugins
       #- type: bind
@@ -66,55 +67,26 @@ services:
       - 6222:6222
       - 8222:8222
 
-  service-core:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: service
-    environment:
-      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
-    container_name: service-core
-    command: pnpm run start:dev service-core
-
   gateway:
+    image: project-tool-gateway
+    container_name: gateway
     extends:
       file: ./docker-compose.templates.yml
       service: gateway-service
-    container_name: gateway
     environment:
       PORT: 5000
-    command: pnpm run start:dev gateway
     ports:
       - 5001:5000
 
-  frontend:
-    extends:
-      file: ./docker-compose.templates.yml
-      service: frontend
-    container_name: frontend
-    build:
-      context: ./packages/frontend
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./packages/frontend:/app
-      - /app/node_modules
-    environment:
-      PORT: 5173
-      API_DOMAIN: http://gateway:5000
-      SOCKET_DOMAIN: http://127.0.0.1:5001
-      NODE_ENV: development
-      GATEWAY_PORT: 5000
-    ports:
-      - 5173:5173
-      # - 8002:8002
 
 volumes:
-  mongo-data-dev:
-  neo4j-data-dev:
+  mongo-data:
+  neo4j-data:
 
 networks:
-  service-tier-dev:
+  service-tier:
     external: true
-  front-tier-dev:
+  front-tier:
     external: true
-  db-tier-dev:
+  db-tier:
     external: true

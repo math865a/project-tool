@@ -1,4 +1,4 @@
-# base node image
+ # base node image
 FROM node:19-alpine3.16 as base
 
 # set for base and all layer that inherit from it
@@ -11,64 +11,32 @@ FROM base as deps
 
 WORKDIR /app
 
-# Copy workspace configuration
-COPY ../../pnpm-workspace.yaml ./
-COPY ../../pnpm-lock.yaml ./
+ADD package.json tsconfig*.json ./
+RUN pnpm install --production=false
 
-# Copy package files
-COPY package.json ./
-COPY tsconfig*.json ./
-
-# Install all dependencies (including dev dependencies)
-RUN pnpm install --frozen-lockfile
-
-# Build the app (keep dev dependencies for build)
-FROM base as build
-
-WORKDIR /app
-
-# Copy workspace configuration
-COPY ../../pnpm-workspace.yaml ./
-COPY ../../pnpm-lock.yaml ./
-
-# Copy all source code
-COPY . .
-
-# Copy node_modules from deps stage
-COPY --from=deps /app/node_modules ./node_modules
-
-# Build the gateway application
-RUN pnpm run build gateway
-
-# Setup production node_modules (after build is complete)
+# Setup production node_modules
 FROM base as production-deps
 
 WORKDIR /app
 
-# Copy workspace configuration
-COPY ../../pnpm-workspace.yaml ./
-COPY ../../pnpm-lock.yaml ./
-
-# Copy package files
-COPY package.json ./
-COPY tsconfig*.json ./
-
-# Copy node_modules from deps stage and prune
 COPY --from=deps /app/node_modules ./node_modules
+ADD package.json tsconfig*.json ./
 RUN pnpm prune --production
+
+# Build the app
+FROM base as build
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN pnpm run build gateway
 
 # Finally, build the production image with minimal footprint
 FROM base
 
 WORKDIR /app
 
-# Copy production dependencies
 COPY --from=production-deps --chown=node:node /app/node_modules ./node_modules
-
-# Copy built application
 COPY --from=build --chown=node:node /app/dist ./dist
-
-# Copy package files for runtime
 COPY package*.json ./
-
 CMD ["pnpm", "run", "gateway:prod"]

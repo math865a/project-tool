@@ -8,7 +8,7 @@ services:
       service: base
     profiles: [ "databases" ]
     networks:
-      - db-tier-dev
+      - db-tier
 
   node-base:
     extends:
@@ -21,14 +21,14 @@ services:
       service: node-base
     profiles: [ "frontends" ]
     networks:
-      - front-tier-dev
+      - front-tier
 
   transport:
     extends:
       service: base
     profiles: [ "transports" ]
     networks:
-      - service-tier-dev
+      - service-tier
 
   service:
     extends:
@@ -47,8 +47,8 @@ services:
       NEO4J_PASSWORD: ${NEO4J_PASSWORD}
       MONGO_CONN: mongodb://mongo-db:27017
     networks:
-      - service-tier-dev
-      - db-tier-dev
+      - service-tier
+      - db-tier
 
   gateway-service:
     extends:
@@ -56,4 +56,4 @@ services:
     environment:
       JWT_SECRET: ${JWT_SECRET}
     networks:
-      - front-tier-dev
+      - front-tier
