@@ -20,8 +20,8 @@ export const Neo4jProvider: Provider = {
         }
 
         return neo4j.driver(
-            process.env.NEO4J_CONN,
-            neo4j.auth.basic("neo4j", "password"),
+            neo4jConn,
+            neo4j.auth.basic(neo4jUser, neo4jPassword),
             { disableLosslessIntegers: true }
         );
     },

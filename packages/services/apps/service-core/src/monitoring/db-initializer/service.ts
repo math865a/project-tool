@@ -1,4 +1,5 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
+import { randomBytes } from "crypto";
 import { capitalize } from "lodash";
 import { DateTime as dt, Interval as int } from "luxon";
 import { Neo4jClient } from "@ns/neo4j";
@@ -236,6 +237,14 @@ export class DBInitService implements OnModuleInit {
     }
 
     async createAppNodes() {
+        const adminEmail = process.env.ADMIN_EMAIL ?? "admin@project-tool.local";
+        const adminPassword = randomBytes(16).toString("hex");
+        console.log("=================================================");
+        console.log("  INITIAL ADMIN CREDENTIALS (shown once only)");
+        console.log(`  Email:    ${adminEmail}`);
+        console.log(`  Password: ${adminPassword}`);
+        console.log("=================================================");
+
         await this.client.write(`
 
         CALL {
@@ -252,7 +261,7 @@ export class DBInitService implements OnModuleInit {
                 WITH adminGroup
                 CREATE (u:User {
                     name: "Admin Admin",
-                    email: "smth@gmail.com",
+                    email: $adminEmail,
                     lastSeen: null,
                     isOnline: false,
                     isDeactivated: false,
@@ -262,8 +271,8 @@ export class DBInitService implements OnModuleInit {
                 })
                 CREATE (c:Credentials {
                     changedAt: timestamp(),
-                    password: "pass",
-                    username: "smth@gmail.com"
+                    password: $adminPassword,
+                    username: $adminEmail
                 })
                 MERGE (u)-[:HAS_CREDENTIALS]->(c)
                 MERGE (u)-[:IN_ACCESS_GROUP {timestamp: timestamp()}]->(adminGroup)
@@ -386,6 +395,6 @@ export class DBInitService implements OnModuleInit {
                 }]->(usersPage)
             }
 
-        `);
+        `, { adminEmail, adminPassword });
     }
 }

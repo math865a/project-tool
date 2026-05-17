@@ -24,7 +24,7 @@ export class ValidateCredentialsHandler
             this.publisher.publish(new ValidCredentialsEvent(uid));
         } else {
             this.publisher.publish(
-                new InvalidCredentialsEvent(email, password)
+                new InvalidCredentialsEvent(email)
             );
         }
         return { uid };

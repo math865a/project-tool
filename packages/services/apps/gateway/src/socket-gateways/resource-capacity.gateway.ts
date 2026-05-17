@@ -1,3 +1,4 @@
+import { UseGuards } from "@nestjs/common";
 import {
     MessageBody,
     SubscribeMessage,
@@ -7,6 +8,7 @@ import {
 import { ResourceCapacityInstructionsDto } from "@ns/dto";
 import { schedulePatterns } from "@ns/endpoints";
 import { NatsClient } from "@ns/nats";
+import { WsGuard } from "@ns/session";
 import { Server } from "socket.io";
 
 @WebSocketGateway({
@@ -21,6 +23,7 @@ export class ResourceCapacityGateway {
     @WebSocketServer()
     server: Server;
 
+    @UseGuards(WsGuard)
     @SubscribeMessage("get:workpackage-tasks")
     async getWorkpackageTasks(
         @MessageBody("instruction")
@@ -33,6 +36,7 @@ export class ResourceCapacityGateway {
         });
     }
 
+    @UseGuards(WsGuard)
     @SubscribeMessage("get:capacity-difference-timeseries")
     async getCapacityDifferenceTimeseries(
         @MessageBody() instruction: ResourceCapacityInstructionsDto
@@ -43,6 +47,7 @@ export class ResourceCapacityGateway {
         );
     }
 
+    @UseGuards(WsGuard)
     @SubscribeMessage("get:booking-stage-timeseries")
     async getBookingStageTimeseries(
         @MessageBody() instruction: ResourceCapacityInstructionsDto
@@ -53,6 +58,7 @@ export class ResourceCapacityGateway {
         );
     }
 
+    @UseGuards(WsGuard)
     @SubscribeMessage("get:workpackage-data")
     async getWorkpackageTimeseries(
         @MessageBody() instruction: ResourceCapacityInstructionsDto
