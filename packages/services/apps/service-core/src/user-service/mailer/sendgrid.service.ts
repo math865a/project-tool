@@ -16,9 +16,7 @@ export class SendgridService {
         private client: NatsClient,
         public publisher: DomainEvents
     ) {
-        SendGrid.setApiKey(
-            "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"
-        );
+        SendGrid.setApiKey(process.env.SENDGRID_API_KEY as string);
     }
 
     private async getCredentials(uid: string) {

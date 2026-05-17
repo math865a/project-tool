@@ -7,7 +7,7 @@ export const sessionStorage = createCookieSessionStorage({
         name: "__session",
         path: "/",
         sameSite: "lax",
-        secrets: ["3Aa&q!$-{~G7tiiUZnJU+UX%nM]za<"],
+        secrets: [process.env.SESSION_SECRET as string],
     },
 });
 

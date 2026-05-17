@@ -8,12 +8,12 @@ import { VerifySession, VerifySessionHandler } from "../commands";
 export class WsGuard implements CanActivate {
     constructor(private verify: VerifySessionHandler) {}
 
-    canActivate(
+    async canActivate(
         context: any
-    ): boolean | any | Promise<boolean | any> | Observable<boolean | any> {
+    ): Promise<boolean | any> {
         const client = context.args[0] as Socket;
         const token = client.handshake.auth["access_token"] as string;
-        const result = this.verify.execute(new VerifySession(token));
+        const result = await this.verify.execute(new VerifySession(token));
         if (!result) {
             client.disconnect(true);
             return false;

@@ -16,7 +16,7 @@ import { LocalStrategy } from "./strategies/local.strategy";
         PassportModule,
         JwtModule.register({
             secret: process.env.JWT_SECRET as string,
-            signOptions: { expiresIn: dur.fromObject({ days: 7 }).toMillis() },
+            signOptions: { expiresIn: dur.fromObject({ days: 7 }).toSeconds() },
         }),
         CQRSModule,
         Neo4jModule,
