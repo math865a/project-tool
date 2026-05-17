@@ -7,6 +7,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DomainEvents } from "@ns/cqrs";
 import { PasswordUpdatedEvent } from "@ns/events";
 import { Neo4jClient } from "@ns/neo4j";
+import * as bcrypt from "bcrypt";
 import { UpdatePasswordCommand } from "./update-password.command";
 
 @CommandHandler(UpdatePasswordCommand)
@@ -43,24 +44,23 @@ export class UpdatePasswordHandler
         uid: string,
         password: string
     ): Promise<boolean> {
-        const res = await this.client.read(this.checkQuery, {
-            uid: uid,
-            password: password,
-        });
-        return res.records.length > 0;
+        const res = await this.client.read(this.checkQuery, { uid });
+        if (res.records.length === 0) return false;
+        const storedHash: string = res.records[0].get("password");
+        return bcrypt.compare(password, storedHash);
     }
 
     private readonly checkQuery = `
         MATCH (u:User)--(cred:Credentials)
             WHERE u.uid = $uid
-            AND cred.password = $password
-        RETURN u
+        RETURN cred.password AS password
     `;
 
     async updatePassword(uid: string, password: string) {
+        const hash = await bcrypt.hash(password, 10);
         const res = await this.client.write(this.query, {
             uid: uid,
-            password: password,
+            password: hash,
         });
         return res.records.length > 0;
     }

@@ -4,6 +4,7 @@ import { DomainEvents } from "@ns/cqrs";
 import { PasswordResetEvent } from "@ns/events";
 import { Neo4jClient } from "@ns/neo4j";
 import { generatePassword } from "@ns/util";
+import * as bcrypt from "bcrypt";
 import { ResetPasswordCommand } from "./reset-password.command";
 
 @CommandHandler(ResetPasswordCommand)
@@ -20,9 +21,10 @@ export class ResetPasswordHandler
         uid: id,
     }: ResetPasswordCommand): Promise<FormResponse> {
         const newPassword = generatePassword();
+        const hash = await bcrypt.hash(newPassword, 10);
         const queryResult = await this.client.write(this.query, {
             email: email,
-            password: newPassword,
+            password: hash,
         });
         const uid = queryResult.records[0].get("uid");
         if (uid) {

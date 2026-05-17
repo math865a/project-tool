@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { randomBytes } from "crypto";
+import * as bcrypt from "bcrypt";
 import { capitalize } from "lodash";
 import { DateTime as dt, Interval as int } from "luxon";
 import { Neo4jClient } from "@ns/neo4j";
@@ -239,6 +240,7 @@ export class DBInitService implements OnModuleInit {
     async createAppNodes() {
         const adminEmail = process.env.ADMIN_EMAIL ?? "admin@project-tool.local";
         const adminPassword = randomBytes(16).toString("hex");
+        const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
         console.log("=================================================");
         console.log("  INITIAL ADMIN CREDENTIALS (shown once only)");
         console.log(`  Email:    ${adminEmail}`);
@@ -395,6 +397,6 @@ export class DBInitService implements OnModuleInit {
                 }]->(usersPage)
             }
 
-        `, { adminEmail, adminPassword });
+        `, { adminEmail, adminPassword: adminPasswordHash });
     }
 }

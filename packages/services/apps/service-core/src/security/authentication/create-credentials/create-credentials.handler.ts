@@ -7,6 +7,7 @@ import {
     CredentialsCreationFailedEvent,
 } from "@ns/events";
 import { generatePassword } from "@ns/util";
+import * as bcrypt from "bcrypt";
 
 @CommandHandler(CreateCredentialsCommand)
 export class CreateCredentialsHandler
@@ -16,10 +17,11 @@ export class CreateCredentialsHandler
 
     async execute(command: CreateCredentialsCommand): Promise<void> {
         const password = generatePassword();
+        const hash = await bcrypt.hash(password, 10);
         const params = this.prepareParams(
             command.dto.uid,
             command.dto.email,
-            password
+            hash
         );
         const queryResult = await this.client.write(this.query, params);
         if (queryResult.summary.updateStatistics.containsUpdates()) {
