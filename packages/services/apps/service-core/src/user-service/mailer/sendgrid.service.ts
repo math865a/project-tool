@@ -7,7 +7,7 @@ import { NatsClient } from "@ns/nats";
 import * as SendGrid from "@sendgrid/mail";
 import { getCredentialsHTML, getWelcomeHTML } from "./templates";
 import { FormErrorResponse, FormSuccessResponse } from "@ns/definitions";
-import { CredentialsForwardedEvent, WelcomeMailSentEvent } from "@ns/events";
+import { WelcomeMailSentEvent } from "@ns/events";
 
 @Injectable()
 export class SendgridService {
@@ -48,12 +48,10 @@ export class SendgridService {
         html: string
     ): Promise<SendGrid.MailDataRequired> {
         const toAdress =
-            process.env.NODE_ENV === "development"
-                ? "ext.mathias.oehrgaard@eltelnetworks.com"
-                : to;
+            process.env.NODE_ENV === "development" ? "temp@mail.com" : to;
         const mail: SendGrid.MailDataRequired = {
             to: toAdress,
-            from: "ext.mathias.oehrgaard@eltelnetworks.com",
+            from: "temp@mail.com",
             subject: subject,
             html: html,
         };
@@ -72,15 +70,6 @@ export class SendgridService {
             getCredentialsHTML(data.name, data.username, data.password)
         );
 
-        this.publisher.publish(
-            new CredentialsForwardedEvent(
-                {
-                    uid: to,
-                    mail: result,
-                },
-                uid
-            )
-        );
         return new FormSuccessResponse({
             message: "Adgangsoplysningerne blev sendt.",
         });
